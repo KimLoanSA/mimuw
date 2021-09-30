@@ -1,0 +1,8 @@
+Test 1
+C assumes B is alive
+C changes parent
+B dies
+C assumes B is zombie
+A collected B
+C assumes B is dead and collected
+OK

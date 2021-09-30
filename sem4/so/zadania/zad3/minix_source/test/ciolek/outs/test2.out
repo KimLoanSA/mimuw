@@ -1,0 +1,7 @@
+Test 2
+C assumes B is alive
+B dies
+C assumes B is zombie
+A collected B
+C assumes B has been collected by A
+OK
