@@ -1,0 +1,243 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-image: url(https://www.itl.cat/pngfile/big/196-1961254_galaxy-wallpapers-for-ipad-group-pastel-pink-galaxy.jpg);
+  text-align: center
+}
+
+header {
+  color: white;
+  width: 100%;
+  text-align: center;
+  font-size: 100px;
+}
+
+footer {
+  color: rgb(109, 19, 75);
+  font-family: sans-serif;
+  font-size: 20px;
+  width: 100%;
+  padding: 12px;
+}
+
+table, th, td {
+  border: 2px solid black;
+  padding: 4px;
+}
+
+table {
+  font-weight: 100;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+th {
+  color: black;
+  background-color: plum;
+}
+
+tr {
+  color: black;
+  background-color: pink;
+}
+
+div {
+  position: relative;
+}
+
+ol {
+  padding-left: 45%;
+  padding-right: 45%;
+}
+
+a:link, a:visited {
+  color: blue;
+  text-decoration: none;
+}
+
+.super-lot {
+  background-color: plum;
+  width: 200px;
+  z-index: 1;
+  position: absolute;
+  top: 35%;
+  left: 42%;
+}
+
+.miasto {
+  background-color: lightpink;
+  padding: 12px;
+  font-size: 50px;
+  margin-left: 20%;
+  margin-right: 20%;
+  position: relative;
+}
+
+.samolot {
+  font-weight: bold;
+}
+
+.obrazek, .obrazek-miasta {
+  display: block;
+  width: 30%;
+  left: 35%;
+  position: relative;
+}
+
+.menu-list {
+  list-style: none;
+  padding-left: 24px;
+  text-align: left;
+  font-family: "Andale Mono", serif;
+  text-transform: uppercase;
+  grid-area: menu;
+}
+
+.little-delayed {
+  background-color: rgb(239, 237, 124);
+}
+
+.delayed {
+  background-color: rgb(239, 170, 83);
+}
+
+.cancelled {
+  background-color: rgba(255, 0, 24, 0.51);
+}
+
+.my-header {
+  grid-area: my-header;
+}
+
+.my-footer {
+  grid-area: my-footer;
+}
+
+.loty {
+  grid-area: loty
+}
+
+.opoznione {
+  grid-area: opoznione;
+}
+
+.rezerwacja {
+  grid-area: rezerwacja;
+}
+
+.containter {
+  display: inline-grid;
+  grid-column-gap: 15px;
+  grid-row-gap: 15px;
+
+  grid-template-columns: 200px 3fr 1fr;
+  grid-template-rows: auto;
+  grid-template-areas:
+      "my-header my-header my-header"
+      "menu loty opoznione"
+      ". loty rezerwacja"
+      "my-footer my-footer my-footer";
+}
+
+
+@media screen and (max-width: 450px) {
+
+  .containter {
+    display: inline-grid;
+    grid-column-gap: 15px;
+    grid-row-gap: 15px;
+
+    grid-template-columns: auto;
+    grid-template-rows: auto;
+    grid-template-areas:
+        "my-header"
+        "menu"
+        "loty"
+        "opoznione"
+        "rezerwacja"
+        "my-footer";
+  }
+
+  .pogoda {
+    display: none;
+  }
+
+  .obrazek-miasta {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 450px) and (max-width: 1100px) {
+
+  .containter {
+    display: inline-grid;
+    grid-column-gap: 15px;
+    grid-row-gap: 15px;
+
+    grid-template-columns: auto auto;
+    grid-template-rows: auto;
+    grid-template-areas:
+        "my-header my-header"
+        "menu ."
+        "loty opoznione"
+        ". rezerwacja"
+        "my-footer my-footer";
+  }
+
+}
+
+.pasazer {
+  width: 200px;
+  height: 20px;
+  padding: 12px;
+}
+
+.pasazer:nth-child(odd) {
+  background-color: lightpink;
+}
+
+.popup {
+  background-color: hotpink;
+  width: 300px;
+  padding: 2px;
+  top: -40px;
+  position: relative;
+  left: 300px;
+
+  visibility: hidden;
+}
+
+
+.pasazer:hover .popup {
+  visibility: visible;
+}
+
+#rezerwacja-popup {
+  font-size: 70px;
+  color: white;
+  background-color: fuchsia;
+  opacity: 90%;
+  position: fixed;
+
+  width: 100%;
+  height: 100%;
+
+  top: 0;
+  left: 0;
+  margin:0;
+
+  visibility: hidden;
+}
+
+.formularz, .formularz-tr, .formularz-td {
+  border: 0;
+  padding: 4px;
+  text-align: left;
+  border-collapse: collapse;
+  position: relative;
+  width: 100%;
+  background: none;
+}
+
+input {
+  width: 90%;
+}

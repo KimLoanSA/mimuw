@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Quizquizquiz</title>
+  <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/quizEnding.css">
+</head>
+
+<body>
+<section class="password-change-container">
+
+  <section class="quiz-ending-header-section">
+    <header class="password-change-header-text">
+      Quizquizquiz
+    </header>
+
+    <button id="quiz-ending-logout-button">
+      Wyloguj się
+    </button>
+  </section>
+
+  <section class="quiz-ending-stats-section">
+    <table class="quiz-ending-stats-table">
+      <tr class="quiz-ending-stats-table-row">
+        <td class="quiz-ending-stats-table-left-element">
+          Odpowiedzi:
+        </td>
+        <td id="quiz-ending-stats-table-answers" class="quiz-ending-stats-table-right-element">
+          0 / 0
+        </td>
+      </tr>
+      <tr class="quiz-ending-stats-table-row">
+        <td class="quiz-ending-stats-table-left-element">
+          Wynik:
+        </td>
+        <td id="quiz-ending-stats-table-result" class="quiz-ending-stats-table-right-element">
+          0 sekund
+        </td>
+      </tr>
+    </table>
+  </section>
+
+  <section class="quiz-ending-stats-details-section">
+    <table id="quiz-ending-stats-details-table">
+      <tr class="quiz-ending-stats-details-table-row">
+        <th class="quiz-ending-stats-details-table-element">
+          Numer pytania
+        </th>
+        <th class="quiz-ending-stats-details-table-answer-element">
+          Odpowiedź
+        </th>
+        <th class="quiz-ending-stats-details-table-element">
+          Poprawna odpowiedź
+        </th>
+        <th class="quiz-ending-stats-details-table-element">
+          Czas (+ kara)
+        </th>
+        <th class="quiz-ending-stats-details-table-element">
+          Średni czas poprawnej odpowiedzi
+        </th>
+      </tr>
+    </table>
+
+  </section>
+
+  <section class="quiz-ending-top-scores-section">
+    <h1 class="top-scores-header">
+      Najlepsze wyniki:<br>
+    </h1>
+    <table id="quiz-ending-top-scores-table">
+    </table>
+  </section>
+
+  <section class="quiz-ending-return-button-section">
+    <button id="quiz-ending-return-button" class="quiz-ending-return-button">
+      Wróć do strony głównej
+    </button>
+  </section>
+
+</section>
+
+<script type="module" src="../scripts/quizEnding.js"></script>
+</body>
+
+</html>

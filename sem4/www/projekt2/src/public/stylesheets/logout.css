@@ -1,0 +1,61 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+  color: darkslategrey;
+  margin: 0;
+}
+
+.logout-container {
+  display: inline-grid;
+  grid-column-gap: 16px;
+  grid-row-gap: 10%;
+  width: 100%;
+
+  grid-template-columns: 1fr;
+  grid-template-rows: auto;
+  grid-template-areas:
+      "logout-header-section"
+      "logout-introduction-section"
+      "logout-form-section"
+}
+
+
+.logout-header-section {
+  grid-area: logout-header-section;
+
+  background-color: #54aabd;
+  width: 100%;
+  padding: 16px;
+
+  color: #ffffff;
+}
+
+.logout-header-text {
+  font-weight: bolder;
+  font-size: 200%;
+  text-align: left;
+}
+
+
+.logout-introduction-section {
+  grid-area: logout-introduction-section;
+}
+
+
+.logout-form-section {
+  grid-area: logout-form-section;
+}
+
+
+.logout-submit-input {
+  grid-area: login-submit-input;
+
+  background-color: #54aabd;
+  border: 2px solid #54aabd;
+
+  color: #ffffff;
+  font-size: 100%;
+
+  padding: 16px;
+}
+

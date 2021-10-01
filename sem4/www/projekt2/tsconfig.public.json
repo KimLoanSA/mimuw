@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "module": "ES6",
+    "removeComments": true,
+    "strict": true,
+    "target": "ES2016",
+    "moduleResolution": "node",
+    "outDir": "dist/src/public/scripts"
+  },
+  "include": [
+    "src/public"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "esModuleInterop": true,
+    "module": "commonjs",
+    "outDir": "dist/src",
+    "removeComments": true,
+    "sourceMap": true,
+    "target": "ES2016",
+    "moduleResolution": "node"
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "src/public/"
+  ]
+}

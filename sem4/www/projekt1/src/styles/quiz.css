@@ -1,0 +1,121 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+  color: darkslategrey;
+  margin: 0;
+}
+
+.quiz-body-container {
+  display: inline-grid;
+  grid-column-gap: 16px;
+  grid-row-gap: 10%;
+  width: 100%;
+
+  grid-template-rows: auto;
+  grid-template-columns: auto auto;
+  grid-template-areas:
+      "quiz-header-section        quiz-header-section"
+      "quiz-selection-section     quizzes-scoreboard-section"
+      "start-quiz-button-section  start-quiz-button-section"
+}
+
+@media screen and (max-width: 1100px) {
+
+  .quiz-body-container {
+    display: inline-grid;
+    grid-row-gap: 10%;
+    width: 100%;
+
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+        "quiz-header-section"
+        "quiz-selection-section"
+        "quizzes-scoreboard-section"
+        "start-quiz-button-section"
+  }
+
+}
+
+.quiz-header-section {
+  grid-area: quiz-header-section;
+
+  background-color: #54aabd;
+  width: 100%;
+  padding: 16px;
+
+  color: #ffffff;
+}
+
+.quiz-header-text {
+  font-weight: bolder;
+  font-size: 500%;
+}
+
+.quiz-header-subtext {
+  font-weight: lighter;
+  font-size: 120%;
+}
+
+
+.quiz-selection-section {
+  grid-area: quiz-selection-section;
+}
+
+.quiz-selection-select-label {
+  font-size: 170%;
+  font-weight: bolder;
+}
+
+#quiz-selection-select {
+  background-color:  #54aabd;
+  width: 70%;
+  border: 2px solid  #54aabd;
+  color: #ffffff;
+  padding: 16px;
+  font-size: 170%;
+
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+}
+
+.quiz-selection-select-option {
+  font-size: 170%;
+  text-align: center;
+}
+
+
+.quizzes-scoreboard-section {
+  grid-area: quizzes-scoreboard-section;
+}
+
+#quizzes-scoreboard-table {
+  width: 100%;
+}
+
+.quizzes-scoreboard-table-element {
+  width: 50%;
+  text-align: center;
+  padding: 16px;
+}
+
+.quizzes-scoreboard-header {
+  width: 100%;
+  font-size: 120%;
+}
+
+.start-quiz-button-section {
+  grid-area: start-quiz-button-section;
+}
+
+#start-quiz-button {
+  background-color: #54aabd;
+  border: 2px solid #54aabd;
+
+  color: #ffffff;
+  font-size: 120%;
+
+  padding: 16px;
+  width: 50%;
+}

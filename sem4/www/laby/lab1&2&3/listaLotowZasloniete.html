@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Linie lotnicze</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" media="screen" href="main.css">
+</head>
+<body>
+
+<section class="containter">
+
+  <section class="my-header">
+    <header>LISTA LOTÓW</header>
+    <img class="obrazek"
+         src="https://a.allegroimg.com/s512/03780b/685694334d50aab4c685ae796d6b/SIKU-WORLD-5402-Samolot-pasazerski-z-wyposazeniem"
+         alt="logo firmy">
+  </section>
+
+  <ul class="menu-list">
+    <li>
+      <a href="listaLotow.html">Lista lotów</a>
+
+      <ul class="menu-list">
+        <li>
+          <a href="opisLotu1.html">Lot 1. WWA -> NYC</a>
+
+          <ul class="menu-list">
+            <li><a href="warszawa">Warszawa</a></li>
+            <li><a href="nyc">NYC</a></li>
+            <li><a href="boeing747">Boeing 747</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="opisLotu.html">Lot 2. GDA -> ŁDZ</a>
+
+          <ul class="menu-list">
+            <li><a href="https://en.wikipedia.org/wiki/Gdańsk">Gdańsk</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Łódź">Łódź</a></li>
+            <li><a href="https://pl.wikipedia.org/wiki/Boeing_787">Boeing 787</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="opisLotu1.html">Lot 3. WWA -> LAX</a>
+
+          <ul class="menu-list">
+            <li><a href="warszawa">Warszawa</a></li>
+            <li><a href="nyc">LAX</a></li>
+            <li><a href="boeing747">Boeing 747</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <a href="listaLotniska.html">Lista obsługiwanych lotnisk</a>
+    </li>
+  </ul>
+
+  <table class="loty">
+    <tr>
+      <th>nr lotu</th>
+      <th>skąd</th>
+      <th>dokąd</th>
+      <th>data</th>
+      <th>godzina</th>
+    </tr>
+    <tr>
+      <td><a href="url">1</a></td>
+      <td>Warszawa</td>
+      <td>NYC</td>
+      <td>01.05.2020</td>
+      <td>12:37</td>
+    </tr>
+    <tr>
+      <td><a href="opisLotu.html">2</a></td>
+      <td>Gdańsk</td>
+      <td>Łódź</td>
+      <td>12.05.2020</td>
+      <td>13:27</td>
+    </tr>
+    <tr>
+      <td><a href="url">3</a></td>
+      <td>Warszawa</td>
+      <td>LAX</td>
+      <td>5.06.2021</td>
+      <td>21:36</td>
+    </tr>
+    <tr>
+      <td><a href="url">4</a></td>
+      <td>Gdańsk</td>
+      <td>Kraków</td>
+      <td>1.05.2020</td>
+      <td>12:36</td>
+    </tr>
+  </table>
+
+  <section class="opoznione">
+    <table>
+      <tr>
+        <th>nr lotu</th>
+        <th>skąd</th>
+        <th>dokąd</th>
+        <th>kiedy</th>
+        <th>opóźnienie/
+          odwołanie</th>
+      </tr>
+      <tr class="little-delayed">
+        <td><a href="url">1</a></td>
+        <td>Warszawa</td>
+        <td>NYC</td>
+        <td>01.05 12:37</td>
+        <td>30 min </td>
+      </tr>
+      <tr class="cancelled">
+        <td><a href="url">3</a></td>
+        <td>Warszawa</td>
+        <td>LAX</td>
+        <td>5.06 21:36</td>
+        <td>odwołany</td>
+      </tr>
+      <tr class="delayed">
+        <td><a href="url">4</a></td>
+        <td>Gdańsk</td>
+        <td>Kraków</td>
+        <td>1.05 - 12:36</td>
+        <td>120 min</td>
+      </tr>
+    </table>
+  </section>
+
+  <section class="rezerwacja">
+    <form action="*">
+      <h1>zrób rezerwacje</h1>
+      <table class="formularz">
+        <tr class="formularz-tr">
+          <td class="formularz-td">
+            <label for="start">Wybierz skąd</label>
+          </td>
+          <td class="formularz-td">
+            <select id="start">Wybierz skąd:
+              <option value="warszawa">Warszawa</option>
+              <option value="gdansk">Gdańsk</option>
+            </select>
+          </td>
+        </tr>
+        <tr class="formularz-tr">
+          <td class="formularz-td">
+            <label for="destination">Wybierz dokąd</label>
+          </td>
+          <td class="formularz-td">
+            <select id="destination">
+              <option value="krakow">Kraków</option>
+              <option value="lodz">Łódź</option>
+              <option value="nyc">NYC</option>
+              <option value="lax">LAX</option>
+            </select>
+          </td>
+        </tr>
+        <tr class="formularz-tr">
+          <td class="formularz-td">
+            <label for="name">Podaj imię</label>
+          </td>
+          <td class="formularz-td">
+            <input type="text" id="name" name="name">
+          </td>
+        </tr>
+        <tr class="formularz-tr">
+          <td class="formularz-td">
+            <label for="surname">Podaj nazwisko</label>
+          </td>
+          <td class="formularz-td">
+            <input type="text" id="surname" name="surname">
+          </td>
+        </tr>
+        <tr class="formularz-tr">
+          <td class="formularz-td">
+            <label class="pole" for="date">Wybierz datę</label>
+          </td>
+          <td class="formularz-td">
+            <input type="date" id="date" name="date">
+          </td>
+        </tr>
+      </table>
+
+      <input type="submit" value="Wyślij">
+      <input type="reset" value="Wyczyść dane">
+    </form>
+  </section>
+
+  <p class="rezerwacja-popup">Rezerwacja udana</p>
+
+  <footer class="my-footer">Marcin Abramowicz</footer>
+</section>
+
+<script src="mainListaLotow.js"></script>
+</body>
+</html>
+

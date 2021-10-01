@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "sourceMap": true,
+        "target": "ES2016",
+        "module": "commonjs",
+        "outDir": "./dist",
+        "baseUrl": "./src",
+        "esModuleInterop": true
+    },
+    "include": [
+        "*.ts",
+        "routes/*.ts"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}

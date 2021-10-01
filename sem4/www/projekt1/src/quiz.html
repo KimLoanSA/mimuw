@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Quziquziquiz</title>
+  <link rel="stylesheet" type="text/css" media="screen" href="styles/quiz.css">
+</head>
+<body>
+  <section class="quiz-body-container">
+
+    <section class="quiz-header-section">
+      <header class="quiz-header-text">
+        Quizquizquiz
+      </header>
+      <p class="quiz-header-subtext">
+        Rozwiązuj quizy z Quizquizquiz - baw się i ucz
+      </p>
+    </section>
+
+    <section class="quiz-selection-section">
+      <form action="*" id="quiz-selection-form">
+        <label for="quiz-selection-select" class="quiz-selection-select-label">
+          Wybierz quiz:<br>
+        </label>
+          <select id="quiz-selection-select">
+          </select>
+      </form>
+    </section>
+
+    <section class="quizzes-scoreboard-section">
+      <h1 class="quizzes-scoreboard-header">
+        Najlepsze wyniki:<br>
+      </h1>
+      <table id="quizzes-scoreboard-table">
+      </table>
+    </section>
+
+    <section class="start-quiz-button-section">
+      <button id="start-quiz-button"> Zacznij nowy quiz </button>
+    </section>
+
+  </section>
+
+  <script type="module" src="modules/quiz.js" ></script>
+</body>
+</html>

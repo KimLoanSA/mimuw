@@ -1,0 +1,201 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+  color: darkslategrey;
+  margin: 0;
+}
+
+.quiz-question-container {
+  display: inline-grid;
+  grid-column-gap: 16px;
+  grid-row-gap: 10%;
+  width: 100%;
+
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto;
+  grid-template-areas:
+      "quiz-question-header-section           quiz-question-header-section          quiz-question-header-section"
+      "quiz-question-introduction-section     quiz-question-introduction-section    ."
+      "quiz-question-and-answer-section       quiz-question-and-answer-section      quiz-question-info-section"
+      ".                                      .                                     quiz-question-cancel-button-section"
+      "quiz-question-navigation-section-back  quiz-question-navigation-section-stop quiz-question-navigation-section-next"
+}
+
+@media screen and (max-width: 1100px) {
+
+  .quiz-question-container {
+    display: inline-grid;
+    grid-row-gap: 10%;
+    width: 100%;
+
+    grid-template-rows: auto;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+        "quiz-question-header-section"
+        "quiz-question-introduction-section"
+        "quiz-question-and-answer-section"
+        "quiz-question-navigation-section-back"
+        "quiz-question-navigation-section-stop"
+        "quiz-question-navigation-section-next"
+  }
+
+  .quiz-question-info-section {
+    display: none;
+  }
+
+  .quiz-question-cancel-button-section {
+    display: none;
+  }
+}
+
+.quiz-question-header-section {
+  grid-area: quiz-question-header-section;
+
+  background-color: #54aabd;
+  width: 100%;
+  padding: 16px;
+  color: #ffffff;
+
+  display: inline-grid;
+  grid-row-gap: 10%;
+
+  grid-template-columns: 5fr 1fr;
+  grid-template-rows: auto;
+  grid-template-areas:
+      "quiz-question-header-text quiz-question-logout-button"
+}
+
+.quiz-question-header-text {
+  grid-area: quiz-question-header-text;
+
+  font-weight: bolder;
+  font-size: 200%;
+  text-align: left;
+}
+
+#quiz-question-logout-button {
+  grid-area: quiz-question-logout-button;
+
+  background-color: #ffffff;
+  border: 2px solid #ffffff;
+
+  color: #54aabd;
+  font-size: 100%;
+  width: 70%;
+
+  padding: 16px;
+}
+
+.quiz-question-introduction-section {
+  grid-area: quiz-question-introduction-section;
+}
+
+.quiz-question-and-answer-section {
+  grid-area: quiz-question-and-answer-section;
+}
+
+#quiz-question-answer-label {
+  font-size: 150%;
+}
+
+#quiz-question-answer-input {
+  width: 30%;
+  font-size: 200%;
+  text-align: center;
+}
+
+.quiz-question-info-section {
+  grid-area: quiz-question-info-section;
+}
+
+.quiz-question-info-table {
+  width: 100%;
+  border-left: 2px solid #54aabd;
+}
+
+.quiz-question-info-table-left-element {
+   width: 50%;
+   text-align: right;
+   padding: 16px;
+ }
+
+.quiz-question-info-table-right-element {
+  width: 50%;
+  text-align: left;
+  padding: 16px;
+  font-weight: bold;
+}
+
+.quiz-question-cancel-button-section {
+  grid-area: quiz-question-cancel-button-section;
+}
+
+#quiz-question-cancel-button {
+  background-color: #54aabd;
+  border: 2px solid #54aabd;
+
+  color: #ffffff;
+  font-size: 100%;
+
+  padding: 8px;
+  width: 40%;
+}
+
+.quiz-question-navigation-back-section {
+  grid-area: quiz-question-navigation-section-back;
+}
+
+
+.quiz-question-navigation-stop-section {
+  grid-area: quiz-question-navigation-section-stop;
+}
+
+
+.quiz-question-navigation-next-section {
+  grid-area: quiz-question-navigation-section-next;
+}
+
+
+.quiz-question-navigation-button {
+  background-color: #54aabd;
+  border: 2px solid #54aabd;
+
+  color: #ffffff;
+  font-size: 100%;
+
+  padding: 16px;
+  width: 50%;
+}
+
+.quiz-question-navigation-button:disabled {
+  background-color: darkslategrey;
+  border: 2px solid darkslategrey;
+
+  color: #ffffff;
+  font-size: 100%;
+
+  padding: 16px;
+  width: 50%;
+}
+
+@media screen and (max-width: 1100px) {
+
+  .quiz-question-header-section {
+    grid-area: quiz-question-header-section;
+
+    background-color: #54aabd;
+    width: 100%;
+    padding: 16px;
+    color: #ffffff;
+
+    display: inline-grid;
+    grid-row-gap: 10%;
+
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+        "quiz-question-header-text"
+        "quiz-question-logout-button"
+  }
+
+}

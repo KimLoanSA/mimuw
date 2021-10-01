@@ -1,0 +1,41 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+  color: darkslategrey;
+  margin: 0;
+}
+
+.quiz-already-solved-error-container {
+  display: inline-grid;
+  grid-column-gap: 16px;
+  grid-row-gap: 10%;
+  width: 100%;
+
+  grid-template-columns: 1fr;
+  grid-template-rows: auto;
+  grid-template-areas:
+      "quiz-already-solved-error-header-section"
+      "quiz-already-solved-error-introduction-section"
+}
+
+
+.quiz-already-solved-error-header-section {
+  grid-area: quiz-already-solved-error-header-section;
+
+  background-color: #54aabd;
+  width: 100%;
+  padding: 16px;
+
+  color: #ffffff;
+}
+
+.quiz-already-solved-header-text {
+  font-weight: bolder;
+  font-size: 200%;
+  text-align: left;
+}
+
+
+.quiz-already-solved-error-introduction-section {
+  grid-area: quiz-already-solved-error-introduction-section;
+}

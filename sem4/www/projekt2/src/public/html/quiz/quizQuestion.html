@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Quizquizquiz</title>
+  <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/quizQuestion.css">
+</head>
+
+<body>
+  <section class="quiz-question-container">
+
+    <section class="quiz-question-header-section">
+      <header class="quiz-question-header-text">
+        Quizquizquiz
+      </header>
+
+      <button id="quiz-question-logout-button">
+        Wyloguj się
+      </button>
+    </section>
+
+    <section class="quiz-question-introduction-section">
+      <p id="quiz-question-introduction-paragraph">
+      </p>
+    </section>
+
+    <section class="quiz-question-and-answer-section">
+      <form action="*" class="quiz-question-form">
+        <label  for="quiz-question-answer-input" id="quiz-question-answer-label">
+          Pytanie:<br>
+        </label>
+
+        <input id="quiz-question-answer-input" type="number">
+      </form>
+    </section>
+
+    <section class="quiz-question-info-section">
+      <table class="quiz-question-info-table">
+        <tr class="quiz-question-info-table-row">
+          <td class="quiz-question-info-table-left-element">
+            Pytanie numer:
+          </td>
+          <td id="quiz-question-info-table-question-number" class="quiz-question-info-table-right-element">
+          </td>
+        </tr>
+        <tr class="quiz-question-info-table-row">
+          <td class="quiz-question-info-table-left-element">
+            Pytań w quizie:
+          </td>
+          <td id="quiz-question-info-table-all-questions-number" class="quiz-question-info-table-right-element">
+          </td>
+        </tr>
+        <tr class="quiz-question-info-table-row">
+          <td class="quiz-question-info-table-left-element">
+            Czas poświęcony na quiz:
+          </td>
+          <td id="quiz-question-info-table-quiz-time" class="quiz-question-info-table-right-element">
+            0 sekund
+          </td>
+        </tr>
+        <tr class="quiz-question-info-table-row">
+          <td class="quiz-question-info-table-left-element">
+            Czas poświęcony na to zadanie:
+          </td>
+          <td id="quiz-question-info-table-quiz-page-time" class="quiz-question-info-table-right-element">
+            0 sekund
+          </td>
+        </tr>
+        <tr class="quiz-question-info-table-row">
+          <td class="quiz-question-info-table-left-element">
+            Kara za złą odpowiedź:
+          </td>
+          <td id="quiz-question-info-table-time-penalty" class="quiz-question-info-table-right-element">
+          </td>
+        </tr>
+      </table>
+    </section>
+
+    <section class="quiz-question-cancel-button-section">
+      <button id="quiz-question-cancel-button">
+        Anuluj quiz
+      </button>
+    </section>
+
+    <section class="quiz-question-navigation-back-section">
+      <button id="quiz-question-navigation-back-button" class="quiz-question-navigation-button">
+        Poprzednie pytanie
+      </button>
+    </section>
+
+    <section class="quiz-question-navigation-stop-section">
+      <button id="quiz-question-navigation-stop-button" class="quiz-question-navigation-button">
+        Stop
+      </button>
+    </section>
+
+    <section class="quiz-question-navigation-next-section">
+      <button id="quiz-question-navigation-next-button" class="quiz-question-navigation-button">
+        Następne pytanie
+      </button>
+    </section>
+
+  </section>
+
+  <script type="module" src="../scripts/quizQuestion.js"></script>
+</body>
+
+</html>

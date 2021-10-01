@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Quizquizquiz</title>
+  <link rel="stylesheet" type="text/css" media="screen" href="styles/quizEnding.css">
+</head>
+<body>
+  <section class="quiz-ending-container">
+
+    <section class="quiz-ending-header-section">
+      <header class="quiz-header-text">
+        Quizquizquiz
+      </header>
+    </section>
+
+    <section class="quiz-ending-stats-section">
+      <table class="quiz-ending-stats-table">
+        <tr class="quiz-ending-stats-table-row">
+          <td class="quiz-ending-stats-table-left-element">
+            Odpowiedzi:
+          </td>
+          <td id="quiz-ending-stats-table-answers" class="quiz-ending-stats-table-right-element">
+            0 / 0
+          </td>
+        </tr>
+        <tr class="quiz-ending-stats-table-row">
+          <td class="quiz-ending-stats-table-left-element">
+            Wynik:
+          </td>
+          <td id="quiz-ending-stats-table-result" class="quiz-ending-stats-table-right-element">
+            0 sekund
+          </td>
+        </tr>
+      </table>
+    </section>
+
+    <section class="quiz-ending-stats-details-section">
+      <table id="quiz-ending-stats-details-table">
+        <tr class="quiz-ending-stats-details-table-row">
+          <th class="quiz-ending-stats-details-table-left-element">
+            Numer pytania
+          </th>
+          <th class="quiz-ending-stats-details-table-middle-element">
+            Odpowiedź
+          </th>
+          <th class="quiz-ending-stats-details-table-right-element">
+            Czas (+ kara)
+          </th>
+        </tr>
+      </table>
+
+    </section>
+
+    <section class="quiz-ending-save-button-section">
+      <button id="quiz-ending-saving-button-simple-score" class="quiz-ending-saving-button">
+        Zapisz wynik
+      </button>
+    </section>
+
+    <section class="quiz-ending-save-with-stats-button-section">
+      <button id="quiz-ending-saving-button-detailed-score" class="quiz-ending-saving-button">
+        Zapisz wynik ze statystykami
+      </button>
+    </section>
+
+  </section>
+
+  <script type="module" src="modules/quizEnding.js"></script>
+</body>
+</html>

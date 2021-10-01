@@ -1,0 +1,114 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+  color: darkslategrey;
+  margin: 0;
+}
+
+.login-container {
+  display: inline-grid;
+  grid-column-gap: 16px;
+  grid-row-gap: 10%;
+  width: 100%;
+
+  grid-template-columns: 1fr;
+  grid-template-rows: auto;
+  grid-template-areas:
+      "login-header-section"
+      "login-introduction-section"
+      "login-form-section"
+}
+
+
+.login-header-section {
+  grid-area: login-header-section;
+
+  background-color: #54aabd;
+  width: 100%;
+  padding: 16px;
+
+  color: #ffffff;
+}
+
+.login-header-text {
+  font-weight: bolder;
+  font-size: 200%;
+  text-align: left;
+}
+
+
+.login-introduction-section {
+  grid-area: login-introduction-section;
+}
+
+
+.login-form-section {
+  grid-area: login-form-section;
+}
+
+
+.login-form {
+  display: inline-grid;
+  grid-column-gap: 16px;
+  grid-row-gap: 30%;
+  width: 50%;
+
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;
+  grid-template-areas:
+      "login-username-label       login-username-input"
+      "login-password-label       login-password-input"
+      "login-submit-input         login-submit-input"
+
+}
+
+
+.login-label {
+  grid-area: login-username-label;
+}
+
+.login-input {
+  grid-area: login-username-input;
+}
+
+
+.login-password-label {
+  grid-area: login-password-label;
+}
+
+.login-password-input {
+  grid-area: login-password-input;
+}
+
+
+.login-submit-input {
+  grid-area: login-submit-input;
+
+  background-color: #54aabd;
+  border: 2px solid #54aabd;
+
+  color: #ffffff;
+  font-size: 100%;
+
+  padding: 16px;
+}
+
+
+
+@media screen and (max-width: 1100px) {
+
+  .login-form {
+    display: inline-grid;
+    grid-row-gap: 5%;
+    width: 100%;
+
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+        "login-username-label"
+        "login-username-input"
+        "login-password-label"
+        "login-password-input"
+        "login-submit-input"
+  }
+}

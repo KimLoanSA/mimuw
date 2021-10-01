@@ -1,0 +1,16 @@
+html
+    head
+        title= title
+        style
+            include style.css
+    body
+        h1= message
+        a(href="logout") logout
+        img(src="https://d.newsweek.com/en/full/1588920/puki-style-league-legends-polish-esports.jpg?w=1600&h=1600&q=88&f=d707dbb36fba4c3b38be13bace23a96d").small-image
+
+        h1="Meme list"
+        ul
+            each meme in memes
+                li
+                    a(href="meme/" + meme.getId()) #{meme.getName()}
+                    img(src=meme.getUrl()).small-image

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Quziquziquiz</title>
+  <link rel="stylesheet" type="text/css" media="screen" href="../stylesheets/quiz.css">
+</head>
+
+<body>
+  <section class="quiz-body-container">
+
+    <section class="quiz-header-section">
+      <header class="password-change-header-text">
+        Quizquizquiz
+      </header>
+      <p class="quiz-header-subtext">
+        Rozwiązuj quizy z Quizquizquiz - baw się i ucz
+      </p>
+
+      <button id="quiz-header-password-change-button">
+        Zmień hasło
+      </button>
+
+      <button id="quiz-header-logout-button">
+        Wyloguj się
+      </button>
+    </section>
+
+    <section class="quiz-selection-section">
+      <form action="*" id="quiz-selection-form">
+        <label for="quiz-selection-select" class="quiz-selection-select-label">
+          Wybierz quiz:<br>
+        </label>
+          <select id="quiz-selection-select">
+          </select>
+      </form>
+    </section>
+
+    <section class="quizzes-scoreboard-section">
+      <h1 class="quizzes-scoreboard-header">
+        Najlepsze wyniki:<br>
+      </h1>
+      <table id="quizzes-scoreboard-table">
+      </table>
+    </section>
+
+    <section class="start-quiz-button-section">
+      <button id="start-quiz-button"> Zacznij nowy quiz </button>
+    </section>
+
+    <section class="quiz-stats-selection-section">
+      <form action="*" id="quiz-stats-selection-form">
+        <label for="quiz-stats-selection-select" class="quiz-stats-selection-select-label">
+          Wybierz quiz, którego statystyki chcesz zobaczyć:<br>
+        </label>
+        <select id="quiz-stats-selection-select">
+        </select>
+      </form>
+    </section>
+
+    <section class="stats-quiz-button-section">
+      <button id="stats-quiz-button"> Obejrzyj statystyki quizu </button>
+    </section>
+
+  </section>
+
+  <script type="module" src="../scripts/quiz.js" ></script>
+</body>
+
+</html>

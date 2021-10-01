@@ -1,0 +1,10 @@
+extends layout
+
+block content
+    h1= title
+    p Login first
+    form(method="post")
+        input(type="text" name="login")
+        input(type="password" name="password")
+        input(type="hidden", name="_csrf", value=csrfToken)
+        input(type="submit", value="In")
