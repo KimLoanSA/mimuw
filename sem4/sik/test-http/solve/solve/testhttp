@@ -1,0 +1,87 @@
+#!/bin/bash
+
+trap interrupt_handler INT
+
+function interrupt_handler() {
+  if [[ -n ${PID} ]]
+  then
+    kill ${PID}
+    exit
+  else
+    exit
+  fi
+}
+
+if [[ $# -ne 2 ]]
+then
+  exit 1
+fi
+
+COOKIE_FILE=$1
+ADDRESS=$2
+
+#ekstraktowanie potrzebnych danych
+HOST=$(echo ${ADDRESS} | awk -F[/?#:] '{print $4}')
+HTTP=$(echo ${ADDRESS} | awk -F[/:] '{print $1}')
+PORT="$(echo ${ADDRESS} | sed -e 's,^.*:,:,g' -e 's,.*:\([0-9]*\).*,\1,g' -e 's,[^0-9],,g')"
+
+# ustawianie domyslnego portu jesli nie jest ustawiony
+if [[ -z ${PORT} ]]
+then
+  if [[ "https" == ${HTTP} ]]
+  then
+    PORT="443"
+  else
+    PORT="80"
+  fi
+fi
+
+HOST_WITH_PORT="${HOST}:${PORT}"
+
+# znajdowanie wolnego portu
+STUNNEL_PORT=7777
+CONDITION=$(netstat -taln | grep ${STUNNEL_PORT})
+
+while [[ -n "${CONDITION}" ]]
+do
+    STUNNEL_PORT=$[STUNNEL_PORT+1]
+    CONDITION=$(netstat -taln | grep ${STUNNEL_PORT})
+done
+
+
+STUNNEL_CONFIGURATION="pid =
+foreground = yes
+[service]
+client = yes
+accept = localhost:${STUNNEL_PORT}
+connect = ${HOST_WITH_PORT}"
+
+function http_call() {
+  ./testhttp_raw ${HOST_WITH_PORT} ${COOKIE_FILE} ${ADDRESS}
+}
+
+function https_call() {
+  # uruchamianie stunnel
+  echo -e "${STUNNEL_CONFIGURATION}" | stunnel -fd 0 >/dev/null 2>&1 & PID=$!
+
+  # czekanie az port zostanie zajety
+  while ! nc -z localhost ${STUNNEL_PORT} >/dev/null 2>&1
+  do
+    sleep 0.5
+  done
+
+  ./testhttp_raw "localhost:${STUNNEL_PORT}" "${COOKIE_FILE}" "${ADDRESS}"
+
+  kill ${PID}
+}
+
+if echo ${ADDRESS} | grep -q "http://"
+then
+  http_call
+elif echo ${ADDRESS} | grep -q "https://"
+then
+  https_call
+else
+  exit 1
+fi
+

@@ -1,0 +1,4 @@
+GET /plik HTTP/1.1
+Host: www.mimuw.edu.pl:8080
+Connection: close
+

@@ -1,0 +1,14 @@
+#ifndef MIMUW_S4_SIK_TESTHTTP_RESPONSE_RESOLVER_H
+#define MIMUW_S4_SIK_TESTHTTP_RESPONSE_RESOLVER_H
+
+#include <stdlib.h>
+
+#include "tcp_client.h"
+
+typedef struct response_resolver_persistence response_resolver_persistence_t;
+
+response_resolver_persistence_t *init_response_resolver_persistence(tcp_client_persistence_t *tcp_client_persistence);
+void report_response(response_resolver_persistence_t *response_resolver_persistence);
+void delete_response_resolver_persistence(response_resolver_persistence_t *response_resolver_persistence);
+
+#endif //MIMUW_S4_SIK_TESTHTTP_RESPONSE_RESOLVER_H

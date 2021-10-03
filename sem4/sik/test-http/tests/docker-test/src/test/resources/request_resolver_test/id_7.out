@@ -1,0 +1,5 @@
+GET /?plik=2137 HTTP/1.1
+Host: www.mimuw.edu.pl:8080
+Connection: close
+Cookie: ciasteczko1=hej; ciasteczko2=wszystkim
+

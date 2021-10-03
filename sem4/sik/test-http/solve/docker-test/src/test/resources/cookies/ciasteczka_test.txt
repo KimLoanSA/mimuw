@@ -1,0 +1,2 @@
+ciasteczko1=hej
+ciasteczko2=wszystkim
