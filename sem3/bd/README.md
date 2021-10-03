@@ -8,7 +8,7 @@ _wyklad_, _lab_: [Filip Murlak](https://usosweb.uw.edu.pl/kontroler.php?_action=
 
 ```
 .
-└── projekt     - rozwiazania zadan z labow (punkty za aktywnosc)
+└── projekt     - projekt
 ```
 
 ### punkty
