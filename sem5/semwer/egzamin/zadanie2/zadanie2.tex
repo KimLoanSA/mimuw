@@ -1,0 +1,199 @@
+% !TeX spellcheck = pl_PL
+%!TEX encoding =  UTF-8 Unicode
+
+\documentclass{article}
+\usepackage{amssymb}
+\usepackage{amsmath}
+
+\usepackage[all]{xy}
+
+\usepackage{graphicx}
+\usepackage[bookmarks = true, pagebackref = false]{hyperref}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[polish]{babel}
+
+\newcommand{\note}[1]{\marginpar{\raggedright\footnotesize\tt #1}}
+
+\newcommand{\otto}{\leftrightarrow}
+\newcommand{\sembr}[1]{[\![#1]\!]}
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{empheq}
+\usepackage{bm}
+
+\newcommand{\pto}{\rightharpoonup}
+
+\newcommand{\syn}[1]{{\bf \textcolor{RawSienna}{#1}}}
+\newcommand{\sem}[1]{{\bf \textcolor{olive}{#1}}}
+\newcommand{\semcol}[1]{{\textcolor{olive}{#1}}}
+\newcommand{\sembr}[1]{[\![#1]\!]}
+\newcommand{\comm}[1]{\quad \; \text{ \textcolor{black!42}{ - #1} } }
+
+\newcommand{\boxedeq}[1]{\begin{empheq}[box={\fboxsep=6pt\fbox}]{align*}#1\end{empheq}}
+
+\newcommand{\bigeps}{\mathcal{E}}
+
+\newcommand{\boxedeq}[1]{\begin{empheq}[box={\fboxsep=6pt\fbox}]{align*}#1\end{empheq}}
+
+\newcommand{\bigeps}{\mathcal{E}}
+
+\title{
+   Semantyka i Weryfikacja programów \\
+   \large Egzamin, zadanie 2.
+}
+\author{Marcin Abramowicz ma406058}
+
+\begin{document}
+
+   \maketitle
+
+   \section{Zadanie}
+
+   Napisz semantykę denotacyjną, w stylu kontynuacyjnym, instrukcji języka o gramatyce:
+   \begin{alignat*}{4}
+      Num &\ni n & & ::= &\ & {\tt 0} \mid{\tt 1} \mid {\tt -1} \mid {\tt 2} \mid {\tt -2} \mid \cdots \\
+      Var &\ni x && ::= && {\tt x}\mid {\tt y}\mid \cdots \\
+      PName &\ni p & & ::= && {\tt p}\mid {\tt q}\mid \cdots \\
+      Expr &\ni e && ::= && n \mid x \mid e_1+e_2 \mid e_1*e_2 \mid e_1-e_2 \\
+      BExpr &\ni b && ::= && {\tt true} \mid {\tt false} \mid e_1<e_2 \mid e_1=e_2 \mid b_1\land b_2 \mid {\tt not}\ b\\
+      VDecl &\ni d_V && ::= && {\tt var}\ x \\
+      PDecl &\ni d_P && ::= && {\tt proc}\ p\ (I) \\
+      Instr &\ni I && ::= && x := e \mid I_1;I_2 \mid {\tt if}\ b\ {\tt then}\ I \mid {\tt while}\ b\ {\tt do}\ I \mid {\tt begin}\ d_V; d_P;  I\ {\tt end} \mid \\
+      &&&&& {\tt call}\ p \mid {\tt break} \mid {\tt continue} \mid {\tt exit} %\\
+      %Prog &\ni P && ::= && {\tt program}\ I
+   \end{alignat*}
+
+   Jest to język z rekurencyjnymi procedurami bezparametrowymi oraz z prostymi mechanizmami przerywania pętli i procedur.
+
+   Instrukcja {\tt break} powoduje zakończenie wykonywania najbliższej aktualnie wykonywanej pętli i przejście do dalszego wykonywania programu. Dzieje się tak nawet wtedy, jeśli instrukcja {\tt break} nie występuje w ciele tej pętli, ale w procedurze wywołanej (bespośrednio lub poprzez inne procedury) z tej pętli. Na przykład, w programie:
+   \begin{verbatim}
+        begin
+           var x;
+           proc p (if x>3 then break);
+           x := 1;
+           while true do
+             call(p);
+             x := x+1
+        end
+   \end{verbatim}
+   wykonanie pętli kończy się, a zmienna {\tt x} przyjmuje wartość $4$.
+
+   Instrukcja {\tt continue} powoduje zakończenie wykonywania aktualnej iteracji najbliższej aktualnie wykonywanej pętli i przejście do wykonywania następnej iteracji tej pętli, z uwagami jak dla instrukcji {\tt break} powyżej. Na przykład, gdyby w powyższym przykładzie zastąpić instrukcję {\tt break} instrukcją {\tt continue}, to program zapętli się w stanie pamięci, w którym zmienna {\tt x} przyjmuje wartość $4$.
+
+   Instrukcja {\tt exit} powoduje zakończenie wykonywania najbliższej aktualnie wykonywanej procedury. Gdyby w powyższym przykładzie zastąpić instrukcję {\tt break} instrukcją {\tt exit}, to program zapętli się, a zmienna {\tt x} będzie przyjmować coraz większe wartości.
+
+   Semantyka pozostałych konstrukcji jest standardowa. Widoczność wszystkich identyfikatorów jest statyczna.
+
+   W rozwiązaniu należy podać co najmniej równania semantyczne dla instrukcji {\tt break}, {\tt continue}, {\tt exit}, ${\tt while..do..}$ i {\tt call}, a także dla deklaracji procedur. Pozostałe równania można pominąć, jeżeli są standardowe lub zupełnie analogiczne do standardowych. Można założyć, że dana jest funkcja semantyczna dla wyrażeń i wyrażeń logicznych, w wybranym przez siebie wariancie -- klasycznym denotacyjnym lub w stylu kontynuacyjnym. Należy natomiast zdefiniować wszystkie potrzebne dziedziny pomocnicze i typy wszystkich funkcji semantycznych.
+
+   Można założyć, że programy nie korzystają z niezadeklarowanych zmiennych ani procedur. Można też założyć, że instrukcja {\tt exit} może wystąpić tylko w ciele jakiejś procedury, a instrukcje {\tt break} i {\tt continue} będą wykonywane tylko podczas wykonywania jakiejś pętli.
+
+
+   \newpage
+   \section{Rozwiązanie}
+
+   Będziemy modyfikować jedynie semantykę dla $Instr$ i $PDecl$, reszta pozostaje standardowa
+   (jak na wykładzie).
+   Rozwiązanie będzie się wzorować na zadaniu z {\bf continue} oraz {\bf break} omawiane na ćwiczeniach.
+
+   \subsection{Dziedziny semantyczne}
+
+   Wszystkie niepodane dziedziny są takie same jak na wykładzie.
+
+   \begin{gather*}
+      \begin{aligned}
+         \sem{Cont}_{\sem{break}} &= \sem{Cont} \\
+         \sem{Cont}_{\sem{exit}} &= \sem{Cont} \\
+         \sem{Cont}_{\sem{continue}} &= \sem{Cont} \\
+         \\
+         \sem{PDECL} &=
+         \sem{VEnv} \to
+         \sem{PEnv} \to
+         \sem{Cont} \\
+         \sem{INSTR} &=
+         \sem{VEnv} \to
+         \sem{PEnv} \to
+         \sem{Cont}_{\sem{break}} \to
+         \sem{Cont}_{\sem{exit}} \to
+         \sem{Cont}_{\sem{continue}} \to
+         \sem{Cont} \\
+      \end{aligned}
+   \end{gather*}
+
+
+   \subsection{Funkcje semantyczne}
+
+   Wszystkie niepodane funkcje są takie same jak na wykładzie.
+
+   \begin{gather*}
+      \semcol{\mathcal{D}_{V}}: \syn{PDecl} \to \sem{PDECL} \\
+      \semcol{\mathcal{I}}: \syn{Instr} \to \sem{INSTR} \\
+   \end{gather*}
+
+
+   \subsection{Równania semantyczne}
+
+   Równania semantyczne dla pozostałych operacji są analogiczne jak na wykładzie.
+
+   \boxedeq{ \semcol{\mathcal{D}_{V}}: \syn{PDecl} \to \sem{PDECL} }
+
+   Oczywiście wywołanie metody {\bf P} powinno zostać zapisane przy użyciu punku stałego.
+
+   \begin{gather*}
+      \semcol{\mathcal{D}_{V}}\sembr{\syn{proc} \ p \ (I)}
+      \ \rho_{V} \ \rho_{P} =
+      \rho_{P}[p \mapsto P], \\
+      {\bf gdzie:} \\
+      P =
+      \lambda \beta_{break}. \
+      \lambda \beta_{exit}. \
+      \lambda \beta_{continue}. \
+      \lambda \kappa.
+      \semcol{\mathcal{I}}\sembr{I}
+      \ \rho_{V} \ \rho_{P}[p \mapsto P] \ \beta_{break} \ \beta_{exit} \ \beta_{continue} \ \kappa
+   \end{gather*}
+
+   \boxedeq{ \semcol{\mathcal{I}}: \syn{Instr} \to \sem{INSTR} }
+
+   Oczywiście wywołanie rekurencyjne w {\bf while} powinno być zapisane przy użyciu punktu stałego:
+   \begin{gather*}
+      \semcol{\mathcal{I}}\sembr{\syn{while} \ b \ \syn{do} \ I}
+      \ \rho_{V} \ \rho_{P} \ \beta_{break} \ \beta_{exit} \ \beta_{continue} \ \kappa \ s = \\
+      \semcol{\mathcal{B}}\sembr{b} \ \rho_{V} \ (\lambda v.
+      ifte(v,
+      \semcol{\mathcal{I}}\sembr{I}
+      \ \rho_{V} \ \rho_{P} \ \kappa \ \kappa \ \beta \ \beta \ s, \kappa \ s)) \ s, \\
+      {\bf gdzie:} \\
+      \beta = \semcol{\mathcal{I}}\sembr{\syn{while}\ b \ \syn{do} \ I}
+      \ \rho_{V} \ \rho_{P} \ \beta_{break} \ \beta_{exit} \ \beta_{continue} \ \kappa
+      \\
+      \\
+      \\
+      \semcol{\mathcal{I}}\sembr{\syn{break}}
+      \ \rho_{V} \ \rho_{P} \ \beta_{break} \ \beta_{exit} \ \beta_{continue} \ \kappa \ =
+      \beta_{break}
+      \\
+      \\
+      \\
+      \semcol{\mathcal{I}}\sembr{\syn{exit}}
+      \ \rho_{V} \ \rho_{P} \ \beta_{break} \ \beta_{exit} \ \beta_{continue} \ \kappa \ =
+      \beta_{exit}
+      \\
+      \\
+      \\
+      \semcol{\mathcal{I}}\sembr{\syn{continue}}
+      \ \rho_{V} \ \rho_{P} \ \beta_{break} \ \beta_{exit} \ \beta_{continue} \ \kappa \ =
+      \beta_{continue}
+      \\
+      \\
+      \\
+      \semcol{\mathcal{I}}\sembr{\syn{call} \ p}
+      \ \rho_{V} \ \rho_{P} \ \beta_{break} \ \beta_{exit} \ \beta_{continue} \ \kappa \ =
+      (\rho_{P} \ p) \ \beta_{break} \ \kappa \ \beta_{continue} \ \kappa \
+   \end{gather*}
+
+
+\end{document}

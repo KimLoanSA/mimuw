@@ -1,0 +1,111 @@
+\documentclass[final,12pt]{article}
+\usepackage{a4wide}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{latexsym}
+\usepackage[polish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[pdftex]{graphicx}
+\usepackage[pdftex]{color}
+\usepackage[final]{listings}
+
+%%%%%%%%%%%%% listings
+\lstdefinelanguage{whileprograms}{morekeywords={while,do,if,then,else,div),(,decr,in,wrt},%
+   sensitive,%
+   morecomment=[l]//,%
+   morecomment=[s]{\{}{\}},%
+%   morecomment=[s]{$}{$},%
+   basicstyle=\Large\tt,
+   keywordstyle=\normalfont\bfseries\color{black},
+   commentstyle=\color{blue},
+   mathescape=true,
+}
+
+\lstset{language=whileprograms,flexiblecolumns=true,mathescape=true,frame=none}
+\lstset{commentstyle=\it,basicstyle=\tt}
+\lstset{literate={<=}{{$\leq$}}1
+      {>=}{{$\geq$}}1
+      {^}{{$\land$}{$\;$}}2
+      {&}{{$\land$}{$\;$}}2
+      {||}{{$\lor$}{$\;$}}2
+      {<>}{{$\neq$}{$\;$}}2
+      {=>}{{$\Rightarrow$}{$\;$}}2
+      {EE}{{$\exists$}}1
+      {AA}{{$\forall$}}1
+      {!}{{$\neg$}}1
+}
+
+\title{\vspace{-2cm}
+Semantyka i Weryfikacja programów \\
+\large Praca domowa 3.
+}
+\author{Marcin Abramowicz ma406058}
+
+
+\begin{document}
+
+   \maketitle
+
+   \section{Zadanie}
+
+   \lstset{language=whileprograms} \selectlanguage{polish}
+
+   Rozważamy proste rozszerzenie języka {\sc Tiny} o jednowymiarowe
+   tablice.
+
+   Dany jest następujący program w tym języku, operujący na tablicy
+   $A$ {\bf indeksowanej od $1$ do $n$}.
+   Należy udowodnić częściową poprawność
+   tego programu względem
+   podanych warunków. Wymagane jest podanie niezmienników obu
+   pętli programu oraz asercji pośrednich.
+
+   Poniższa specyfikacja używa następującej formuły, stwierdzającej że fragment tablicy $A$ jest posortowany niemalejąco:
+   \begin{eqnarray*}
+      S(i,j) &\equiv&  \forall p. (i\leq p<j \Rightarrow A[p]\leq A[p+1])
+   \end{eqnarray*}
+
+   \begin{lstlisting}
+            {n>0 & AAp.(1<=p<=n =>  A[p]>=0)}
+            i:=1;
+            while
+              (i<n) do
+                j:=i+1;
+                while
+                  (j<=n)  do
+                   if A[i]>A[j] then
+                       t:=A[i]; A[i]:=A[j]; A[j]:=t
+                   else
+                       j:=j+1;
+                i:=i+1
+            {S(1,n)}
+   \end{lstlisting}
+
+
+   \section{Rozwiązanie}
+
+   \begin{lstlisting}
+    {n>0 & AAp.(1<=p<=n => A[p]>=0)}
+    i:=1;
+    while {S(1,i) & AAp.((i>1 & i<=p<=n) => A[i-1]<=A[p])}
+      (i<n) do
+        {i<n & S(1,i) & AAp.((i>1 & i<=p<=n) => A[i-1]<=A[p])}
+        j:=i+1;
+        {i<n & j=i+1 & j<=n}
+        while {AAp.(i<p<j => A[i]<=A[p])}
+          (j<=n)  do
+           {i<j<=n & AAp.(i<p<j => A[i]<=A[p])}
+           if A[i]>A[j] then
+               {i<j<=n & A[i]>A[j] & AAp.(i<p<j => A[i]<=A[p])}
+               t:=A[i]; A[i]:=A[j]; A[j]:=t
+           else
+               {i<j<=n & AAp.(i<p<=j => A[i]<=A[p])}
+               j:=j+1;
+        {j=n+1 & S(1,i+1) & AAp.(i<p<=n => A[i]<=A[p])}
+        i:=i+1
+    {S(1,n)}
+   \end{lstlisting}
+
+
+\end{document}

@@ -1,0 +1,377 @@
+\documentclass{article}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage[a4paper, total={7in, 9in}]{geometry}
+\usepackage{mathtools}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[polish]{babel}
+
+\newcommand{\sembr}[1]{[\![#1]\!]}
+\newcommand{\pto}{\rightharpoonup}
+
+\newcommand{\true}{{\tt true}}
+\newcommand{\false}{{\tt false}}
+
+\pagestyle{empty}
+
+\title{\vspace{-1cm}
+Semantyka i Weryfikacja programów \\
+\large Praca domowa 1.
+}
+\author{Marcin Abramowicz ma406058}
+
+\begin{document}
+
+   \maketitle
+
+   \section{Zadanie}
+
+   Napisz semantykę operacyjną dużych kroków instrukcji języka umożliwiającego prostą obsługę odwoływalnych transakcji.
+   Składnia jest opisana gramatyką:
+
+   \begin{flalign*}
+      & {\bf Num} \ni n ::= \ 0 \ | \ 1 \ | \ -1 \ | \ 2 \ | \ -2 \ | \ \dots \\
+      & {\bf Var} \ni x ::= \ x \ | \ y \ | \ \dots \\
+      & {\bf TrId} \ni t ::= \ t \ | \ u \ | \ \dots \\
+      & {\bf Expr} \ni e ::= \ n \ | \ x \
+      | \ e_{1} + e_{2} \
+      | \ e_{1} * e_{2} \
+      | \ e_{1} - e_{2} \\
+      & {\bf BExpr} \ni b ::= \ true \ | \ false \
+      | \ e_{1} < e_{2} \
+      | \ e_{1} = e_{2} \
+      | \ b_{1} \land b_{2} | \neg b \\
+      & {\bf Instr} \ni I ::= \ x := \ e \
+      | \ I_{1}; I_{2} \
+      | \ {\bf if} \ b \ {\bf then} \ I_{1} \
+      | \ {\bf while} \ b \ {\bf do} \ I \
+      | \ {\bf try} \ t: \ I \
+      | \ {\bf fail} \ t \
+      | \ {\bf commit}
+   \end{flalign*}
+
+   Wyliczanie wyrażeń arytmetycznych i logicznych odbywa się standardowo.
+   Można założyć, że semantyka wyrażeń jest dana.
+
+   Instrukcja ${\bf try} \ t: \ I$ rozpoczyna transakcję o nazwie $t$,
+   polegającą na wykonaniu instrukcji $I$.
+
+   Instrukcja ${\bf fail} \ t$ przerywa wykonanie transakcji o nazwie $t$.
+   Zauważmy, że jednocześnie może się wykonywać wiele zagnieżdżonych transakcji.
+   Jeżeli więcej niż jedna z nich ma nazwę $t$, to przerwaniu ulega „najbliższa” z nich.
+   Jeżeli aktualnie nie jest wykonywana żadna transakcja o nazwie $t$, to instrukcja ${\bf fail} \ t$ nie wywołuje żadnego skutku i program normalnie wykonuje się dalej.
+   Przy przerwaniu transakcji odwoływane są wszystkie zmiany wartości zmiennych dokonane od chwili rozpoczęcia tej transakcji.
+   Instrukcja $\bf commit$ zmienia tę zasadę.
+   Utrwala ona aktualny stan tak, że zmiany dokonane przed jej wykonaniem pozostają w mocy przy przerywaniu transakcji.
+   Innymi słowy, jeżeli podczas wykonania transakcji wykonano co najmniej jedną instrukcję $\bf commit$, to przy przerwaniu tej transakcji odwoływane są tylko zmiany wartości zmiennych dokonane po ostatnim wykonaniu instrukcji $\bf commit$ w tej transakcji.
+
+   Przykładowo, po wykonaniu programu:
+   \begin{flalign*}
+      & x := 0; \ y := 0; \ z := 10; \\
+      & {\bf try} \ t: \\
+      & \quad {\bf while} \ true \ {\bf do} \\
+      & \quad \quad {\bf commit}; \ x := x + 1; \\
+      & \quad \quad {\bf try} \ u: \\
+      & \quad \quad \quad {\bf while} \ true \ {\bf do} \\
+      & \quad \quad \quad \quad y := y + 1; \ z := z - 1; \\
+      & \quad \quad \quad \quad {\bf if} \ x < y \ {\bf then \ fail} \ u; \\
+      & \quad \quad \quad \quad {\bf if} \ z < x \ {\bf then \ fail} \ t
+   \end{flalign*}
+   (gdzie wcięcia określają zasięg instrukcji $\bf while$ i $\bf try$) zmienna $x$ przyjmuje wartość 5, zmienna $y$ wartość 0, a zmienna $z$ wartość 10.
+
+   W rozwiązaniu wystarczy podać reguły semantyczne dla instrukcji $\bf try$, $\bf fail$, $\bf commit$ i dla sekwencji (średnika).
+
+
+   \section{Rozwiązanie}
+
+   Stan w naszej semantyce będzie ''rozbudowanym'' podstawowym stanem (krotką):
+   \[
+         {State} = (mem, \, actTr, \, fail, \, commited, \, commitedMem)
+   \]
+   gdzie:
+   \begin{itemize}
+      \item
+      $mem: Var \rightarrow Int$ -- ''podstawowa`` definicja stanu
+
+      \item
+      $actTr: TrId \rightarrow BExpr$ -- funkcja mówiąca, czy transakcja o podanym id została rozpoczęta,
+      na start zakładamy, że dla każdej wartości funkcja przyjmuje wartość $false$
+
+      \item
+      $fail: TrId \, | \, Null$ -- flaga, która mówi, czy została użyta komenda ${\bf fail}$ $t$,
+      dodatkowo zawiera informację jakie $t$ zostało użyte w komendzie
+
+      \item
+      $commited: BExpr$ -- flaga, która mówi, czy została użyta komenda ${\bf commit}$
+
+      \item
+      $commitedMem: Var \rightarrow Int$ -- wartość, z ostatnim stanem,
+      na którym została wywołana komenda ${\bf commit}$,
+      albo stan ostatniej otwartej transakcji
+      (żeby była poprawna wartość wewnątrz, do sprawdzania czy operacja nastąpiła używamy oddzielnej flagi) \\ \\
+
+   \end{itemize}
+
+   Teraz możemy opisać sementykę:
+
+   \begin{itemize}
+      \item
+      Rozpatrzmy na początku semantykę związaną z operacją:
+      \[
+            {\bf try} \, t: \, S_1
+      \]
+
+      W przypadku, kiedy dochodzimy do operacji
+      (oczywiście stan wywołania dla $S_1$, aktualizujemy poprzez zmienienie wartości $t$ w $actTr$ na $true$
+      -- transakcja została rozpoczęta)
+      i wszystko wykonało się poprawnie możemy zwrócić stan,
+      który został zwrócony przez $S_1$.
+      \\ \\
+      $mem_1'$, $actTr_1'$, $commited_1'$ i $commitedMem_1'$ mogą być dowolne, interesuje nas $Null$ we fladze $fail$:
+      \\ \\
+      \[
+         \frac {
+            \splitfrac {
+               \langle S_1, (mem_1, \, actTr_1[u \rightarrowtail true], \, fail_1, \, false, \, mem_1) \rangle
+               \leadsto
+            } {
+               s_1' = (mem_1', \, actTr_1', \, Null, \, commited_1', \, commitedMem_1')
+            }
+         } {
+            \langle {\bf try} \, t: \, S_1, \, s \rangle
+            \leadsto s_1'
+         }
+      \]
+      \\ \\ \\
+      Jednak jeśli wykonanie $S_1$
+      (oczywiście stan wywołania dla $S_1$, aktualizujemy poprzez zmienienie wartości $t$ w $actTr$ na $true$
+      -- transakcja została rozpoczęta) zwróciło ustawioną flagę, czyli transakcja została przerwana,
+      to próbujemy dopasować id we fladze do aktualnie otwieranej transakcji i jeśli dopasujemy
+      oraz flaga $commited$ ma wartość $false$ (brak wywołania ${\bf commit}$),
+      to zwracamy aktualny stan -- stan ''z poziomu'' tego wywolania, czyli ''anulujemy'' operacje z $S_1$.
+      \\ \\
+      $mem_1'$, $actTr_1'$, i $commitedMem_1'$ mogą być dowolne,
+      interesuje nas wartość $fail_1' = t$ we fladze oraz flaga $commited$ z wartością $false$:
+      \\ \\
+      \[
+         \frac {
+            \splitfrac {
+               \langle S_1, (mem_1, \, actTr_1[u \rightarrowtail true], \, fail_1, \, false, \, mem_1) \rangle
+               \leadsto
+            } {
+               s_1' = (mem_1', \, actTr_1', \, fail_1', \, false, \, commitedMem_1')
+            }
+         } {
+            \langle {\bf try} \, t: \, S_1, \, s \rangle
+            \leadsto s
+         }
+      \]
+      \\ \\ \\
+      W przypadku, kiedy dochodzimy do operacji
+      (oczywiście stan wywołania dla $S_1$, aktualizujemy poprzez zmienienie wartości $t$ w $actTr$ na $true$
+      -- transakcja została rozpoczęta)
+      i flaga $fail$ nie jest $Null$-em, ale wartość w niej nie pasuje do aktualnej transakcji,
+      to zwracamy stan, który został zwrócony przez $S_1$.
+      \\ \\
+      $mem_1'$, $actTr_1'$, $commited_1'$ i $commitedMem_1'$ mogą być dowolne, interesuje nas $fail_1' \ne t$ we fladze $fail$:
+      \\ \\
+      \[
+         \frac {
+            \splitfrac {
+               \langle S_1, (mem_1, \, actTr_1[u \rightarrowtail true], \, fail_1, \, false, \, mem_1) \rangle
+               \leadsto
+            } {
+               s_1' = (mem_1', \, actTr_1', \, fail_1', \, commited_1', \, commitedMem_1')
+            }
+         } {
+            \langle {\bf try} \, t: \, S_1, \, s \rangle
+            \leadsto s_1'
+         }
+      \]
+      \\ \\ \\
+      W przypadku, gdy napotykamy tę operację, a wcześniej została używa poprawna operacja ${\bf fail} \, t$
+      możemy ominąć całe wykonanie (nawet jeśli została użyta operacja ${\bf commit}$ -- ''wyższy'' ${\bf try}$ obsłuży to)
+      \\ \\
+      Interesuje nas $fail$, który nie jest $Null$ - em:
+      \\ \\
+      \[
+         \frac {
+            s = (mem, \, actTr, \, fail, \, commited, \, commitedMem)
+         } {
+            \langle {\bf try} \, t: \, S_1, \, s \rangle
+            \leadsto s
+         }
+      \]
+      \\ \\ \\
+      Ostatnim przypadkiem jest wykonanie operacji ${\bf commit}$ oraz poprawnej operacji ${\bf fail} \, t$ w transakcji.
+      Wtedy chcemy zwrócić ostatni zapisany stan (wartość w polu $commitedMem$).
+      \\ \\
+      $mem_1'$, $actTr_1'$ mogą być dowolne, interesuje nas $fail_1'$ we fladze $fail$, które nie jest $Null$-em oraz
+      wartość $true$ we fladze $commited$:
+      \\ \\
+      \[
+         \frac {
+            \splitfrac {
+               \langle S_1, (mem_1, \, actTr_1[u \rightarrowtail true], \, fail_1, \, false, \, mem_1) \rangle
+               \leadsto
+            } {
+               s_1' = (mem_1', \, actTr_1', \, fail_1', \, true, \, commitedMem_1')
+            }
+         } {
+            \langle {\bf try} \, t: \, S_1, \, s \rangle
+            \leadsto s' = (commitedMem_1', \, actTr_1', \, fail_1', \, true, \, commitedMem_1')
+         }
+      \]
+      \\ \\ \\
+
+      \item
+      Teraz rozpatrzmy semantykę dla operacji:
+      \[
+            {\bf commit}
+      \]
+
+      W przypadku kiedy napotykamy tę operację, zapisujemy aktualny stan i zmieniamy flagę $commited$.
+      \\ \\
+      $mem$, $actTr$, $fail$, $commited$ i $commitedMem$ mogą być dowolne (ostatnie 2 nadpiszemy):
+      \\ \\
+      \[
+         \frac {
+            s = (mem, \, actTr, \, fail, \, commited, \, commitedMem)
+         } {
+            \langle {\bf commit}, \, s \rangle
+            \leadsto s' = (mem, \, actTr, \, fail, \, true, \, mem)
+         }
+      \]
+      \\ \\ \\
+
+      \item
+      Pora rozpatrzyć semantykę operacji:
+      \[
+            {\bf fail} \, t: \, S_1
+      \]
+
+      Możemy mieć przypadek napotkania tej operacji, ale transakcja o podanym id nie została otwarta.
+      Oznacza to, że ta operacja nic nie zrobi i możemy kontynuować wykonanie nie zmieniając flagi.
+      \\ \\
+      Interesuje nas tutaj wartość funkcji $actTr_1$ dla $t$ -- jest $false$, czyli transakcja o tym id nie została otwarta:
+      \\ \\
+      \[
+         \frac {
+            s = (mem, \, actTr, \, fail, \, commited, \, commitedMem)
+            \quad
+            actTr(t) == false
+         } {
+            \langle {\bf fail} \, t: \, S_1, \, s \rangle
+            \leadsto s
+         }
+      \]
+      \\ \\ \\
+      Drugi przypadek występuje, kiedy transakcja o podanym id została otwarta.
+      Wtedy w zwracanym stanie ustawiamy flagę na wartość aktualnego id.
+      Zauważmy, że dzięki sprawdzaniu, czy transakcja o danym id została otwarta, to wiemy,
+      że jeśli napotykamy ''wzniesioną'' flagę to jest to poprawne anulowanie
+      -- istnieje odpowiadająca otwarta transakcja i powinniśmy odwoływać wykonane operacje.
+      Omijamy tym samym wszystkie operacje ${\bf fail} \, t$, które nie mają odpowiadających instrukcji rozpoczęcia
+      transakcji, co oznacza, że nie wpływają na przebieg programu.
+      \\ \\
+      Interesuje nas tutaj, wartość funkcji $actTr_1$ dla $t$ -- jest $true$, czyli transakcja o tym id została otwarta
+      i flaga $fail$ jest $Null$-em, więc ustawiamy odpowiednio flagę:
+      \\ \\
+      \[
+         \frac {
+            s = (mem, \, actTr, \, Null, \, commited, \, commitedMem)
+            \quad
+            actTr(t) == true
+         } {
+            \langle {\bf fail} \, t: \, S_1, \, s \rangle
+            \leadsto s' = (mem, \, actTr, \, t, \, commited, \, commitedMem)
+         }
+      \]
+      \\ \\ \\
+      Trzeci przypadek występuje, kiedy transakcja o podanym id została otwarta,
+      ale flaga jest juz ustawiona, czyli nie jest to pierwsza operacja ${\bf fail} \, t$
+      -- my natomiast patrzymy tylko na pierwszą poprawną
+      \\ \\
+      Interesuje nas tutaj, wartość funkcji $actTr_1$ dla $t$ -- jest $true$, czyli transakcja o tym id została otwarta,
+      ale $fail$ nie jest $Null$-em:
+      \\ \\
+      \[
+         \frac {
+            s = (mem, \, actTr, \, fail, \, commited, \, commitedMem)
+            \quad
+            actTr(t) == true
+         } {
+            \langle {\bf fail} \, t: \, S_1, \, s \rangle
+            \leadsto s
+         }
+      \]
+      \\ \\ \\
+
+      \item
+      Na koniec rozpatrzmy generyczną operację sekwencji:
+      \[
+         S_1; \, S_2
+      \]
+
+      Jeśli nic nie zostało przerwane w wykonaniu $S_1$ to możemy wykonać $S_2$:
+      \\ \\
+      Interesuje nas $Null$ we fladze $fail$:
+      \\ \\
+      \[
+         \frac {
+            \langle S_1, \, s \rangle
+            \leadsto s_1' = (mem_1', \, actTr_1', \, Null, \, commited_1', \, commitedMem_1')
+            \quad
+            \langle S_2, \, s_1' \rangle
+            \leadsto s_2'
+         } {
+            \langle S_1; \, S_2, \, s \rangle
+            \leadsto s_2'
+         }
+      \]
+      \\ \\ \\
+      Natomiast jeśli operacja $S_1$ zwraca podniesioną flagę, czyli została wykonana w niej poprawna operacja
+      ${\bf fail} \, t$, czyli wszystkie operacje po niej następujące możemy ominąć
+      (aż do końca aktualnego bloku, podobnie jak na ćwiczeniach z operacją break).
+      \\ \\
+      Interesuje nas wartość $t_1'$ we fladze, która nie jest $Null$-em:
+      \\ \\
+      \[
+         \frac {
+            \langle S_1, \, s \rangle
+            \leadsto s_1' = (mem_1', \, actTr_1', \, t_1', \, commited_1', \, commitedMem_1')
+            \quad
+            \langle S_2, \, s_1' \rangle
+            \leadsto s_2'
+         } {
+            \langle S_1; \, S_2, \, s \rangle
+            \leadsto s_1'
+         }
+      \]
+      \\ \\ \\
+
+      \item
+      Finalnie dodamy jeszcze przypadek dla operacji:
+      \[
+            {\bf while} \, b \, {\bf do} \, S_1
+      \]
+
+      Aby while z wartością $true$ w $b$ mógł zostać przerwany operacją ${\bf fail} \, t$ podobnie jak $break$,
+      dodamy sprawdzanie flagi przerwania.
+      \\ \\
+      Interesuje nas wartość $t$ we fladze, która nie jest $Null$-em:
+      \\ \\
+      \[
+         \frac {
+            mem(b) == false \quad or \quad s = (mem, \, actTr, \, t, \, commited, \, commitedMem)
+         } {
+            \langle {\bf while} \, b \, {\bf do} \, S_1, \, s \rangle
+            \leadsto s
+         }
+      \]
+
+   \end{itemize}
+
+\end{document}

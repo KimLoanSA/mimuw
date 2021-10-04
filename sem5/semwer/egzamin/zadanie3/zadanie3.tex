@@ -1,0 +1,150 @@
+%!TEX encoding =  UTF-8 Unicode
+
+\documentclass[final,11pt]{article}
+\usepackage{a4wide}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{latexsym}
+\usepackage[polish,english]{babel}
+\selectlanguage{english}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\usepackage{url}
+\usepackage{xspace}
+\usepackage{verbatim}
+\usepackage{alltt}
+\usepackage{wrapfig}
+\usepackage[pdftex]{graphicx}
+\usepackage[pdftex]{color}
+\usepackage[final]{listings}
+
+
+%%%%%%%%%%%%% listings
+\lstdefinelanguage{whileprograms}{morekeywords={while,do,if,then,else,div),(,decr,in,wrt},%
+   sensitive,%
+   morecomment=[l]//,%
+   morecomment=[s]{\{}{\}},%
+%   morecomment=[s]{$}{$},%
+   basicstyle=\Large\tt,
+   keywordstyle=\normalfont\bfseries\color{black},
+   commentstyle=\color{blue},
+   mathescape=true,
+}
+
+\lstset{language=whileprograms,flexiblecolumns=true,mathescape=true,frame=none}
+\lstset{commentstyle=\it,basicstyle=\tt}
+\lstset{literate={<=}{{$\leq$}}1
+      {>=}{{$\geq$}}1
+      {^}{{$\land$}{$\;$}}2
+      {&}{{$\land$}{$\;$}}2
+      {||}{{$\lor$}{$\;$}}2
+      {<>}{{$\neq$}{$\;$}}2
+      {=>}{{$\Rightarrow$}{$\;$}}2
+      {EE}{{$\exists$}}1
+      {AA}{{$\forall$}}1
+      {!}{{$\neg$}}1
+}
+
+\title{
+   Semantyka i Weryfikacja programów \\
+   \large Egzamin, zadanie 3.
+}
+\author{Marcin Abramowicz ma406058}
+
+\begin{document}
+
+   \lstset{language=whileprograms} \selectlanguage{polish}
+
+   \maketitle
+
+   \section{Zadanie}
+
+   Rozważamy proste rozszerzenie języka {\sc Tiny} o jednowymiarowe
+   tablice.
+
+   Dany jest następujący program w tym języku, operujący na tablicy
+   $A$ {\bf indeksowanej od $1$ do $n$}.
+   Należy udowodnić częściową poprawność
+   tego programu względem
+   podanych warunków. Wymagane jest podanie asercji we wszystkich wskazanych miejscach, w tym niezmienników dwóch z trzech pętli. (Miejsca na wpisanie niezmienników znajdują się bezpośrednio po słowach kluczowych {\bf while}.) Jeżeli ktoś uzna za stosowne, to można także podać więcej asercji.
+
+   Poniższa specyfikacja używa następującej formuły, stwierdzającej że fragment tablicy $A$ jest posortowany niemalejąco:
+
+   \begin{eqnarray*}
+      S(i,j) &\equiv&  \forall p. (i\leq p<j \Rightarrow A[p]\leq A[p+1])
+   \end{eqnarray*}
+
+   \newpage
+   \section{Rozwiązanie}
+
+   \begin{lstlisting}
+        {1<=k<=n &  S(1,k-1) & S(k,n) (s)}
+        i:=1;
+        while {S(1,k-1) & S(k,n)
+               & 1<=k<=n+1 & 1<=i<=k (1)}
+          (k<=n) do
+            {1<=i<=k & S(1,k-1) & S(k,n)
+             & 1<=k<=n (2)}
+            while (A[i]<A[k]) do  i:=i+1;
+            {1<=i<=k & 1<=k<=n & S(1,k-1) & S(k,n)
+             & A[i]>=A[k] (3)}
+            j:=i;
+            while {1<=i<=k & 1<=k<=n
+                   & 1<=j<=k & S(1,j) & S(k+1,n) & A[j]>=A[k] (4)}
+              (j<k)  do
+               {1<=i<=k & 1<=k<=n & S(1,j) & S(k+1,n) & A[j]>=A[k]
+                & 1<=j<k (5)}
+               t:=A[j]; A[j]:=A[k]; A[k]:=t;
+               {1<=i<=k & 1<=k<=n & 1<=j<k & S(k+1,n)
+                & A[j]<=A[k] & S(1,j+1) (6)}
+               j:=j+1;
+            {1<=i<=k & S(k+1,n)
+             & j=k & S(1,k) (7)}
+            k:=k+1
+        {S(1,n) (k)}
+   \end{lstlisting}
+
+
+   \subsection{Wyjaśnienie}
+
+   W blokach {} pierwsza linia zawiera jedynie warunki ''przepisane'' z poprzedniego,
+   natomiast nowe linie zawierają nowe warunki.
+
+   \subsubsection{Bardzo ogólnie wynikanie}
+
+   \begin{itemize}
+      \item
+      (s) => (1): dodaję jedynie warunki na $k$
+      (pamiętając, że po pętli $k = n + 1$) i $i$
+
+      \item
+      (1) => (2): wzmacniam warunek na $k$ wiedząc, że spełniamy warunek pętli
+
+      \item
+      (2) => (3): wiem, że w poprzedzającym $while$ znalazłem takie $i$,
+      że $A[i] >= A[k]$
+
+      \item
+      (3) => (4): dodaję odpowiednie warunki na $j$,
+      dodatkowo zmniejszam siłę warunków na posorotowanie,
+      żeby finalnie dla $j = k + 1$ również to zachodziło
+
+      \item
+      (4) => (5): wzmacniam warunek na $j$ wiedząc, że spełniamy warunek pętli
+
+      \item
+      (5) => (6): po wykonaniu swapa odwraca mi się nierówność między
+      $A[j]$ i $A[k]$, dodatkowo ciąg o 1 dłużsy jest posortowany
+      (po dodaniu 1 do $j$ otrzymuję niezmiennik)
+
+      \item
+      (6) => (7): wyszedłem z pętli, wiem że $j = k$, ciąg o 1 dłuższy jest posortowany i pasuje to do niezmiennika jeśli dodam 1 do $k$
+
+      \item
+      (7) => (k): dochodzę $k = n$, więc finalny warunek jest spełniony
+
+   \end{itemize}
+
+
+\end{document}

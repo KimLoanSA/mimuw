@@ -1,0 +1,213 @@
+\documentclass{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[polish]{babel}
+
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{empheq}
+\usepackage{bm}
+
+\newcommand{\pto}{\rightharpoonup}
+
+\newcommand{\syn}[1]{{\bf \textcolor{RawSienna}{#1}}}
+\newcommand{\sem}[1]{{\bf \textcolor{olive}{#1}}}
+\newcommand{\semcol}[1]{{\textcolor{olive}{#1}}}
+\newcommand{\sembr}[1]{[\![#1]\!]}
+\newcommand{\comm}[1]{\quad \; \text{ \textcolor{black!42}{ - #1} } }
+
+\newcommand{\boxedeq}[1]{\begin{empheq}[box={\fboxsep=6pt\fbox}]{align*}#1\end{empheq}}
+
+\newcommand{\bigeps}{\mathcal{E}}
+
+\title{\vspace{-3cm}
+Semantyka i Weryfikacja programów \\
+\large Praca domowa 2.
+}
+\author{Marcin Abramowicz ma406058}
+
+
+\begin{document}
+
+   \maketitle
+
+   \section{Zadanie}
+
+   Napisz semantykę denotacyjną, w stylu bezpośrednim
+   (tj. bez użycia semantyki kontynuacyjnej), języka o gramatyce:
+
+   \begin{flalign*}
+      & {\bf Num} \ni n ::= \ 0 \ | \ 1 \ | \ -1 \ | \ 2 \ | \ -2 \ | \dots \\
+      & {\bf Var} \ni x ::= \ x \ | \ y \ | \dots \\
+      & {\bf Expr} \ni e ::= \ n \ | \ x \
+      | \ e_{1} + e_{2} \
+      | \ e_{1} * e_{2} \
+      | \ e_{1} - e_{2} \\
+      & {\bf Decl} \ni d ::= {\bf var} \ x_{1} \ {\bf set \ to} \ x_{2} \ {\bf by} \ S
+      | \ d1;d2 \
+      | \epsilon \\
+      & {\bf Stmt} \ni S ::= x := e \
+      | \ {\bf var} := e \
+      | \ S1;S2 \
+      | \ {\bf if} \ e = 0 \ {\bf then} \ S_{1} \ {\bf else} \ S_{2} \
+      | \ {\bf while} \ e \ne 0 \ {\bf do} \ S \
+      | \ {\bf begin} \ d;I \ {\bf end}
+   \end{flalign*}
+
+   Znaczenie wszystkich konstrukcji, z wyjątkiem deklaracji zmiennych i przypisań,
+   jest standardowe.
+   Deklaracja zmiennej postaci
+   \[
+         {\bf var} \ x_{1} \ {\bf set \ to} \ x_{2} \ {\bf by} \ S,
+   \]
+   oprócz zmiennej $x_{1}$ o początkowej wartości 0,
+   wprowadza (anonimową) procedurę o treści $S$,
+   której parametrem formalnym (przekazywanym przez wartość) jest $x_{2}$.
+   Wystąpienie w programie (w tym także wewnątrz instrukcji $S$) przypisania $x_{1} := e$,
+   zamiast zwykłego podstawienia wartości wyrażenia $e$ na zmienną,
+   powoduje wywołanie tej procedury z argumentem będącym wartością wyrażenia $e$.
+   Specjalna postać przypisania ${\bf var} := e$ występuje jedynie wewnątrz instrukcji $S$
+   i służy do bezpośredniego (tj. bez rekurencyjnego wywoływania procedury anonimowej)
+   ustawienia wartości zmiennej $x_{1}$.
+   Odczyt wartości zmiennej odbywa się w zwykły sposób.
+   Widoczność wszystkich identyfikatorów jest statyczna.
+
+   Przykładowo, na końcu wykonania bloku:
+   \begin{flalign*}
+      & {\bf begin} \\
+      & \quad {\bf var} \ x \ {\bf set \ to} \ y \ {\bf by} \ {\bf var} := 2 * y; \\
+      & \quad x := 8 \\
+      & {\bf end}
+   \end{flalign*}
+   zmienna $x$ przyjmuje wartość 16.
+   Z kolei wykonanie:
+   \begin{flalign*}
+      & {\bf begin} \\
+      & \quad {\bf var} \ x \ {\bf set \ to} \ y \ {\bf by} \\
+      & \quad \quad {\bf if} \ y = 0 \
+         {\bf then \ var} \ := 1 \ {\bf else} \ x := y - 1; \ {\bf var} := x*y; \\
+      & \quad x := 5 \\
+      & {\bf end}
+   \end{flalign*}
+   spowoduje nadanie zmiennej $x$ wartości $5! = 120$.
+
+   W rozwiązaniu można używać semantycznej funkcji $alloc$,
+   która dla danego stanu pamięci zwraca pewną nieużywaną w tym stanie komórkę pamięci.
+   Można założyć, że przypisania postaci ${\bf var} := e$
+   nie występują poza deklaracjami zmiennych.
+
+   W rozwiązaniu należy podać co najmniej równania semantyczne dla deklaracji zmiennych,
+   obu rodzajów przypisań i dla odczytania wartości zmiennej w wyrażeniu arytmetyczym.
+   Pozostałe równania można pominąć jeżeli są zupełnie standardowe.
+   Należy jednak podać definicje wszystkich użytych dziedzin i typy funkcji semantyczych.
+
+
+   \section{Rozwiązanie}
+
+   \subsection{Dziedziny semantyczne}
+
+   \begin{gather*}
+      \begin{aligned}
+         \sem{Int} &= \{\semcol{0}, \semcol{1}, \semcol{-1}, \semcol{2}, \semcol{-2}, \dots\} \\
+         \\
+         \sem{VEnv} &= \syn{Var} \pto \sem{Loc} \\
+         \sem{Store} &= \sem{Loc} \pto \sem{Int} \\
+         \\
+         \sem{PEnv} &= \syn{Var} \pto \sem{PROC} \\
+         \sem{PROC} &= \sem{Int} \pto \sem{Store} \pto \sem{Store}\\
+         \\
+         \sem{EXPR} &= \sem{VEnv} \to \sem{Store} \pto \sem{Int} \\
+         \sem{STMT} &=\sem{VEnv}\to \sem{PEnv}\to \sem{Loc} \to \sem{Store} \pto \sem{Store} \\
+         \sem{DECL} &= \sem{VEnv} \to \sem{PEnv} \to \sem{Store} \to (\sem{VEnv} \times \sem{PEnv} \times \sem{Store})  \\
+      \end{aligned}
+   \end{gather*}
+
+
+   \subsection{Funkcje semantyczne}
+
+   \begin{gather*}
+      \semcol{\mathcal{N}}: \syn{Num} \to \sem{Int} \\
+      \semcol{\bigeps}: \syn{Expr} \to \sem{EXPR} \\
+      \semcol{S}: \syn{Stmt} \to \sem{STMT} \\
+      \semcol{D}: \syn{Decl} \to \sem{DECL} \\
+   \end{gather*}
+
+
+   \subsection{Równania semantyczne}
+
+   \boxedeq{ \semcol{S}: \syn{Stmt} \to \sem{STMT} }
+
+   \begin{gather*}
+      \semcol{S}\sembr{x \syn{:=} e} \ \rho_V \ \rho_P \ l \ s =
+      \rho_P \ x \ ( \semcol{\bigeps}\sembr{e} \ \rho_V \ s ) \ s \\
+      \semcol{S}\sembr{\syn{var :=} e} \ \rho_V \ \rho_P \ l \ s =
+      s [ l \mapsto ( \semcol{\bigeps}\sembr{e} \ \rho_V \ s )] \\
+      \semcol{S}\sembr{S_{1} \syn{;} S_{2}} \ \rho_V \ \rho_P \ l \ s =
+      \semcol{S}\sembr{S_{2}} \ \rho_V \ \rho_P \ l \ ( \semcol{S}\sembr{S_{1}} \ \rho_V \ \rho_P \ l \ s ) \\
+      \semcol{S}\sembr{\syn{if} \ e = 0 \ \syn{then} \ S_{1} \ \syn{else} \ S_{2}} \ \rho_V \ \rho_P \ l \ s =
+      ifte_{\sem{Store}}(
+      \semcol{\bigeps}\sembr{e} \ \rho_V \ s = 0,
+      \semcol{S}\sembr{S_{1}} \ \rho_V \ \rho_P \ l \ s,
+      \semcol{S}\sembr{S_{2}} \ \rho_V \ \rho_P \ l \ s ) \\
+   \end{gather*}
+   \begin{gather*}
+      \semcol{S}\sembr{\syn{while} \ e \ne 0 \ \syn{do} \ S} \ \rho_V \ \rho_P \ l \ s =
+      fix(\Phi), \ {\bf gdzie}: \\
+      \Phi(F) \ \rho_V \ \rho_P \ l \ s = ifte_{\sem{Store}}(
+      \semcol{\bigeps}\sembr{e} \ \rho_V \ s \ne 0,
+      F ( \semcol{S}\sembr{S} \ \rho_V \ \rho_P \ l \ s ),
+      s ) \\
+      \\
+      \semcol{S}\sembr{\syn{begin} \ d \syn{;} \ I \ \syn{end}} \ \rho_V \ \rho_P \ l \ s =
+      \semcol{S}\sembr{I} \ \rho_V' \ \rho_P' \ l \ s', \ {\bf gdzie}: \\
+      \langle \rho_V', \rho_P', s' \rangle =
+      \semcol{D}\sembr{d} \ \rho_V \ \rho_P \ s
+   \end{gather*}
+
+
+   \boxedeq{ \semcol{D}: \syn{Decl} \to \sem{DECL} }
+
+   \begin{gather*}
+      \semcol{D}\sembr{ \syn{\epsilon} } \ \rho_V \ \rho_P \ s =
+      \langle \rho_V, \rho_P, s \rangle \\
+      \\
+      \semcol{D}\sembr{ d_{1} \syn{;} \ d_{2} } \ \rho_V \ \rho_P \ s =
+      \semcol{D}\sembr{ d_{2} } \ \rho_V' \ \rho_P' \ s', \ {\bf gdzie}: \\
+      \langle \rho_V', \rho_P', s' \rangle = \semcol{D}\sembr{ d_{1} } \ \rho_V \ \rho_P \ s \\
+      \\
+      \semcol{D}\sembr{ \syn{var} \ x_{1} \ \syn{set \ to} \ x_{2} \ \syn{by} \ S } \ \rho_V \ \rho_P \ s =
+      \langle \rho_V', \rho_P', s' \rangle, {\bf gdzie}: \\
+      l = newloc(s) \\
+      \rho_V' = \rho_V[x_{1} \mapsto l] \\
+      s' = s[l \mapsto 0] \\
+      \\
+      \rho_P' = \rho_P[x_{1} \mapsto fix(\Phi)] \\
+      \Phi(F) \ n \ s_{F} = \semcol{S}\sembr{S} \ \rho_V'' \ \rho_P'' \ l \ s_{F}', {\bf gdzie}: \\
+      l_{F} = newaloc(s_{F}) \\
+      \rho_V'' = \rho_V'[x_{2} \mapsto l_{F}] \\
+      s_{F}' = s_{F}[l_{F} \mapsto n] \\
+      \rho_P'' = \rho_P[x_{1} \mapsto F] \\
+   \end{gather*}
+
+
+   \boxedeq{ \semcol{\bigeps}: \syn{Expr} \to \sem{EXPR} }
+
+   \begin{gather*}
+      \semcol{\bigeps}\sembr{x} \ \rho_V \ s = s \ (\rho_V \ x)
+   \end{gather*}
+   Reszta jak na wykładzie. \\
+
+
+   \boxedeq{ \semcol{\mathcal{N}}: \syn{Num} \to \sem{Int} }
+   Jak na wykładzie, bo ich dziedzin semantycznych i funkcji semantycznych nie zmieniałem. \\
+   \\
+   \\
+   \\
+   Lokacja $l \in \sem{Loc}$ w $\sem{STMT}$ startowo jest nieokreślona poza blokiem begin-end.
+   Zakładam również ze nie będzieny aplikować operatorów dla niezdefiniowanych zmiennych,
+   a wynik każdej aplikacji z nieokreślonym argumentem jest nieokreślony również (tak jak to było mówione na wykładzie).
+
+
+\end{document}
