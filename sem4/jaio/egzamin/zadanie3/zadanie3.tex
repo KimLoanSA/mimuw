@@ -1,0 +1,82 @@
+\documentclass[a4paper]{article}
+
+\usepackage{amssymb,mathrsfs,amsmath,amscd,amsthm}
+\usepackage[mathcal]{euscript}
+\usepackage{stmaryrd}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[polish]{babel}
+\usepackage{graphics}
+
+%%%%%%% makra do notacji
+
+\renewcommand{\le}{\leqslant}%mniejsze bądź równe
+\renewcommand{\ge}{\geqslant}%większe bądź równe
+\renewcommand\qedsymbol{\scalebox{0.75}{$\blacksquare$}}%koniec dowodu
+\newcommand\exendsymbol{\scalebox{1}{$\lrcorner$}}%inny koniec dowodu
+\renewcommand{\phi}{\varphi}%litera φ
+\newcommand{\eps}{\varepsilon}%litera ε
+\newcommand{\nr}[1]{\smallcaps{NR#1}}%zadanie ze zbioru Niwiński-Rytter
+
+\newcommand{\bin}{\textrm{bin}}%napis "bin" oznaczający binarną reprezentację liczby
+
+\newcommand{\rev}{{\mathsf R}}%L^\rev to odwrócenie języka L
+\newcommand{\N}{\mathbb N}%liczby naturalne
+\newcommand{\set}[1]{\{#1\}}%\set{1,2,3} to zbiór {1,2,3}
+\newcommand{\setof}[2]{\{#1\mid #2\}}%\setof{(x,y)}{x,y\in\N,x+y=5} to {(x,y)|x,y∈N, x+y=5}
+\newcommand{\from}{\colon}%f\from X\to Y to funkcja f:X→Y
+
+\renewcommand{\subset}{\subseteq}%symbol ⊆
+\newcommand{\aut}[1]{\mathcal {#1}}%\aut A to automat A
+\newcommand{\reg}[1]{\mathcal {#1}}%\reg E to wyrażenie regularne E
+\newcommand{\gram}[1]{\mathcal {#1}}%\gram G to gramatyka G
+\newcommand{\lang}{L}%\lang(\aut A) to L(A)
+
+\newcommand{\tran}[1]{\xrightarrow{#1}}%p\tran a q to tranzycja z p do q z etykietą a
+
+\newcommand{\produce}{\rightarrow}%produkcja np. X\produce YZ
+\newcommand{\sep}{\mathop{\big|}}%X\produce YZ\sep ZT
+
+
+%notacja dla lematu o pompowaniu dla CFL: długie słowo jest postaci \prefix \pleft \infix \pright \suffix
+\newcommand{\prefix}{\mathit{prefix}}
+\newcommand{\infix}{\mathit{infix}}
+\newcommand{\suffix}{\mathit{suffix}}
+\newcommand{\pleft}{\mathit{left}}
+\newcommand{\pright}{\mathit{right}}
+
+%tranzycje automatu ze stosem
+\newcommand{\tranp}[3]{\xrightarrow{\textbf{pop}(#1), #2 ,\textbf{push}(#3)}}
+\newcommand{\trant}[5]{#1,\textbf{read}(#2):\textbf{write}(#4),\textbf{state}(#3),\textbf{move}(#5)}
+
+\newtheorem{twierdzenie}{Twierdzenie}
+\newtheorem{fakt}{Fakt}
+\newtheorem{wniosek}{Wniosek}
+\newtheorem{lemat}{Lemat}
+\newtheorem{zadanie}{Zadanie}
+\newtheorem{zadanie*}{Zadanie$^*$}
+
+
+\title{JAO Egzamin\\ Zadanie 3.}
+\author{Marcin Abramowicz}
+
+\begin{document}
+\maketitle
+Czy następujący problem jest rozstrzygalny?
+\begin{description}
+\item [Dane:]gramatyka bezkontekstowa $\gram G$ oraz słowa $u, v$ nad alfabetem terminali $\gram G$.
+\item [Rozstrzygnąć:]czy $u\sim v$, gdzie $\sim$ to relacja Myhilla-Nerodego języka $\lang(\gram G)$?
+\end{description}
+
+\section*{Rozwiązanie}
+
+Problem ten nie jest roztrzygalny, jest on nierozstrzygalny.
+
+Udowodnimy to dzięki redukcji problemu uniwersalności gramatyki do naszego problemu. Załóżmy, przez sprzeczność, że nasz problem jest rozstrzygalny i spróbujemy go zredukować do problemu uniwersalności gramatyki.
+
+Problem nasz jest rozstrzygalny i mamy ``magiczne pudełko'' z nim, które portafi odpowiadać na nasze zapytania. Spróbujemy rozstrzygnąć problem uniwersalności gramatyki $\gram H$ z jego pomocą. Najpierw sprawdźmy czy $\eps$ należy do naszej gramatyki $\gram H$. Odpytujemy się naszego pudełka i się dowiadujemy, czy należy, jeśli należy to sprawdzamy dalej, jeśli nie należy to znaczy, że to nie jest gramatyka uniwersalna. Zauważmy, że dzięki relacji Myhilla-Nerodego wiemy, że jeśli $\eps \sim \alpha$, dla $\alpha \in A$, gdzie $A$ to alfabet terminali $\gram G$, wtedy dla każdego słowa $w$ zachodzi $\eps w \in \lang \iff \alpha w \in \lang$, czyli słowo $w \in \lang$. Czyli  pytając się pudełka czy każda litera z alfabetu $A$ jest w relacji z $\eps$ sprawdzamy równocześnie, czy gramatyka jest uniwersalna, gdyż wykonując te zapytania dowiadujemy się czy wszystkie słowa należą do języka.
+
+Wiemy ze problem uniwersalności gramatyki jest nierozstrzygalny, więc otrzymaliśmy sprawczność, więc problem uniwersalności gramatyki redukuje się do naszego, tym samym udowadniając ze nasz problem jest nierozstrzygalny.
+
+
+\end{document}

@@ -1,0 +1,102 @@
+\documentclass[a4paper]{article}
+
+\usepackage{amssymb,mathrsfs,amsmath,amscd,amsthm}
+\usepackage[mathcal]{euscript}
+\usepackage{stmaryrd}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[polish]{babel}
+\usepackage{graphics}
+
+%%%%%%% makra do notacji
+
+\renewcommand{\le}{\leqslant}%mniejsze bądź równe
+\renewcommand{\ge}{\geqslant}%większe bądź równe
+\renewcommand\qedsymbol{\scalebox{0.75}{$\blacksquare$}}%koniec dowodu
+\newcommand\exendsymbol{\scalebox{1}{$\lrcorner$}}%inny koniec dowodu
+\renewcommand{\phi}{\varphi}%litera φ
+\newcommand{\eps}{\varepsilon}%litera ε
+\newcommand{\nr}[1]{\smallcaps{NR#1}}%zadanie ze zbioru Niwiński-Rytter
+
+\newcommand{\bin}{\textrm{bin}}%napis "bin" oznaczający binarną reprezentację liczby
+
+\newcommand{\rev}{{\mathsf R}}%L^\rev to odwrócenie języka L
+\newcommand{\N}{\mathbb N}%liczby naturalne
+\newcommand{\set}[1]{\{#1\}}%\set{1,2,3} to zbiór {1,2,3}
+\newcommand{\setof}[2]{\{#1\mid #2\}}%\setof{(x,y)}{x,y\in\N,x+y=5} to {(x,y)|x,y∈N, x+y=5}
+\newcommand{\from}{\colon}%f\from X\to Y to funkcja f:X→Y
+
+\renewcommand{\subset}{\subseteq}%symbol ⊆
+\newcommand{\aut}[1]{\mathcal {#1}}%\aut A to automat A
+\newcommand{\reg}[1]{\mathcal {#1}}%\reg E to wyrażenie regularne E
+\newcommand{\gram}[1]{\mathcal {#1}}%\gram G to gramatyka G
+\newcommand{\lang}{L}%\lang(\aut A) to L(A)
+
+\newcommand{\tran}[1]{\xrightarrow{#1}}%p\tran a q to tranzycja z p do q z etykietą a
+
+\newcommand{\produce}{\rightarrow}%produkcja np. X\produce YZ
+\newcommand{\sep}{\mathop{\big|}}%X\produce YZ\sep ZT
+
+
+%notacja dla lematu o pompowaniu dla CFL: długie słowo jest postaci \prefix \pleft \infix \pright \suffix
+\newcommand{\prefix}{\mathit{prefix}}
+\newcommand{\infix}{\mathit{infix}}
+\newcommand{\suffix}{\mathit{suffix}}
+\newcommand{\pleft}{\mathit{left}}
+\newcommand{\pright}{\mathit{right}}
+
+%tranzycje automatu ze stosem
+\newcommand{\tranp}[3]{\xrightarrow{\textbf{pop}(#1), #2 ,\textbf{push}(#3)}}
+\newcommand{\trant}[5]{#1,\textbf{read}(#2):\textbf{write}(#4),\textbf{state}(#3),\textbf{move}(#5)}
+
+\newtheorem{twierdzenie}{Twierdzenie}
+\newtheorem{fakt}{Fakt}
+\newtheorem{wniosek}{Wniosek}
+\newtheorem{lemat}{Lemat}
+\newtheorem{zadanie}{Zadanie}
+\newtheorem{zadanie*}{Zadanie$^*$}
+
+
+\title{JAO\\ Zadanie 3}
+\author{Marcin Abramowicz}
+
+\begin{document}
+\maketitle
+
+\begin{enumerate}
+  \item 
+  Pokazać, że dowolny niepusty, częściowo obliczalny problem $L \subset B^{*}$ jest obrazem pewnej funkcji $f \from \set{0, 1}^{*} \to B^{*}$ obliczalnej w czasie liniowym.
+
+  \item
+  Pokazać, że jeśli $L \in NP$ jest niepusty, to powyżej dodatkowo istnieją wielomian $p \from \N \to \N$ oraz słowo $v \in B^{*}$ takie, że dla wszystkich $w \in \set{0,1}^{*}$, albo $|w| \leq p(|f(w)|)$, albo $f(w) = v$.
+\end{enumerate}
+
+\section*{Dowód}
+  \begin{enumerate}
+  \item 
+  Niech język $L$ będzie nad alfabetem $A$ oraz $M$ będzie niedeterministyczną maszyną Turinga rozpoznającą język $L$. Zbudujemy deterministyczną, wielotaśmową maszynę Turinga $F$ obliczającą funkcję $f$ z zadania, której alfabetem wejściowym będzie $\set{0, 1}^{*}$. Słowo wejściowe jest binarnie (alfabet wejściowy $F$) zakodowanym opisem przebiegu maszyny $M$, które możemy w czasie linionym odkodować do alfabetu $A'$, gdzie słowami nad $A'$ opisujemy przebiegi maszyny $M$. Opis ten ma on ustaloną formę, można ją przykłądowo opisać wyrażeniem regularnym.
+
+  Zdefiniujmy sobie słowo $e \in L$, które funkcja $f$ będzie zwrać w przypadku niepowodzenia symulacji przebiegu. $L$ jest częściowo obliczalny, więc możemy je znaleść na przykład algorytmem opisanym na początku 82. strony skryptu - w ten sposób znajdziemy słowo najmniejsze leksykograficznie.
+
+  Po wczytaniu i odkodowaniu słowa wejściowego maszyna sprawdza czy pasuje ono do opisu przebiegu. Jeśli nie pasuje to zwraca słowo $e$, w przeciwnym przypadku jest uruchamiana symulacja na maszynie $M$. Nasza maszyna przekazuje maszynie $M$ słowo początkowe przebiegu - jest ono zapisane na początku opisu.
+  Następnie iteruje się po tym nim, za każdym razem przechodząc po wszystkich osiągalnych stanach maszyny $M$ dla aktualnego jej stanu. Jeśli jakiś stan pasuje do następnego opisanego stanu w słowie wejściowym pozwala się maszynie $M$ przejść własnie do tego stanu, natomiast jeśli żaden osiągalny stan nie pasuje do opisu przerywamy symulacje i zwracamy słowo $e$. Powtarzamy wszystko, aż do końca opisu zapisanego w słowie wejściowym. Na koniec sprawdzamy czy finalny stan maszyny $M$ jest stanem akceptującym czy nie, jeśli jest to znaczy ze maszyna $M$ terminowałaby dla słowa startowego, czyli należy ono do języka $L$. W takim przypadku zwracamy je - słowo początkowe przebiegu, te które jest opisane na początku słowa wejściowego. Natomiast, jeśli finalny stan nie jest stanem akceptującym, to znaczy ze ten opis nie kodował przebiegu rozpoznającego słowo startowe i wtedy zwracamy słowo $e$. Symulacja ta wykona się w czasie liniowym od długości słowa wejściowego, mamy do rozpatrzenia 3 przypadki. W pierwszym, w pewnym momencie stan do którego przeszliśmy dopasowując opis umożliwia dalsze przejścia tylko do stanów, z których żaden nie jest tym następnym z opisu, wtedy kończymy symulacje. Przeszliśmy po słowie wejściowym do pewnego momentu, w każdym kroku wykonując pewną liczbę operacji, która to liczba jest ograniczona z góry przez liczbe stanów, ta liczba z kolei jest stała, czyli przy każdej iteracji wykonujemy stałą liczbę operacji, co daje nam złożoność liniową. W drugim i trzecim przypadku przeszliśmy cale słowo wejściowe i na koniec sprawdziliśmy czy stan jest akceptujący w czasie stałym, maszyna $M$ nie może się zapętlić, gdyż liczbę jej operacji ograniczamy długością opisu - jedno przejście w opisie to jedno przejście w maszynie $M$, czyli łącznie również wykonaliśmy symulację w czasie liniowym od długości wejścia (podobnie jak w pierwszym przypadku).
+
+  Język $L$ jest obrazem funckji $f$, gdyż kiedy dostanie poprawny opis zwraca słowo należące do języka $L$ używając maszyny $M$, która rozpoznaje ten język, czyli jesteśmy w stanie otrzymać każde słowo z jzyka L. Natomiast jeśli otrzymujemy nieprawidłowy opis, lub opis słowa, które nie należy do języka $L$ zwracamy słowo $e$. Oznacza to, że zawsze zwracamy słowo należące do $L$ i możemy otrzymać każde słowo z $L$, więc $L$ jest obrazem $f$.
+
+  \item
+  Język $L \in NP$, więc istnieje wielomian $z \from \N \to \N$, taki że każdy bieg maszyny $M$ po słowie $w$ wykonuje maksymalnie $z(|w|)$ kroków.
+
+  Niech $w \in \set{0, 1}^{*}$, wtedy mamy 2 możliwości - $w$ nie jest opisem pewnego akceptującego biegu maszyny $M$, wtedy $f(w) = e = v$ ($e$ z dowodu 1.), albo $w$ jest prawidłowym opisem. Wtedy wiemy, że ten bieg opisuje wykonianie maksymalnie $z(|f(w)|)$ kroków. Oznacza to, że wiemy jak długi jest opis określający kroki maszyny, żeby rozpoznała słowo $w$, z dokładnością do stałej $\alpha$, bo wykonujemy rożne operacje, omówionych w dowodzie 1. \\
+  Niech $w = abc$, gdzie $f(w) = b \in B^{*}$, natomiast $a$ to jakis początek opisu (może pusty) i $c$ to dalsza część opisu przebiegów. Wtedy (bo $L \in NP$)
+  $$|w| \leq z(|f(w)|) * \alpha$$
+  $$|abc| \leq z(|f(w)|) * \alpha$$
+  $$|a| + |b| + |c| \leq z(|f(w)|) * \alpha$$
+  $$|b| \leq z(|f(w)|) * \alpha - |a| - |c|$$
+
+  Wynika z tego, że $p = z(|f(w)|) * \alpha - |a| - |c|$, czyli wielomian $p$ istnieje.
+
+\end{enumerate}
+
+\qedsymbol
+
+\end{document}

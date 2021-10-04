@@ -1,0 +1,93 @@
+\documentclass[a4paper]{article}
+
+\usepackage{amssymb,mathrsfs,amsmath,amscd,amsthm}
+\usepackage[mathcal]{euscript}
+\usepackage{stmaryrd}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[polish]{babel}
+\usepackage{graphics}
+
+%%%%%%% makra do notacji
+
+\renewcommand{\le}{\leqslant}%mniejsze bądź równe
+\renewcommand{\ge}{\geqslant}%większe bądź równe
+\renewcommand\qedsymbol{\scalebox{0.75}{$\blacksquare$}}%koniec dowodu
+\newcommand\exendsymbol{\scalebox{1}{$\lrcorner$}}%inny koniec dowodu
+\renewcommand{\phi}{\varphi}%litera φ
+\newcommand{\eps}{\varepsilon}%litera ε
+\newcommand{\nr}[1]{\smallcaps{NR#1}}%zadanie ze zbioru Niwiński-Rytter
+
+\newcommand{\bin}{\textrm{bin}}%napis "bin" oznaczający binarną reprezentację liczby
+
+\newcommand{\rev}{{\mathsf R}}%L^\rev to odwrócenie języka L
+\newcommand{\N}{\mathbb N}%liczby naturalne
+\newcommand{\set}[1]{\{#1\}}%\set{1,2,3} to zbiór {1,2,3}
+\newcommand{\setof}[2]{\{#1\mid #2\}}%\setof{(x,y)}{x,y\in\N,x+y=5} to {(x,y)|x,y∈N, x+y=5}
+\newcommand{\from}{\colon}%f\from X\to Y to funkcja f:X→Y
+
+\renewcommand{\subset}{\subseteq}%symbol ⊆
+\newcommand{\aut}[1]{\mathcal {#1}}%\aut A to automat A
+\newcommand{\reg}[1]{\mathcal {#1}}%\reg E to wyrażenie regularne E
+\newcommand{\gram}[1]{\mathcal {#1}}%\gram G to gramatyka G
+\newcommand{\lang}{L}%\lang(\aut A) to L(A)
+
+\newcommand{\tran}[1]{\xrightarrow{#1}}%p\tran a q to tranzycja z p do q z etykietą a
+
+\newcommand{\produce}{\rightarrow}%produkcja np. X\produce YZ
+\newcommand{\sep}{\mathop{\big|}}%X\produce YZ\sep ZT
+
+
+%notacja dla lematu o pompowaniu dla CFL: długie słowo jest postaci \prefix \pleft \infix \pright \suffix
+\newcommand{\prefix}{\mathit{prefix}}
+\newcommand{\infix}{\mathit{infix}}
+\newcommand{\suffix}{\mathit{suffix}}
+\newcommand{\pleft}{\mathit{left}}
+\newcommand{\pright}{\mathit{right}}
+
+%tranzycje automatu ze stosem
+\newcommand{\tranp}[3]{\xrightarrow{\textbf{pop}(#1), #2 ,\textbf{push}(#3)}}
+\newcommand{\trant}[5]{#1,\textbf{read}(#2):\textbf{write}(#4),\textbf{state}(#3),\textbf{move}(#5)}
+
+\newtheorem{twierdzenie}{Twierdzenie}
+\newtheorem{fakt}{Fakt}
+\newtheorem{wniosek}{Wniosek}
+\newtheorem{lemat}{Lemat}
+\newtheorem{zadanie}{Zadanie}
+\newtheorem{zadanie*}{Zadanie$^*$}
+
+
+\begin{document}
+\section*{Zadanie 1. \small{\textnormal{ \itshape Termin: niedziela, 26 kwietnia, g. 23:59.
+Rozwiązanie w pliku pdf należy przesłać przez moodla.}}
+}
+Czy istnieje taki nieskończony język regularny $L$ nad alfabetem
+$\set{a,b}$, że $\#_{a}w=(\#_{b}w)^2$ dla wszystkich $w\in L$?
+Tu $\#_{x}w$ oznacza liczbę wystąpień litery $x$ w słowie $w$.
+
+
+\section*{Rozwiązanie}
+
+Przez sprzeczność załóżmy, że istnieje język regularny $L$. Zatem, istnieje stała $N\in \N$ z lematu o pompowaniu. Rozważmy słowo $w\in L$, gdzie $\#_{b}w = B$, więc $\#_{a}w=(\#_{b}w)^2 = B^2 = A$, gdzie $B \ge N$. Język jest nieskończony, więc istnieją w nim dowolnie długie słowa. Z lematu o pompowaniu istnieje dekompozycja $w = w_1 \cdot w_2 \cdot w_3$, taka że $w_2 \neq \eps$ oraz $w_1 \cdot w_2^k \cdot w_3 \in L$ dla $k \ge 0$, $|w_1 \cdot w_2| \le N$ oraz $|w| = B^2 + B \ge N$. Dla ustalenia uwagi $B = B_1 + B_2$, $A = A_1 + A_2$, gdzie $B_1 = \#_{b}w_1 + \#_{b}w_3$, $B_2 = \#_{b}w_2$, $A_1 = \#_{a}w_1 + \#_{a}w_3$ oraz $A_2 = \#_{a}w_2$, więc $|w_2| = A_1 + B_2$. Słowo $w_1 \cdot w_2^2 \cdot w_3$ jest długości $A_1 + B_1 + 2 * (A_2 + B_2)$, więc teraz:
+
+\[A_1 + B_1 + 2 * (A_2 + B_2)\]
+\[A_1 + B_1 + 2 * A_2 + 2 *B_2\] 
+\[A + B + A_2 + B_2\]
+\[B^2 + B + A_2 + B_2\]
+wiemy też że $1 \le A_2 + B_2 \le N \le B$, więc:
+\[B^2 + B + A_2 + B_2 \ge B^2 + B + 1\]
+oraz
+\[B^2 + B + A_2 + B_2 \le B^2 + B + N \le B^2 + B + B = B^2 + 2 * B\]
+ostatecznie $|w|$ dla $\#_{b}w = B$ i $|w|$ dla $\#_{b}w = B + 1$:
+\[B^2 + B = X\]
+\[(B+1)^2 + B + 1 = B^2 + 3 * B + 2 = Y\]
+\[X < B^2 + B + 1 < B^2 + 2 * B < Y\]
+z nierówności tych wynika, że długość słowa uniemożliwa, aby istaniało takie $k \in \N$, że $\#_{b}w = k$, żeby warunek języka został spełniony. 
+Słowo $w_1 \cdot w_2^2 \cdot w_3$ nie należy do języka L, co jest sprzecznością.
+
+Otrzymana sprzecznosć pokazuje, zć język $L$ nie jest regularny.
+\qed
+
+
+\section*{Marcin Abramowicz ma406058}
+\end{document}

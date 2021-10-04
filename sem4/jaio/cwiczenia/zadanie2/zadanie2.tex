@@ -1,0 +1,98 @@
+\documentclass[a4paper]{article}
+
+\usepackage{amssymb,mathrsfs,amsmath,amscd,amsthm}
+\usepackage[mathcal]{euscript}
+\usepackage{stmaryrd}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[polish]{babel}
+\usepackage{graphics}
+
+%%%%%%% makra do notacji
+
+\renewcommand{\le}{\leqslant}%mniejsze bądź równe
+\renewcommand{\ge}{\geqslant}%większe bądź równe
+\renewcommand\qedsymbol{\scalebox{0.75}{$\blacksquare$}}%koniec dowodu
+\newcommand\exendsymbol{\scalebox{1}{$\lrcorner$}}%inny koniec dowodu
+\renewcommand{\phi}{\varphi}%litera φ
+\newcommand{\eps}{\varepsilon}%litera ε
+\newcommand{\nr}[1]{\smallcaps{NR#1}}%zadanie ze zbioru Niwiński-Rytter
+
+\newcommand{\bin}{\textrm{bin}}%napis "bin" oznaczający binarną reprezentację liczby
+
+\newcommand{\rev}{{\mathsf R}}%L^\rev to odwrócenie języka L
+\newcommand{\N}{\mathbb N}%liczby naturalne
+\newcommand{\set}[1]{\{#1\}}%\set{1,2,3} to zbiór {1,2,3}
+\newcommand{\setof}[2]{\{#1\mid #2\}}%\setof{(x,y)}{x,y\in\N,x+y=5} to {(x,y)|x,y∈N, x+y=5}
+\newcommand{\from}{\colon}%f\from X\to Y to funkcja f:X→Y
+
+\renewcommand{\subset}{\subseteq}%symbol ⊆
+\newcommand{\aut}[1]{\mathcal {#1}}%\aut A to automat A
+\newcommand{\reg}[1]{\mathcal {#1}}%\reg E to wyrażenie regularne E
+\newcommand{\gram}[1]{\mathcal {#1}}%\gram G to gramatyka G
+\newcommand{\lang}{L}%\lang(\aut A) to L(A)
+
+\newcommand{\tran}[1]{\xrightarrow{#1}}%p\tran a q to tranzycja z p do q z etykietą a
+
+\newcommand{\produce}{\rightarrow}%produkcja np. X\produce YZ
+\newcommand{\sep}{\mathop{\big|}}%X\produce YZ\sep ZT
+
+
+%notacja dla lematu o pompowaniu dla CFL: długie słowo jest postaci \prefix \pleft \infix \pright \suffix
+\newcommand{\prefix}{\mathit{prefix}}
+\newcommand{\infix}{\mathit{infix}}
+\newcommand{\suffix}{\mathit{suffix}}
+\newcommand{\pleft}{\mathit{left}}
+\newcommand{\pright}{\mathit{right}}
+
+%tranzycje automatu ze stosem
+\newcommand{\tranp}[3]{\xrightarrow{\textbf{pop}(#1), #2 ,\textbf{push}(#3)}}
+\newcommand{\trant}[5]{#1,\textbf{read}(#2):\textbf{write}(#4),\textbf{state}(#3),\textbf{move}(#5)}
+
+\newtheorem{twierdzenie}{Twierdzenie}
+\newtheorem{fakt}{Fakt}
+\newtheorem{wniosek}{Wniosek}
+\newtheorem{lemat}{Lemat}
+\newtheorem{zadanie}{Zadanie}
+\newtheorem{zadanie*}{Zadanie$^*$}
+
+
+\title{JAO\\ Zadanie 2}
+\date{25 maja 2020}
+\author{Marcin Abramowicz}
+
+\begin{document}
+\maketitle
+
+Niech $L$ będzie językiem bezkontekstowym nad alfabetem $\Sigma\cup\set\#$ dla $\#\notin\Sigma$.
+Czy następujący język jest bezkontekstowy? 
+$$\setof{v_1v_3v_5\ldots v_{2k-1}}{ \textrm{$v_1,\ldots,v_{2k}\in \Sigma^*$, $v_1\#v_2\#v_3\cdots\#v_{2k}\in L$}}.$$
+
+\section*{Dowód}
+Podany język jest bezkontekstowy, aby to udowodnić skonstruuję rozpoznający go automat ze stosem.
+
+Niech $M = \setof{v_1v_3v_5\ldots v_{2k-1}}{ \textrm{$v_1,\ldots,v_{2k}\in \Sigma^*$, $v_1\#v_2\#v_3\cdots\#v_{2k}\in L$}}$ 
+oraz $\aut A_L = <\Sigma_L, \Gamma_L, Q_L, I_L, F_L, \delta_L>$
+gdzie $\aut A_L$ rozpoznaje język $L$. 
+
+Zdefiniujmy teraz $\aut A_M$ rozpoznający język $M$. Będzie on podwójną kopią automatu $\aut A_L$, gdzie pierwsza kopia będzie prawie identyczna do $\aut A_L$, druga natomiast będzie zawierać jedynie $\eps$-przejścia zamiast każdej tranzycji przy zachowaniu operacji na stosie. W obu kopiach $\#$-przejścia zostaną zastąpione $\eps$-przejściami między tymi kopiami. Stany startowe pierwszej kopi będą stanami startowymi automatu $\aut A_M$, natomiast stany akceptujące drugiej kopi będą stanami akceptującymi $\aut A_M$.
+
+$$\aut A_M = <\Sigma_M, \Gamma_M, Q_M, I_M, F_M, \delta_M>$$
+gdzie:
+
+$$\Sigma_M = \Sigma_L$$
+$$\Gamma_M = \Gamma_L$$
+$$Q_M = Q_L \times \set{1, 2}$$
+$$I_M = I_L \times \set{1}$$
+$$F_M = F_L \times \set{2}$$
+$$\delta_M = \delta_M' \cup \delta_M''$$
+
+Gdzie $\delta_M'$, dla $q_0, q_1 \in Q_L$, $q_0\tran a q_1$ i $a \ne \#$, jest zbiorem tranzycji w postaci: $(q_0, 1) \tran a (q_1, 1)$ oraz $(q_0, 2) \tran \eps (q_1, 2)$, przy zachowaniu wszyskich operacji na stosie związanych z tymi tranzycjami w automacie $\aut A_L$ - w automacie $\aut A_M$ mimo zmiany, niektórych etykiet tranzycji w stosunku do automatu $\aut A_L$ nie zmianiamy operacji na stosie, które one wykonywały. Te przemianowania mają nam pozwolić wciąż utrzymywać stan stosu w takiej samej formie jak w automacie $\aut A_L$. Oznacza to, ze pierwsza kopia zawiera wszyskie tranzycje poza tymi na znaku $\#$, a druga kopia ma wszyskie tranzycje zamienione na $\eps$-przejścia, również pomijając $\#$-przejścia.
+
+Natomiast, $\delta_M''$, dla $q_0, q_1 \in Q_L$, $q_0\tran a q_1$ i $a = \#$, jest zbiorem tranzycji w postaci: $(q_0, 1)\tran \eps (q_1, 2)$ oraz $(q_0, 2)\tran \eps (q_1, 1)$, przy zachowaniu wszyskich operacji na stosie związanych z tymi tranzycjami w automacie $\aut A_L$. Czyli epsilon przejścia między kopiami w miejsca $\#$-przejść.
+
+Niech słowo $w \in M$, wtedy istnieje taki podział $w=v_1v_3v_5\ldots v_{2k-1}$, że dla pewnych $v_2, v_4, v_6,\ldots, v_{2k}$ istnieje $v=v_1\#v_2\#v_3\cdots\#v_{2k}$, które akceptuje automat $\aut A_L$. Wczytanie znaku $\#$ powoduje przejście między kopiami, będąc w pierwszej wczytuje on znaki, czyli przetwarza nieparzyste części słowa $v$ - $v_1v_3v_5\ldots v_{2k-1}$, czyli słowo $w$. Natomiast będąc w drugiej kopii przetwarzamy $v_2, v_4, v_6, \ldots, v_{2k}$ (udajemy przetwarzanie $\eps$-przejściami w drugiej kopii utrzymując poprawny stan stosu). Przetwarzanie kończy się w drugiej kopi w jakimś stanie akceptującym, ma to miejsce po wczytaniu nieparzystej liczbie $\#$, czyli po wczytaniu całego słowa $v$. Oznacza to również, że słowo $w$ zostało zakceptowane przez automat $\aut A_M$.
+
+\qedsymbol
+
+\end{document}

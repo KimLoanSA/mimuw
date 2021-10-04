@@ -1,0 +1,92 @@
+\documentclass[a4paper]{article}
+
+\usepackage{amssymb,mathrsfs,amsmath,amscd,amsthm}
+\usepackage[mathcal]{euscript}
+\usepackage{stmaryrd}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[polish]{babel}
+\usepackage{graphics}
+
+%%%%%%% makra do notacji
+
+\renewcommand{\le}{\leqslant}%mniejsze bądź równe
+\renewcommand{\ge}{\geqslant}%większe bądź równe
+\renewcommand\qedsymbol{\scalebox{0.75}{$\blacksquare$}}%koniec dowodu
+\newcommand\exendsymbol{\scalebox{1}{$\lrcorner$}}%inny koniec dowodu
+\renewcommand{\phi}{\varphi}%litera φ
+\newcommand{\eps}{\varepsilon}%litera ε
+\newcommand{\nr}[1]{\smallcaps{NR#1}}%zadanie ze zbioru Niwiński-Rytter
+
+\newcommand{\bin}{\textrm{bin}}%napis "bin" oznaczający binarną reprezentację liczby
+
+\newcommand{\rev}{{\mathsf R}}%L^\rev to odwrócenie języka L
+\newcommand{\N}{\mathbb N}%liczby naturalne
+\newcommand{\set}[1]{\{#1\}}%\set{1,2,3} to zbiór {1,2,3}
+\newcommand{\setof}[2]{\{#1\mid #2\}}%\setof{(x,y)}{x,y\in\N,x+y=5} to {(x,y)|x,y∈N, x+y=5}
+\newcommand{\from}{\colon}%f\from X\to Y to funkcja f:X→Y
+
+\renewcommand{\subset}{\subseteq}%symbol ⊆
+\newcommand{\aut}[1]{\mathcal {#1}}%\aut A to automat A
+\newcommand{\reg}[1]{\mathcal {#1}}%\reg E to wyrażenie regularne E
+\newcommand{\gram}[1]{\mathcal {#1}}%\gram G to gramatyka G
+\newcommand{\lang}{L}%\lang(\aut A) to L(A)
+
+\newcommand{\tran}[1]{\xrightarrow{#1}}%p\tran a q to tranzycja z p do q z etykietą a
+
+\newcommand{\produce}{\rightarrow}%produkcja np. X\produce YZ
+\newcommand{\sep}{\mathop{\big|}}%X\produce YZ\sep ZT
+
+
+%notacja dla lematu o pompowaniu dla CFL: długie słowo jest postaci \prefix \pleft \infix \pright \suffix
+\newcommand{\prefix}{\mathit{prefix}}
+\newcommand{\infix}{\mathit{infix}}
+\newcommand{\suffix}{\mathit{suffix}}
+\newcommand{\pleft}{\mathit{left}}
+\newcommand{\pright}{\mathit{right}}
+
+%tranzycje automatu ze stosem
+\newcommand{\tranp}[3]{\xrightarrow{\textbf{pop}(#1), #2 ,\textbf{push}(#3)}}
+\newcommand{\trant}[5]{#1,\textbf{read}(#2):\textbf{write}(#4),\textbf{state}(#3),\textbf{move}(#5)}
+
+\newtheorem{twierdzenie}{Twierdzenie}
+\newtheorem{fakt}{Fakt}
+\newtheorem{wniosek}{Wniosek}
+\newtheorem{lemat}{Lemat}
+\newtheorem{zadanie}{Zadanie}
+\newtheorem{zadanie*}{Zadanie$^*$}
+
+
+\title{JAO Egzamin\\ Zadanie 4.}
+\author{Marcin Abramowicz}
+
+\begin{document}
+\maketitle
+
+\newcommand{\tor}{\tran{\cal R}}
+Ustalmy alfabet skończony $A$ oraz skończony  zbiór $\cal R$ reguł, każda postaci
+$ab\to a'b'$, dla $a,b,a',b'\in A$.
+Dla $w,w'\in A^*$ piszemy $w\tor w'$ jeśli istnieją $u,v\in A^*$
+oraz reguła $ab\to a'b'$ w $\cal R$ takie, że $w=uabv$ i $w'=ua'b'v$.
+
+Przykładowo, jeśli $A=\set{a,b}$ oraz $\cal R$ ma tylko jedną regułę, $ab\to bb$, to mamy $$aaaab\tor aaabb\tor aabbb\tor abbbb\tor bbbbb.$$
+
+Rozważamy następujący problem decyzyjny:
+\begin{description}
+\item [Dane:]$A$ i $\cal R$ jak powyżej, słowa $w,w'\in A^*$ oraz liczba $n$ zapisana unarnie.
+\item [Rozstrzygnąć:]czy istnieją $w_0,w_1,\ldots,w_n$ takie, że
+$$w=w_0\tor w_1\tor w_2\tor \ldots \tor w_n=w'?$$ 
+\end{description}
+Formalnie, rozważamy język opisów tych instancji $(A,{\cal R},w,w',n)$, dla których odpowiedź na powyższe pytanie brzmi ,,tak''. Przy czym pojęcie \emph{opisu instancji} jest sformalizowane w rozsądny sposób.
+
+Jaka jest złożoność obliczeniowa tego problemu? Podaj najlepsze możliwe ograniczenie górne (typu \textsc{NPSpace}, \textsc{PSpace}, \textsc{NP}, \textsc{P}, \textsc{LogSpace} itd.) oraz dolne (typu \textsc{C}-trudny względem redukcji wielomianowych, dla \textsc{C} jak powyżej).
+
+
+\section*{Rozwiązanie}
+Problem jest \textsc{NP}. 
+
+Górnym ograniczeniem jest maszyna Turinga, która otrzymuje podane słowa, następnie niedeterministycznie wybiera regułę $\cal R$ i miejsce jej zastosowania, ma ona ograniczenie na liczbę takich operacji, gdyż może wykonać tylko $n$ przejść. Obrazowo, przy każdym przejściu tworzymy wiele "wszechświatów", gdzie w każdym nałożymy jedną z reguł na pewnym miejscu, regułę wybieramy niedeterministycznie, natomiast miejsc maksymalnie liniowo wiele, więc problem ma ograniczenie górne \textsc{NP}.
+
+Ograniczeniem dolnym jest \textsc{NP-trudność}, gdyż możemy zrobić redukcję z problemu ``czy dana maszyna niedeterministyczna rozpoznaje słowo w maksymalnie $n$ krokach''. Maszyna rozwiązująca ten problem może nam słyżyc jako pomocnicza, dzięki niej umiemy swierdzać czy słowo w jest równe słowu $w'$ po $n$ nałożeniach reguł.
+
+\end{document}

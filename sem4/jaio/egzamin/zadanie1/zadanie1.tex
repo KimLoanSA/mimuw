@@ -1,0 +1,102 @@
+\documentclass[a4paper]{article}
+
+\usepackage{amssymb,mathrsfs,amsmath,amscd,amsthm}
+\usepackage[mathcal]{euscript}
+\usepackage{stmaryrd}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[polish]{babel}
+\usepackage{graphics}
+
+%%%%%%% makra do notacji
+
+\renewcommand{\le}{\leqslant}%mniejsze bądź równe
+\renewcommand{\ge}{\geqslant}%większe bądź równe
+\renewcommand\qedsymbol{\scalebox{0.75}{$\blacksquare$}}%koniec dowodu
+\newcommand\exendsymbol{\scalebox{1}{$\lrcorner$}}%inny koniec dowodu
+\renewcommand{\phi}{\varphi}%litera φ
+\newcommand{\eps}{\varepsilon}%litera ε
+\newcommand{\nr}[1]{\smallcaps{NR#1}}%zadanie ze zbioru Niwiński-Rytter
+
+\newcommand{\bin}{\textrm{bin}}%napis "bin" oznaczający binarną reprezentację liczby
+
+\newcommand{\rev}{{\mathsf R}}%L^\rev to odwrócenie języka L
+\newcommand{\N}{\mathbb N}%liczby naturalne
+\newcommand{\set}[1]{\{#1\}}%\set{1,2,3} to zbiór {1,2,3}
+\newcommand{\setof}[2]{\{#1\mid #2\}}%\setof{(x,y)}{x,y\in\N,x+y=5} to {(x,y)|x,y∈N, x+y=5}
+\newcommand{\from}{\colon}%f\from X\to Y to funkcja f:X→Y
+
+\renewcommand{\subset}{\subseteq}%symbol ⊆
+\newcommand{\aut}[1]{\mathcal {#1}}%\aut A to automat A
+\newcommand{\reg}[1]{\mathcal {#1}}%\reg E to wyrażenie regularne E
+\newcommand{\gram}[1]{\mathcal {#1}}%\gram G to gramatyka G
+\newcommand{\lang}{L}%\lang(\aut A) to L(A)
+
+\newcommand{\tran}[1]{\xrightarrow{#1}}%p\tran a q to tranzycja z p do q z etykietą a
+
+\newcommand{\produce}{\rightarrow}%produkcja np. X\produce YZ
+\newcommand{\sep}{\mathop{\big|}}%X\produce YZ\sep ZT
+
+
+%notacja dla lematu o pompowaniu dla CFL: długie słowo jest postaci \prefix \pleft \infix \pright \suffix
+\newcommand{\prefix}{\mathit{prefix}}
+\newcommand{\infix}{\mathit{infix}}
+\newcommand{\suffix}{\mathit{suffix}}
+\newcommand{\pleft}{\mathit{left}}
+\newcommand{\pright}{\mathit{right}}
+
+%tranzycje automatu ze stosem
+\newcommand{\tranp}[3]{\xrightarrow{\textbf{pop}(#1), #2 ,\textbf{push}(#3)}}
+\newcommand{\trant}[5]{#1,\textbf{read}(#2):\textbf{write}(#4),\textbf{state}(#3),\textbf{move}(#5)}
+
+\newtheorem{twierdzenie}{Twierdzenie}
+\newtheorem{fakt}{Fakt}
+\newtheorem{wniosek}{Wniosek}
+\newtheorem{lemat}{Lemat}
+\newtheorem{zadanie}{Zadanie}
+\newtheorem{zadanie*}{Zadanie$^*$}
+
+
+\title{JAO Egzamin\\ Zadanie 1.}
+\author{Marcin Abramowicz}
+
+\begin{document}
+\maketitle
+
+Dla słowa $w\in \set{a,b}^*$ definiujemy liczby:
+\begin{align*}
+    w_+&=\max \set{\#_av-\#_bv\mid v \text{ jest prefiksem }w}\\
+    w_-&=\max \set{\#_bv-\#_av\mid v \text{ jest prefiksem }w}\\
+    \delta w&=w_++w_-
+\end{align*}
+Przykładowo, dla $w=aaabbbbab$
+mamy $w_+=3, w_-=1, \delta w=4$.
+Ile klas abstrakcji ma relacja Myhilla-Nerodego języka wszystkich słów $w\in\set{a,b}^*$ takich, że $\delta w\leq 1000$?
+
+\medskip\noindent
+\emph{Uwaga:} Słowo $a_1\ldots a_n$ ma prefiksy $\eps,\quad a_1,\quad a_1a_2,\quad\ldots\quad a_1\cdots a_n$.
+
+
+\section*{Rozwiązanie}
+Niech opisem naszych klas abstrakcji, dla słowa $w \in \set{a, b}^*$ będzie para $<r_+(w), r_-(w)>$ (będziemy skrótowo oznaczać ją jako $r(w)$), gdzie 
+\begin{align*}
+    p_+(w)&=\#_aw-\#_bw \\
+    p_-(w)&=\#_bw-\#_aw \\
+\end{align*} 
+oraz
+\begin{align*}
+   r_+(w)= w_+-p_+(w) \\
+   r_-(w)=w_--p_-(w) \\
+   r_+(w) + r_-(w) \leq 1000 \\
+\end{align*} 
+
+Każde słowo ma dokładnie jeden taki opis, gdyż wartości te dla całego słowa są ustalone, więc każde słowo ma przypasowną dokładnie jedną klasę abstrakcji.
+
+Są do klasy abstrakcji, gdyż mając słowa $u, v \in \set{a,b}^*$, gdzie $r(u) = r(v)$, wtedy mając dowolne słowo $c \in \set{a,b}^*$ i dopisując je na koniec $u$ i $v$ otrzymujamy słowa $uc$ i $vc$, jeśli któreś z nich należy do naszego języka, wtedy drugie również należy, gdyż klasa opisuje słowa o tym samym ``bilansie'' liter $a$ i $b$ (ile musimy dołożyć jakiejś litery, żeby wyskoczyć za język), więc jeśli dodamy na koniec słowo, zmodyfikuje ono bilans słów $u$ i $v$ w ten sam sposób.
+
+Dwie różne pary $r_1(u)$ i $r_2(v)$, gdzie $r_1(u) \ne r_2(v)$ i $u, v \in \set{a,b}^*$ opisują słowa, które nie są równoważne, gdyż dla słowa $u$, dla którego $r_1(u) = <0, 1000>$ i dla słowa $v$, dla którego $r_2(u) = <1000, 0>$ dodamy na koniec literę $b$. Wtedy $r_1(ub) = <1, 999>$ i $r_2(vb) = <1001, 0>$, czyli $ub$ należy do języka, natomiast $vb$ nie należy, czyli są to różne klasy abstrakcji.
+
+Policzmy teraz ile jest klas. Możemy dla każdej klasy ustalić w jej opisie pierwszą wartość w parze, a następnie zsumować ile par "pasuje" do niej (czyli wartości w parach sie sumują do maksymalnie do 1000). Dla przykładu do pary $<998, 0>$ "pasują" pary $<998, 1>$ i $<998, 2>$. Prowadzi nas to do wzoru
+$$\sum_{n=0}^{n\leq1000}\sum_{m=n}^{m\leq 1000} 1 = \sum_{n=0}^{n \leq 1000} n + 1 = \sum_{n=1}^{n \leq 1001} n = \frac{1001 * (1002)}{2} = 501501$$
+
+\end{document}
