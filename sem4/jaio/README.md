@@ -2,7 +2,7 @@
 
 _wyklad_: [Szymon Toruńczyk](https://usosweb.uw.edu.pl/kontroler.php?_action=katalog2/osoby/pokazOsobe&os_id=2213)
 
-_lab_: [Marek Sokołowski <3](https://usosweb.uw.edu.pl/kontroler.php?_action=katalog2/osoby/pokazOsobe&os_id=277281)
+_cwiczenia_: [Marek Sokołowski <3](https://usosweb.uw.edu.pl/kontroler.php?_action=katalog2/osoby/pokazOsobe&os_id=277281)
 
 ---
 
