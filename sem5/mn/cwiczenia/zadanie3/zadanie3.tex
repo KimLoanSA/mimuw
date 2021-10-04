@@ -1,0 +1,336 @@
+\documentclass[a4paper]{article}
+
+\usepackage{amssymb,mathrsfs,amsmath,amscd,amsthm}
+\usepackage[mathcal]{euscript}
+\usepackage{stmaryrd}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[polish]{babel}
+\usepackage{graphics}
+\usepackage{blindtext}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{mathtools}
+\usepackage{textcomp}
+\usepackage{siunitx}
+\usepackage{hyperref}
+
+\makeatletter
+\makeatother
+
+\RequirePackage{a4wide}
+
+%%%%%%% makra do notacji
+
+\renewcommand{\le}{\leqslant} %mniejsze bądź równe
+\renewcommand{\ge}{\geqslant} %większe bądź równe
+\renewcommand\qedsymbol{\scalebox{0.75}{$\blacksquare$}} %koniec dowodu
+\newcommand\exendsymbol{\scalebox{1}{$\lrcorner$}} %inny koniec dowodu
+\renewcommand{\phi}{\varphi} %litera φ
+\newcommand{\eps}{\varepsilon} %litera ε
+
+\newcommand{\N}{\mathbb N} %liczby naturalne
+\newcommand{\R}{\mathbb R} %liczby rzeczywiste
+\newcommand{\I}{\mathbb I} %liczby rzeczywiste
+\newcommand{\set}[1]{\{#1\}} %\set{1,2,3} to zbiór {1,2,3}
+\newcommand{\setof}[2]{\{#1\mid #2\}} %\setof{(x,y)}{x,y\in\N,x+y=5} to {(x,y)|x,y∈N, x+y=5}
+\newcommand{\from}{\colon} %f\from X\to Y to funkcja f:X→Y
+
+\renewcommand{\subset}{\subseteq} %symbol ⊆
+\newcommand{\Longupdownarrow}{\Big\Updownarrow}
+
+\newtheorem{twierdzenie}{Twierdzenie}
+\newtheorem{fakt}{Fakt}
+\newtheorem{wniosek}{Wniosek}
+\newtheorem{lemat}{Lemat}
+\newtheorem{zadanie}{Zadanie}
+\newtheorem{zadanie*}{Zadanie$^*$}
+
+\title{\vspace{-1cm}
+Metody Numeryczne \\
+\large Praca domowa 3.
+}
+\author{
+Marcin Abramowicz ma406058 \\
+\small współpraca: jo406271, ms406329
+}
+
+\begin{document}
+
+   \maketitle
+
+   \section*{Zadanie 1.}
+
+      Korzystając z algorytmu różnic dzielonych znajdź
+      -- wypełniając odpowiednią tabelkę!
+      -- wielomian ineterpolacyjny Hermite'a w, spełniający warunki:
+      \[
+         w(0) = 0, \quad w'(0) = 1, \quad w(1) = 1, \quad w'(1) = 0, \quad w''(1) = -1.
+      \]
+      Zapisz go (a) we właściwej dla tego zadania bazie Newtona (b) w bazie naturalnej.
+
+
+   \section*{\large Rozwiązanie}
+
+      \begin{center}
+         \begin{tabular}{ | c | c | c | c | }
+            \hline
+            $x_{i}$ & $w(x_{i})$ & $w'(x_{i})$ & $w''(x_{i})$ \\
+            \hline
+            0 & 0 & 1 & \\
+            \hline
+            1 & 1 & 0 & -1 \\
+            \hline
+         \end{tabular}
+      \end{center}
+
+      \begin{enumerate}[label=(\alph*)]
+         \item
+            baza Newton'a: \\
+            \begin{tabular}{ c | c c c c c }
+               $x_{i}$ & $w$ \\
+               \hline
+               0 & 0 \\
+               0 & 0    & $w'(0) = 1$ \\
+               \hline
+               1 & 1    & $\frac{1 - 0}{1 - 0} = 1$
+                        & $\frac{1 - 1}{1 - 0} = 0$ \\
+               1 & 1    & $w'(1) = 0$
+                        & $\frac{0 - 1}{1 - 0} = -1$
+                        & $\frac{-1 - 0}{1 - 0} = -1$ \\
+               1 & 1    & $w'(1) = 0$
+                        & $\frac{w''(1)}{2!} = -\frac{1}{2}$
+                        & $\frac{-\frac{1}{2} - (-1)}{1 - 0} = \frac{1}{2}$
+                        & $\frac{\frac{1}{2} - (-1)}{1 - 0} = \frac{3}{2}$ \\
+            \end{tabular}
+
+            \begin{gather*}
+                p(x) =
+                  0 \cdot 1 +
+                  1 \cdot (x - x_{0}) +
+                  0 \cdot (x - x_{0})^{2} +
+                  (-1) \cdot (x - x_{0})^{2} (x - x_{1}) +
+                  \frac{3}{2} \cdot (x - x_{0})^{2} (x - x_{1})^{2} \\
+                p(x) =
+                  (x - x_{0}) -
+                  (x - x_{0})^{2} (x - x_{1}) +
+                  \frac{3}{2} \cdot (x - x_{0})^{2} (x - x_{1})^{2} \\
+                p(x) =
+                   x -
+                   x^{2} (x - 1) +
+                   \frac{3}{2} \cdot x^{2} (x - 1)^{2} \\
+            \end{gather*}
+
+         \item
+            baza naturalna:
+            \begin{gather*}
+               p(x) =
+                  x -
+                  x^2 (x - 1) +
+                  \frac{3}{2} \cdot x^{2} (x - 1)^2 \\
+               p(x) =
+                  \frac{3}{2} \cdot x^{4} -
+                  4 \cdot x^{3} +
+                  \frac{5}{2} \cdot x^{2} +
+                  x
+            \end{gather*}
+      \end{enumerate}
+
+
+   \section*{Zadanie 2.}
+
+      Wykaż, że dla $f(x) = \cosh(x) = \frac{e^{x} + e^{-x}}{2}$
+      i dowolnego wielomianu interpolacyjnego Lagrange'a $w$ opartego na $n \ge 2$ dowolnie wybranych,
+      parami różnych węzłach w przedziale [-1, 1] zachodzi
+      \[
+         \left| \frac{w(x) - f(x)}{f(x)} \right| \le \frac{2^{n}}{n!} \quad \quad dla \, x \in [-1, 1]
+      \]
+      -- jeśli dodatkowo założymy, że jednym z węzłów interpolacji jest zero.
+
+
+   \section*{\large Rozwiązanie}
+
+      Wiemy, że $x \in [-1, 1]$, więc $\left| x - x_{i} \right| \le 2$,
+      ale też, jeden z węzłów jest zerowy i wtedy $\left| x - 0 \right| \le 1$:
+      \[
+         \left| x - x_{0} \right| \cdot
+         \left| x - x_{1} \right| \cdots
+         \left| x - x_{n-1} \right| \le 2^{n-1}
+      \]
+      Dodatkowo $\left| \cosh(x) \right|$ i $\left| \sinh(x) \right|$
+      w tym przedziale mają największe wartości dla $x = 1$ i $x = -1$,
+      a $\cosh^{2k}(x) = \cosh$, natomiast $\cosh^{2k + 1}(x) = \sinh$, więc dla $x \in [-1, 1]$:
+      \begin{gather*}
+         \left| \cosh(x) \right| \le \cosh(1) \quad \quad
+         \left| \sinh(x) \right| \le \sinh(1) \quad \quad
+         \cosh(1) > \sinh(1) \\
+         \Downarrow \\
+         \left| \cosh^{(n)}(x) \right| \le \cosh(1)
+      \end{gather*}
+
+      Również, $\left| \cosh(x) \right|$ ma najmniejszą wartość dla $x = 0$ ($\cosh(0) = 1$).
+
+      Z twierdzenia ze strony 156 skryptu:
+
+      \begin{gather*}
+         \left| w(x) - f(x) \right| =
+         \left| \frac{f^{(n)}(\xi)}{n!} \right| \cdot
+            \left| x - x_{0} \right| \cdot
+            \left| x - x_{1} \right| \cdots
+            \left| x - x_{n-1} \right| \le
+         \left| \frac{\cosh^{(n)}(\xi)}{n!} \right| \cdot 2^{n-1} \le
+         \left| \frac{\cosh(1)}{n!} \right| \cdot 2^{n-1} \\
+         \Downarrow \\
+         \\
+         \left| \frac{w(x) - f(x)}{f(x)} \right| \le
+         \left| \frac{\cosh(1)}{f(x) \cdot n!} \right| \cdot 2^{n-1} \le
+         \left| \frac{\cosh(1)}{\cosh(0) \cdot n!} \right| \cdot 2^{n-1} =
+         \frac{\cosh(1) \cdot 2^{n-1}}{n!}
+      \end{gather*}
+
+      Wiemy, że $\cosh(1) \le 2$, więc $\cosh^{(n)}(1) \le 2$, więc wtedy:
+      \begin{gather*}
+         \frac{\cosh(1) \cdot 2^{n-1}}{n!} \le
+         \frac{2 \cdot 2^{n-1}}{n!} =
+         \frac{2^{n}}{n!} \\
+         \Downarrow \\
+         \left| \frac{w(x) - f(x)}{f(x)} \right| \le \frac{2^{n}}{n!} \quad
+         \qedsymbol
+      \end{gather*}
+
+
+   \section*{Zadanie 3.}
+
+      Ustalmy węzły $a = x_{0} < x_{1} < \dots < x_{n} = b$ oraz $f \in C[a, b]$.
+      Oznaczmy
+      \[
+         \left\| v \right\|_{2} =
+         \left( \int_{a}^{b} v^2(x) \, dx \right)^{\frac{1}{2}} =
+         \left( \sum_{i = 0}^{n-1} \int_{x_i}^{x_{i+1}} v^{2}(x) \, dx \right)^{\frac{1}{2}}.
+      \]
+      Wykaż własność ekstremalną naturalnych kubicznych splajnów interpolacyjnych:
+
+      ''Spośród wszystkich funkcji $v \in C[a, b]$, kawałkami klasy $C^{2}$,
+      interpolujących $f$, naturalny kubiczny splajn interpolacyjny ma najmniejszą wartość
+      $\left\| v'' \right\|_{2}$.''
+
+
+   \section*{\large Rozwiązanie}
+
+      Niech $s$ będzie naturalnym kubicznym splajnem interpolacyjnym, wtedy:
+      \[
+         \left\| v'' \right\|_{2}^{2} =
+         \left\| (v'' - s'') + s'' \right\|_{2}^{2} =
+         \left\| (v'' - s'') \right\|_{2}^{2} + 2(v'' - s'', s'') + \left\| s'' \right\|_{2}^{2}
+      \]
+      W takim wypadku pokażemy, że $(v'' - s'', s'') = 0$:
+      \[
+         (v'' - s'', s'') = \int_{a}^{b} (v(x) - s(x))'' \cdot s''(x) \, dx
+      \]
+      Całkując przez części:
+      \[
+         \int_{a}^{b} (v(x) - s(x))'' \cdot s''(x) \, dx =
+         (v(x) - s(x))' \cdot s''(x) |_{a}^{b} - \int_{a}^{b} (v(x) - s(x))' \cdot s'''(x) \, dx
+      \]
+      Ponieważ $s''(a) = 0 = s''(b)$:
+      \begin{gather*}
+         (v(x) - s(x))' \cdot s''(x) |_{a}^{b} = \\
+         (v(b) - s(b))' \cdot s''(b) - (v(a) - s(a))' \cdot s''(a) = \\
+         (v(b) - s(b))' \cdot 0 - (v(a) - s(a))' \cdot 0 = 0
+      \end{gather*}
+      Również, wiemy, że $v(x_{i}) = s(x_{i}) \quad i = 0, 1 \dots n$
+      oraz $s'''$ jest już funkcją stałą, więc oznaczmy tą wartość jako $a_{i}$ i wtedy:
+      \begin{gather*}
+         \int_{a}^{b} (v(x) - s(x))' \cdot s'''(x) \, dx = \\
+         \sum_{i = 0}^{n-1} \int_{x_{i}}^{x_{i+1}} (v(x) - s(x))' \cdot s'''(x) \, dx = \\
+         \sum_{i = 0}^{n-1} \int_{x_{i}}^{x_{i+1}} (v(x) - s(x))' \cdot a_{i} \, dx = \\
+         \sum_{i = 0}^{n-1} a_{i} \cdot \int_{x_{i}}^{x_{i+1}} (v(x) - s(x))' \, dx = \\
+         \sum_{i = 0}^{n-1} a_{i} \cdot ((v(x_{i+1}) - s(x_{i+1})) - (v(x_{i}) - s(x_{i}))) = \\
+         \sum_{i = 0}^{n-1} a_{i} \cdot (0 - 0) = 0
+      \end{gather*}
+      Wykazaliśmy, że obie części są równe 0:
+      \[
+         (v(x) - s(x))' \cdot s''(x) |_{a}^{b} - \int_{a}^{b} (v(x) - s(x))' \cdot s'''(x) \, dx =
+         0 - 0 = 0
+         \quad \quad \qedsymbol
+      \]
+
+
+   \section*{Zadanie 4.}
+
+      Wyznacz w B-bazie naturalny splajn kubiczny $s$ oparty na pięciu węzłach: $0, \, \pm h, \, \pm 2h$ taki,
+      że $s(0) = 1, \, s(\pm 2h) = 0, \, s(\pm h) = \frac{1}{4}$.
+
+
+   \section*{\large Rozwiązanie}
+
+      Zadanie rozwiążemy podobnie jak zadanie 2.
+      z \href{https://moodle.mimuw.edu.pl/pluginfile.php/117853/mod_resource/content/1/cw-08-splajny.pdf-pt2.pdf}{ćwiczeń}.
+      Oznacza to, że splajn kubiczny będzie postaci:
+      \[
+         s(x) = \sum_{i=-3}^{n-1} c_{i} B_{i}^{3}(x)
+      \]
+      Teraz, z warunków brzegowych naturalnych splajów i wartości kubicznego splaja bazowego możemy wyznaczyć układ:
+      \[
+         \begin{cases}
+            c_{-3} - 2 \cdot c_{-2} + c_{-1} = 0 \\
+            c_{n-3} - 2 \cdot c_{n-2} + c_{n-1} = 0
+         \end{cases}
+      \]
+      Następnie tworzymy układ równań, dzięki któremu wyznaczymy współczynniki:
+      \[
+         \begin{bmatrix}
+            1 & -2 & 1 \\
+            1 &  4 & 1 \\
+              &  1 & 4 & 1 \\
+              &    & 1 & 4 & 1 \\
+              &    &   & 1 & 4 &  1 \\
+              &    &   &   & 1 &  4 & 1 \\
+              &    &   &   & 1 & -2 & 1
+         \end{bmatrix}
+         \cdot
+         \begin{bmatrix}
+            c_{-3} \\
+            c_{-2} \\
+            c_{-1} \\
+            c_{0} \\
+            c_{1} \\
+            c_{2} \\
+            c_{3} \\
+         \end{bmatrix}
+         =
+         \begin{bmatrix}
+            0 \\
+            6 \cdot 0 = 0 \\
+            6 \cdot \frac{1}{4} = \frac{3}{2} \\
+            6 \cdot 1 = 6 \\
+            6 \cdot \frac{1}{4} = \frac{3}{2} \\
+            6 \cdot 0 = 0 \\
+            0
+         \end{bmatrix}
+      \]
+      Którego rozwiązaniem jest:
+      \[
+         c =
+         \begin{bmatrix}
+            0 \\
+            0 \\
+            0 \\
+            \frac{3}{2} \\
+            0 \\
+            0 \\
+            0
+         \end{bmatrix}
+      \]
+      Teraz możemy stworzyć nasz splajn:
+      \[
+         s(x) =
+         \sum_{i=-3}^{n-1} c_{i} B_{i}^{3}(x) =
+         c_{0} B_{0}^{3}(x) =
+         \frac{3}{2} B_{0}^{3}(x)
+      \]
+
+
+\end{document}

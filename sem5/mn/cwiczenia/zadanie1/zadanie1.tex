@@ -1,0 +1,538 @@
+\documentclass[a4paper]{article}
+
+\usepackage{amssymb,mathrsfs,amsmath,amscd,amsthm}
+\usepackage[mathcal]{euscript}
+\usepackage{stmaryrd}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[polish]{babel}
+\usepackage{graphics}
+\usepackage{blindtext}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{mathtools}
+
+\makeatletter
+\makeatother
+
+\RequirePackage{a4wide}
+
+%%%%%%% makra do notacji
+
+\renewcommand{\le}{\leqslant} %mniejsze bądź równe
+\renewcommand{\ge}{\geqslant} %większe bądź równe
+\renewcommand\qedsymbol{\scalebox{0.75}{$\blacksquare$}} %koniec dowodu
+\newcommand\exendsymbol{\scalebox{1}{$\lrcorner$}} %inny koniec dowodu
+\renewcommand{\phi}{\varphi} %litera φ
+\newcommand{\eps}{\varepsilon} %litera ε
+
+\newcommand{\N}{\mathbb N} %liczby naturalne
+\newcommand{\R}{\mathbb R} %liczby rzeczywiste
+\newcommand{\I}{\mathbb I} %liczby rzeczywiste
+\newcommand{\set}[1]{\{#1\}} %\set{1,2,3} to zbiór {1,2,3}
+\newcommand{\setof}[2]{\{#1\mid #2\}} %\setof{(x,y)}{x,y\in\N,x+y=5} to {(x,y)|x,y∈N, x+y=5}
+\newcommand{\from}{\colon} %f\from X\to Y to funkcja f:X→Y
+
+\renewcommand{\subset}{\subseteq} %symbol ⊆
+\newcommand{\Longupdownarrow}{\Big\Updownarrow}
+
+\newtheorem{twierdzenie}{Twierdzenie}
+\newtheorem{fakt}{Fakt}
+\newtheorem{wniosek}{Wniosek}
+\newtheorem{lemat}{Lemat}
+\newtheorem{zadanie}{Zadanie}
+\newtheorem{zadanie*}{Zadanie$^*$}
+
+\title{\vspace{-1cm}
+    Metody Numeryczne \\
+    \large Praca domowa 1.
+}
+\author{
+    Marcin Abramowicz ma406058 \\
+    \small współpraca: jo406271, ms406329
+}
+
+\begin{document}
+
+    \maketitle
+
+    \section*{Zadanie 1.}
+
+        Niech nieosobliwa macierz kwadratowa $A$ rozmiaru $N \times N$  ma własność, że  $a_{ij} = 0$ dla $i > j + 1$.
+        Podaj algorytm rozkładu $PA=LU$ tej macierzy, którego koszt jest $\mathcal{O}(N^2)$.
+
+
+    \section*{\large Rozwiązanie}
+
+        $A$ jest postaci:
+        $\begin{bmatrix}
+           a_{11} & a_{12} & a_{13} & \dots & a_{1N-2} & a_{1N-1} & a_{1N} \\
+           a_{21} & a_{22} & a_{23} & \dots & a_{2N-2} & a_{2N-1} & a_{2N} \\
+           0      & a_{32} & a_{33} & \dots & a_{3N-2} & a_{3N-1} & a_{3N} \\
+           0      & 0      & a_{43} & \dots & a_{4N-2} & a_{4N-1} & a_{4N} \\
+           \dots  & \dots  & \dots  & \dots & \dots    & \dots    & \dots  \\
+           0      & 0      & 0      & \dots & 0        & a_{N-1N} & a_{NN} \\
+        \end{bmatrix}$,
+        czyli pod pierwszą subdiagonalą są jedynie zera.
+        Do rozkładu użyjemy zmodyfikowanego algorytmu $GEPP$.
+
+        W $k$-tym kroku algorytmu, mamy dwa potencjalne elementy główne - $a_{kk}$ oraz $a_{k+1k}$,
+        gdyż wszystkie elementy $a_{ik}$, dla $i > k + 1$ są zerami.
+        Jeśli $|a_{k+1k}| > |a_{kk}|$ to zamieniamy wiersze.
+
+        Następnie wykonujemy kolejny krok algorytmu - aktualizację podmacierzy.
+        Zauważmy jednak, że musimy jedynie zaktualizować wiersz $k+1$.
+        Kolejne wiersze nie zmienią swojej wartości ponieważ kolejne $a_{ik}$, są zerami.
+
+        Powtarzając kroki dla $k = 1 : N - 1$ uzyskamy oczekiwany rozkład o koszcie $\mathcal{O}(N^2)$. \\
+
+        Algorytm ($GEPP$ z wykładu z modyfikacją):
+
+            \begin{algorithm}
+                \begin{algorithmic}[1]
+                    \For{k = 1 : N - 1}
+                        \If{$|a_{k+1k}| > |a_{kk}|$}
+                            zamień wiersze $k$ i $k+1$
+                        \EndIf
+
+                        \State $a_{k+1k} \gets a_{k+1k} / a_{kk}$
+
+                        \For{j = k + 1 : N - 1}
+                            \State $a_{k+1j} \gets a_{k+1j} - a_{k+1j}a_{kj}$
+                        \EndFor
+                    \EndFor
+                \end{algorithmic}\label{alg:algorithm}
+            \end{algorithm}
+
+        Koszt:
+        \begin{enumerate}
+            \item
+                liczba iteracji: $\mathcal{O}(N-1) = \mathcal{O}(N)$
+
+            \item
+                zamiana wierszy: $\mathcal{O}(N)$
+
+            \item
+                aktualizacja $k+1$-tego wiersza: $\mathcal{O}(N)$
+
+        \end{enumerate}
+
+        Sumarycznie:
+        \[\mathcal{O}(N) \cdot (\mathcal{O}(N) + \mathcal{O}(N)) = \mathcal{O}(N^2)\]
+
+
+    \section*{Zadanie 2.}
+
+        Niech macierz $A$ rozmiaru $N \times N$ będzie symetryczna i dodatnio określona. \\
+
+        \begin{enumerate}[label=(\alph*)]
+            \item
+                Wyprowadź algorytm rozkładu $A = LDL^{T}$ tej macierzy,
+                w którym — w przeciwieństwie do rozkładu Cholesky’ego —
+                nie wykorzystuje się operacji pierwiastkowania
+                (wyraźnie droższej od czterech podstawowych operacji arytmetycznych).
+                Macierz $L$ ma być macierzą dolną trójkątną z \textit{jedynkami na diagonali},
+                a macierz $D$ ma być macierzą diagonalną.
+                Uzasadnij, że się nie załamie.
+
+            \item
+                Podaj algorytm rozwiązania układu równań $Ax = b$,
+                gdy znany jest rozkład $A = LDL^{T}$ z poprzedniego podpunktu.
+                Oszacuj jego koszt.
+
+        \end{enumerate}
+
+
+    \section*{\large Rozwiązanie}
+
+        \begin{enumerate}[label=(\alph*)]
+            \item
+                $A \in \R^{N \times N}$, \\
+                $L \in \R^{N \times N}$ dolno trójkątna z jedynkami na diagonali, \\
+                $D \in \R^{N \times N}$ diagonalna, \\
+                wtedy:
+
+                \begin{gather*}
+                    A = LDL^{T} \\
+                    \begin{bmatrix}
+                        a_{11} & \vline & & a_{21}^{T} & \\
+                        \hline
+                               & \vline & &            & \\
+                        a_{21} & \vline & & A_{22}     & \\
+                               & \vline & &            & \\
+                    \end{bmatrix}
+                    =
+                    \begin{bmatrix}
+                        1      & \vline & & 0^{T}      & \\
+                        \hline
+                               & \vline & &            & \\
+                        l_{21} & \vline & & L_{22}     & \\
+                               & \vline & &            & \\
+                    \end{bmatrix}
+                    \cdot
+                    \begin{bmatrix}
+                        d_{11} & \vline & & 0^{T}      & \\
+                        \hline
+                               & \vline & &            & \\
+                        0      & \vline & & D_{22}     & \\
+                               & \vline & &            & \\
+                    \end{bmatrix}
+                    \cdot
+                    \begin{bmatrix}
+                        1      & \vline & & l_{21}^{T} & \\
+                        \hline
+                               & \vline & &            & \\
+                        0_{T}  & \vline & & L_{22}^{T} & \\
+                               & \vline & &            & \\
+                    \end{bmatrix} \\
+                    a_{11} = d_{11} + 0^{T}0
+                        \quad \Rightarrow d_{11} = a_{11} \\
+                    a_{21} = l_{21}d_{11} + L_{22}0
+                        \quad \Rightarrow l_{21} = \frac{a_{21}}{d_{11}} \\
+                    A_{22} = l_{21}d_{11}l_{21}^{T} + L_{22}D_{22}L_{22}^{T}
+                        \quad \Rightarrow A_{22}' = L_{22}D_{22}L_{22}^{T}
+                        = A_{22} - l_{21}d_{11}l_{21}^{T}
+                \end{gather*}
+
+                Później możemy rozwiązać ten sam problem dla podmacierzy $A_{22}'$. \\
+
+                Wynik algorytmu będziemy przechowywać w macierzy $A$ -
+                $L$ w macierzy dolnej (bez diagonali),
+                na diagonali wartości z diagonali $D$. \\
+
+                Algorytm (zmodyfikowany z ćwiczeń 23.11 zadanie 3.):
+
+                \begin{algorithm}
+                    \begin{algorithmic}[1]
+                        \For{k = 1 : N}
+                            \Comment{$d_{11} = a_{11}$, więc nie musimy aktualizować $a_{kk}$}
+
+                            \For{i = k + 1 : N}
+                                \Comment{obliczanie $l_{21}$}
+                                \State $a_{ik} \gets a_{ik} / a_{kk}$
+                            \EndFor
+
+                            \For{i = k + 1 : N}
+                                \Comment{obliczanie $A_{22}'$}
+                                \For{j = k + 1 : i}
+                                    \State $a_{ij} \gets a_{ij} - a_{ik}a_{kk}a_{ik}$
+                                \EndFor
+                            \EndFor
+                        \EndFor
+                    \end{algorithmic}\label{alg:algorithm1}
+                \end{algorithm}
+
+                Teraz pokażemy, że $A_{22}'$ również jest symetryczna i dodatnio określona,
+                więc algorytm rekurencyjnie wywołany się nie załamie.
+                W takim wypadku nigdy nie będzie dzielenia przez zero
+                (dzielimy przez element $a_{11}$ w $A$, $A_{22}'$ i każdej podmacierzy $A_{ii}'$),
+                a macierz jest dodatnio określona więc $det(a_{11}) > 0$, więc $a_{11} > 0$.
+
+                Pokażemy, że jeśli $A$ jest symetryczna (więc $A_{22}$ również jest)
+                i dodatnio określona to $A_{22}'$ również jest. \\
+
+                Symetryczność ($(A_{22}')^{T} \stackrel{?}{=} A_{22}'$):
+                \begin{gather*}
+                    (A_{22}')^{T} = (A_{22} - l_{21} d_{11} l_{21}^{T})^T = \\
+                    A_{22}^{T} - (l_{21} d_{11} l_{21}^{T})^{T} = \\
+                    A_{22} - d_{11} (l_{21} l_{21}^{T})^{T} = \\
+                    A_{22} - (d_{11} l_{21}^{T})^{T} l_{21}^{T} = \\
+                    A_{22} - d_{11} l_{21} l_{21}^{T} = \\
+                    A_{22} - l_{21} d_{11} l_{21}^{T} = A_{22}' \qed
+                \end{gather*}
+
+                Dodatnio określoność: \\
+                Pokażemy, że $\forall x \neq 0 \quad x^{T} A_{22}' x > 0$.
+
+                \begin{gather*}
+                    A_{22}' = A_{22} - l_{21} d_{11} l_{21}^{T} = \\
+                    A_{22} - \frac{a_{21}}{d_{11}} d_{11}\frac{a_{21}^{T}}{d_{11}} = \\
+                    A_{22} - \frac{a_{21} a_{21}^{T}}{d_{11}} \\
+                \end{gather*}
+
+                Wiemy również, że (bo $A$ dodatnio określona) $\forall x \neq 0 \quad x^{T}Ax > 0$.
+                \begin{gather*}
+                    \forall [\alpha, y^{T}] \neq 0
+                    \quad [\alpha, y^{T}]
+                    \cdot
+                    \begin{bmatrix}
+                        a_{11} & \vline & a_{21}^{T} \\
+                        \hline
+                        a_{21} & \vline & A_{22}     \\
+                    \end{bmatrix}
+                    \cdot
+                    \begin{bmatrix}
+                        \alpha \\
+                        y
+                    \end{bmatrix} > 0 \quad \Rightarrow \\
+                    \alpha(\alpha a_{11} + a_{21}^{T} y) + y^{T} (\alpha a_{21} + A_{22} y) > 0
+                \end{gather*}
+
+                dla $\alpha = - \frac{a_{21}^{T} y}{d_{11}}$, ($d_{11} = a_{11}$),
+                więc $\alpha = - \frac{a_{21}^{T} y}{a_{11}}$:
+
+                \begin{gather*}
+                    - \frac{a_{21}^{T} y}{a_{11}} (- \frac{a_{21}^{T} y}{a_{11}} a_{11} + a_{21}^{T} y)
+                    + y^{T} (- \frac{a_{21}^{T} y}{a_{11}} a_{21} + A_{22} y) = \\
+                    - \frac{a_{21}^{T} y}{a_{11}} (- a_{21}^{T} y + a_{21}^{T} y)
+                    + y^{T} (- \frac{a_{21}^{T} y}{a_{11}} a_{21} + A_{22} y) = \\
+                    y^{T} (- \frac{a_{21}^{T} a_{21}}{a_{11}} + A_{22}) y = \\
+                    y^{T} (A_{22} - \frac{a_{21} a_{21}^{T}}{a_{11}}) y
+                \end{gather*}
+                Co wiemy, że zachodzi dla każdego $y \ne 0$.
+                $\qed$
+
+            \item
+                $Ax = b$ \\
+                $L D L^{T} x = b$
+
+                \begin{itemize}
+                    \item
+                        $b = L z \quad$ ---
+                        $\mathcal{O}(n^{2})$ - układ równań z macierzą dolną trójkątną
+
+                    \item
+                        $z = D y \quad$ ---
+                        $\mathcal{O}(n)$ - układ równań z macierzą diagonalną
+
+                    \item
+                        $y = L^{T} x \quad$ ---
+                        $\mathcal{O}(n^{2})$ - układ równań z macierzą górną trójkątną
+
+                \end{itemize}
+
+                Sumaryczny koszt:
+                \[\mathcal{O}(n^{2}) + \mathcal{O}(n) + \mathcal{O}(n^{2}) = \mathcal{O}(n^{2})\]
+
+        \end{enumerate}
+
+
+    \section*{Zadanie 3.}
+
+        Niech $T_j$ oznacza pewną diagonalnie dominującą trójdiagonalą macierz $j \times j$.
+        Podaj możliwie tani algorytm rozwiązania układu równań z \textit{nieosobliwą} macierzą blokową
+
+        \[
+            \begin{bmatrix}
+                T_{n} & B \\
+                B^{T} & T_{k}
+            \end{bmatrix}
+            \begin{bmatrix}
+                x \\
+                y
+            \end{bmatrix}
+            =
+            \begin{bmatrix}
+                f \\
+                g
+            \end{bmatrix},
+        \]
+        gdzie $B \in R^{n \times k}$ jest pewną macierzą pełnego rzędu oraz $n \gg k$.
+        Oceń jego koszt w zależności od $n, k$.
+
+
+    \section*{\large Rozwiązanie}
+
+        \begin{itemize}
+            \item
+                $T_{n} \in \R^{n \times n}$
+
+            \item
+                $B \in \R^{n \times k}, B^{T} \in \R^{k \times n}$
+
+            \item
+                $x \in \R^{n}, y \in \R^{k}$
+
+            \item
+                $f \in \R^{n}, g \in \R^{k}$
+
+        \end{itemize}
+
+        \begin{gather*}
+            \begin{bmatrix}
+                  T_{n} & B \\
+                  B^T & T_{k}
+            \end{bmatrix}
+            \begin{bmatrix}
+                x \\
+                y
+            \end{bmatrix}
+            =
+            \begin{bmatrix}
+                f \\
+                g
+            \end{bmatrix} \\
+            \Longupdownarrow \\
+            \begin{dcases}
+                T_{n}x + By = f \quad \Rightarrow x = T_{n}^{-1}(f - By)  \\
+                B^{T}x + T_{k}y = g \quad \Rightarrow B^{T}T_{n}^{-1}(f - By) + T_{k}y = g
+            \end{dcases} \\ \\
+            B^{T}T_{n}^{-1}(f - By) + T_{k}y = g \\
+            B^{T}T_{n}^{-1}f - B^{T}T_{n}^{-1}By + T_{k}y = g \\
+            - B^{T}T_{n}^{-1}By + T_{k}y = g - B^{T}T_{n}^{-1}f \\
+            (-B^{T}T_{n}^{-1}B + T_{k})y = g - B^{T}T_{n}^{-1}f \\
+            y = (T_{k} - B^{T}T_{n}^{-1}B)^{-1}(g - B^{T}T_{n}^{-1}f)\\
+        \end{gather*}
+
+        Teraz obliczmy $y$:
+
+        \begin{enumerate}
+            \item
+                $r \in \R^{k}, \quad r = (g - B^{T}T_{n}^{-1}f)$
+
+                \begin{itemize}
+                    \item
+                        $q \in \R^{n}, \quad q = T_{n}^{-1}f \quad$ ---
+                        $\mathcal{O}(n)$ - macierz trójdiagonalna i układ równań, jak na ćw.
+
+                    \item
+                        $q' \in \R^{k}, \quad q' = B^{T}q \quad$ ---
+                        $\mathcal{O}(n \cdot k)$ - mnożenie macierzy przez wektor
+
+                    \item
+                        $r = g - q' \quad$ ---
+                        $\mathcal{O}(k)$ - odejmowanie wektorów
+
+                \end{itemize}
+
+            \item
+                 $P \in \R^{k \times k}, \quad P = (T_{k} - B^{T}T_{n}^{-1}B)^{-1}$
+
+                \begin{itemize}
+                    \item
+                        $Q \in \R^{n \times k}, \quad Q = T_{n}^{-1}B \quad$ ---
+                        $\mathcal{O}(n \cdot k)$ - macierz trójdiagonalna i układ $k$ równań, jak na ćw.
+
+                    \item
+                        $Q' \in \R^{k \times k}, \quad Q' = B^{T}Q \quad$ ---
+                        $\mathcal{O}(n \cdot k^{2})$ - mnożenie macierzy
+
+                    \item
+                        $P = T_{k} - Q' \quad$ ---
+                        $\mathcal{O}(k^{2})$ - odejmowanie od macierzy
+
+                \end{itemize}
+
+            \item
+                $y = P^{-1}r \quad$ ---
+                $\mathcal{O}(k^{3})$ - rozwiązanie układu równań ($GEPP$)
+
+        \end{enumerate}
+
+        Sumaryczny koszt obliczenia $y$:
+
+        \begin{gather*}
+            \mathcal{O}(n) + \mathcal{O}(n \cdot k) + \mathcal{O}(k) + \mathcal{O}(n \cdot k)
+            + \mathcal{O}(n \cdot k^{2}) + \mathcal{O}(k^{2}) + \mathcal{O}(k^{3}) = \\
+            \mathcal{O}(n + n \cdot k + n \cdot k^{2} + k^{2} + k^{3}) \\
+        \end{gather*}
+
+        Teraz obliczmy $x$:
+
+        \begin{enumerate}
+            \item
+            $s \in \R^{n}, \quad s = (f - By)$
+
+            \begin{itemize}
+                \item
+                    $q \in \R^{n}, \quad q = By \quad$ ---
+                    $\mathcal{O}(n \cdot k)$ - mnożenie macierzy przez wektor
+
+                \item
+                    $s = f - q \quad$ ---
+                    $\mathcal{O}(n)$ - odejmowanie wektorów
+
+            \end{itemize}
+
+            \item
+                $x = T_{n}^{-1}s \quad$ ---
+                $\mathcal{O}(n)$ - macierz trójdiagonalna i układ równań, jak na ćw.
+
+        \end{enumerate}
+
+        Sumaryczny koszt obliczenia $x$:
+
+        \begin{gather*}
+            \mathcal{O}(n \cdot k) + \mathcal{O}(n) + \mathcal{O}(n) = \\
+            \mathcal{O}(n + n \cdot k)
+        \end{gather*}
+
+        Sumaryczny koszt:
+
+        \begin{gather*}
+            \mathcal{O}(n + n \cdot k + n \cdot k^{2} + k^{2} + k^{3}) + \mathcal{O}(n + n \cdot k) = \\
+            \mathcal{O}(n \cdot k^{2} + k^{3})
+        \end{gather*}
+
+        Sumaryczny koszt dla $n \gg k$ to $\mathcal{O}(n)$.
+
+    \section*{Zadanie 4.}
+
+        Podaj przykład czterech nieosobliwych macierzy symetrycznych, spełniających po \textit{jednym} z poniższych warunków:
+
+        \begin{enumerate}[label=(\alph*)]
+            \item
+                $A$ jest dobrze uwarunkowana.
+
+            \item
+                $A$ jest źle uwarunkowana i nie jest diagonalna.
+                (\textit{Wskazówka.
+                Tu raczej chodzi o przepis na taką macierz.})
+
+            \item
+                $A$ ma uwarunkowanie równe $10^{16}$,
+                ale układ równań z tą macierzą da się rozwiązać w
+                arytmetyce $fl$ z błędem rzędu precyzji arytmetyki.
+
+            \item
+                $||A||_2 \cdot ||A^{-1}||_2 < 1$
+        \end{enumerate}
+
+
+
+    \section*{\large Rozwiązanie}
+
+        \begin{enumerate}[label=(\alph*)]
+            \item
+                $\begin{bmatrix}
+                    1 & 0 \\
+                    0 & 1
+                \end{bmatrix}$
+
+            \item
+                Macierz Hilberta, przykładowo:
+                $\begin{bmatrix}
+                     1           & \frac{1}{2} & \frac{1}{3} \\ \\
+                     \frac{1}{2} & \frac{1}{3} & \frac{1}{4} \\ \\
+                     \frac{1}{3} & \frac{1}{4} & \frac{1}{5}
+                \end{bmatrix}$, jej złe uwarunkowanie jest powszechnie znane.
+
+            \item
+                $\begin{bmatrix}
+                     10^{16} & 0 \\
+                     0       & 1
+                \end{bmatrix}$,
+                której uwarunkowanie jest równe $10^{16}$.
+                Rozwiązanie układu równań z nią jest trywialne.
+
+            \item
+                Taka macierz nie istnieje, co udowodnię.
+
+                Załóżmy przez sprzeczność, że istnieje takie $A$, że:
+                \[||A||_{2} \cdot ||A^{-1}||_{2} < 1\]
+
+                Wtedy:
+                \[||A \cdot A^{-1}||_{2} < ||A||_{2} \cdot ||A^{-1}||_{2} < 1\]
+
+                Co prowadzi do:
+                \[||A \cdot A^{-1}||_{2} = ||\I||_{2} = 1\]
+
+                Co jest sprzecznością, więc macierz $A$ nie może istnieć.
+
+                $\qed$
+
+        \end{enumerate}
+
+\end{document}

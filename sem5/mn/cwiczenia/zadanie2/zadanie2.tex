@@ -1,0 +1,545 @@
+\documentclass[a4paper]{article}
+
+\usepackage{amssymb,mathrsfs,amsmath,amscd,amsthm}
+\usepackage[mathcal]{euscript}
+\usepackage{stmaryrd}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[polish]{babel}
+\usepackage{graphics}
+\usepackage{blindtext}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{mathtools}
+
+\makeatletter
+\makeatother
+
+\RequirePackage{a4wide}
+
+%%%%%%% makra do notacji
+
+\renewcommand{\le}{\leqslant} %mniejsze bądź równe
+\renewcommand{\ge}{\geqslant} %większe bądź równe
+\renewcommand\qedsymbol{\scalebox{0.75}{$\blacksquare$}} %koniec dowodu
+\newcommand\exendsymbol{\scalebox{1}{$\lrcorner$}} %inny koniec dowodu
+\renewcommand{\phi}{\varphi} %litera φ
+\newcommand{\eps}{\varepsilon} %litera ε
+
+\newcommand{\N}{\mathbb N} %liczby naturalne
+\newcommand{\R}{\mathbb R} %liczby rzeczywiste
+\newcommand{\I}{\mathbb I} %liczby rzeczywiste
+\newcommand{\set}[1]{\{#1\}} %\set{1,2,3} to zbiór {1,2,3}
+\newcommand{\setof}[2]{\{#1\mid #2\}} %\setof{(x,y)}{x,y\in\N,x+y=5} to {(x,y)|x,y∈N, x+y=5}
+\newcommand{\from}{\colon} %f\from X\to Y to funkcja f:X→Y
+
+\renewcommand{\subset}{\subseteq} %symbol ⊆
+\newcommand{\Longupdownarrow}{\Big\Updownarrow}
+
+\newtheorem{twierdzenie}{Twierdzenie}
+\newtheorem{fakt}{Fakt}
+\newtheorem{wniosek}{Wniosek}
+\newtheorem{lemat}{Lemat}
+\newtheorem{zadanie}{Zadanie}
+\newtheorem{zadanie*}{Zadanie$^*$}
+
+\title{\vspace{-1cm}
+Metody Numeryczne \\
+\large Praca domowa 2.
+}
+\author{
+Marcin Abramowicz ma406058 \\
+\small współpraca: jo406271, ms406329 % TODO
+}
+
+\begin{document}
+
+   \maketitle
+
+   \section*{Zadanie 1.}
+
+      Rozważmy LZNK postaci:
+
+      \[
+         ||
+         \begin{bmatrix}
+            b_{1}  \\
+            \vdots \\
+            b_{M}  \\
+         \end{bmatrix}
+         -
+         \begin{bmatrix}
+            1      & \vline &   & \\
+            \vdots & \vline & B & \\
+            1      & \vline &   & \\
+         \end{bmatrix}
+         \begin{bmatrix}
+            \alpha \\
+            x \\
+         \end{bmatrix}
+         ||_{2}^{2} \longrightarrow min!, \quad (1)
+      \]
+      gdzie B jest zadaną macierzą $M \times N$, $M > N$,
+      natomiast $x \in \R^{N}$, $\alpha \in \R$ są niewiadomymi.
+      Zakładamy, że zadanie jest regularne, tzn. $A$ jest pełnego rzędu.
+      Oznaczając $e = (1, \dots, 1)^{T}$ , macierz powyższego LZNK możemy zapisać
+
+      \[
+         A =
+         \begin{bmatrix}
+            e & B
+         \end{bmatrix}.
+      \]
+      Wykaż, że
+
+      \begin{enumerate}[label=(\alph*)]
+         \item
+            $P = \frac{ee^{T}}{e^{T}e}$ jest macierzą symetryczną i $P^{2} = P$.
+
+         \item
+            $I - P$ jest macierzą symetryczną i $(I - P)^{2} = I - P$ oraz $(I - P)e = 0$.
+
+         \item
+            Dla każdego $r \in \R^{M}$,
+
+            \[
+               ||r||_{2}^{2} = ||P r||_{2}^{2} + ||(I - P) r||_{2}^{2}.
+            \]
+
+         \item
+            Rozwiązanie (1) można wyznaczyć następującym algorytmem:
+
+            Krok 1: Wyznacz $x$ jako rozwiązanie LZNK
+
+            \[
+               ||\tilde{b} - \tilde{B}x||_{2} \longrightarrow min!
+            \]
+            gdzie $\tilde{b} = (I - P)b$ oraz $\tilde{B} = (I - P)B$
+
+            Krok 2: wyznacz $\alpha = \frac{1}{M}e^{T}(b - Bx)$
+      \end{enumerate}
+
+
+   \section*{\large Rozwiązanie}
+
+      \begin{enumerate}[label=(\alph*)]
+         \item
+            \begin{itemize}
+               \item
+                  $P^{T} = P$:
+                  \[
+                     P^{T} =
+                     (\frac{e e^{T}}{e^{T} e})^{T} =
+                     \frac{(e^{T})^{T} e^{T}}{e^{T} e} =
+                     \frac{e e^{T}}{e^{T} e} =
+                     P
+                  \]
+
+               \item
+                  $P^{2} = P$:
+                  \[
+                     P^{2} =
+                     (\frac{e e^{T}}{e^{T} e}) (\frac{e e^{T}}{e^{T} e}) =
+                     \frac{e (e^{T} e) e^{T}}{(e^{T} e)(e^{T} e)} =
+                     \frac{e e^{T}}{e^{T} e} =
+                     P
+                  \]
+            \end{itemize}
+
+         \item
+            \begin{itemize}
+               \item
+                  $(I - P)^{T} = (I - P)$:
+                  \[
+                     (I - P)^{T} =
+                     I^{T} - P^{T} =
+                     I - P
+                  \]
+
+               \item
+                  $(I - P)^{2} = (I - P)$:
+                  \[
+                     (I - P)^{2} =
+                     I^{2} - P - P + P^{2} =
+                     I - P - P + P =
+                     I - P
+                  \]
+
+               \item
+                  $(I - P) e = 0$:
+                  \[
+                     (I - P) e =
+                     I e - P e =
+                     e - \frac{e e^{T}}{e^{T} e} e =
+                     e - \frac{e e e^{T}}{e^{T} e} =
+                     e - e =
+                     0
+                  \]
+            \end{itemize}
+
+         \item
+            \begin{gather*}
+               ||P r||_{2}^{2} + ||(I - P) r||_{2}^{2} = \\
+               (P r)^{T} (P r) + ((I - P) r)^{T} ((I - P) r) = \\
+               r^{T} P^{T} P r + r^{T} (I - P)^{T} (I - P) r = \\
+               r^{T} (P P) r + r^{T} ((I - P) (I - P)) r = \\
+               r^{T} P r + r^{T} (I - P) r = \\
+               r^{T} (P r + (I -P) r) = \\
+               r^{T} (P r + r - P r) = \\
+               r^{T} r =
+               ||r||_{2}^{2}
+            \end{gather*}
+
+         \item
+            Niech
+            $
+               \begin{bmatrix}
+                  \alpha \\
+                  x      \\
+               \end{bmatrix}
+            $
+            będzie rozwiązaniem (1).
+
+            Wtedy:
+            \begin{gather*}
+               \forall
+                  \begin{bmatrix}
+                     \beta \\
+                     y \\
+                  \end{bmatrix}
+                  \in \R^{N + 1} \quad
+               ||
+                  b -
+                  \begin{bmatrix}
+                     e & B
+                  \end{bmatrix}
+                  \begin{bmatrix}
+                     \alpha \\
+                     x \\
+                  \end{bmatrix}
+               ||_{2}^{2}
+               \le
+               ||
+                  b -
+                  \begin{bmatrix}
+                     e & B
+                  \end{bmatrix}
+                  \begin{bmatrix}
+                     \beta \\
+                     y \\
+                  \end{bmatrix}
+               ||_{2}^{2} \\
+               \\
+               ||
+                  b -
+                  \begin{bmatrix}
+                     e & B
+                  \end{bmatrix}
+                  \begin{bmatrix}
+                     \alpha \\
+                     x \\
+                  \end{bmatrix}
+               ||_{2}^{2} = \\
+               ||b - \alpha e - B x||_{2}^{2} = \\
+               \\
+               oznaczamy \, jako \quad r = (b - \alpha e - B x) \\
+               korzystamy \, z \, podpunktu \, c) \\
+               \\
+               ||P (b - \alpha e - B x)||_{2}^{2} + ||(I - P) (b - \alpha e - B x)||_{2}^{2} = \\
+               ||P (b - B x) - \alpha P e||_{2}^{2} + ||(I - P)(b - B x) - (I - P) \alpha e||_{2}^{2} = \\
+               \\
+               korzystamy \, z \, tego, \, ze: \, Ie - Pe = 0 \implies Ie = Pe \\
+               oraz \, (I - P) e = 0 \\
+               \\
+               ||P (b - B x) - \alpha e||_{2}^{2} + ||(I - P)(b - B x)||_{2}^{2} \\
+               \Downarrow \\
+               \forall
+               \begin{bmatrix}
+                  \beta \\
+                  y \\
+               \end{bmatrix}
+               \in \R^{N + 1} \quad
+               ||P (b - B x) - \alpha e||_{2}^{2} + ||(I - P)(b - B x)||_{2}^{2}
+               \le
+               ||P (b - B y) - \beta e||_{2}^{2} + ||(I - P)(b - B y)||_{2}^{2} \\
+               w \, szczegolnosci \Downarrow \\
+               \forall
+               \begin{bmatrix}
+                  \beta \\
+                  y \\
+               \end{bmatrix}
+               \in \R^{N + 1} \quad
+               ||P (b - B x) - \alpha e||_{2}^{2} + ||(I - P)(b - B x)||_{2}^{2}
+               \le
+               ||P (b - B x) - \alpha e||_{2}^{2} + ||(I - P)(b - B y)||_{2}^{2} \\
+               \Downarrow
+               \end{gather*}
+               \begin{gather*}
+               \forall
+               \begin{bmatrix}
+                  \beta \\
+                  y \\
+               \end{bmatrix}
+               \in \R^{N + 1} \quad
+               ||(I - P)(b - B x)||_{2}^{2}
+               \le
+               ||(I - P)(b - B y)||_{2}^{2} \\
+               \\
+               wiec \, dla \quad \tilde{b} = (I - P)b \quad oraz \quad \tilde{B} = (I - P)B \\
+               \Downarrow \\
+               ||\tilde{b} - \tilde{B}x||_{2}^{2} \le ||\tilde{b} - \tilde{B}y||_{2}^{2} \\
+               \Downarrow \\
+               ||\tilde{b} - \tilde{B}x||_{2} \longrightarrow min! \quad \qedsymbol
+            \end{gather*} \\
+
+            $\alpha = \frac{1}{M}e^{T}(b - Bx)$:
+            \begin{gather*}
+               ||
+                  b -
+                  \begin{bmatrix}
+                     e & B
+                  \end{bmatrix}
+                  \begin{bmatrix}
+                     \alpha \\
+                     x \\
+                  \end{bmatrix}
+               ||_{2}^{2} = \\
+               ||P (b - B x) - \alpha e||_{2}^{2} + ||(I - P)(b - B x)||_{2}^{2} = \\
+               ||P (b - B x) - \alpha e||_{2}^{2} + ||\tilde{b} - \tilde{B}x||_{2}^{2} \\
+               \\
+               wiec \, chcemy \, minimalizowac \quad ||P (b - B x) - \alpha e||_{2}^{2} \\
+               czyli \, wtedy \, kiedy \quad \alpha e = P (b - B x) \\
+               \\
+               \alpha e = P (b - B x) \\
+               \alpha e = \frac{e e^{T}}{e^{T} e}(b - B x) \\
+               \alpha e - \frac{e e^{T}}{e^{T} e}(b - B x) = 0 \\
+               e (\alpha - \frac{e^{T}}{e^{T} e}(b - B x)) = 0 \\
+               \alpha - \frac{e^{T}}{e^{T} e}(b - B x) = 0 \\
+               \\
+               e \in \R^{M} \quad e^{T} e = M \\
+               \\
+               \alpha - \frac{e^{T}}{M}(b - B x) = 0 \\
+               \alpha = \frac{1}{M} e^{T} (b - B x) \quad \qedsymbol
+            \end{gather*}
+      \end{enumerate}
+
+
+   \section*{Zadanie 2.}
+
+      Opracuj możliwie tanie algorytmy obliczania dla danego $x \in \R^{N}$:
+
+      \begin{enumerate}[label=(\alph*)]
+         \item
+            $H^{m}x$, gdy $H = I - \gamma vv^{T}$ jest macierzą Householdera zadaną przez
+            $v \in \R^{N}$ i $\gamma \in \R$.
+            Zakładamy, że $m$ jest dodatnią liczbą naturalną.
+            (Oczywiście, $\gamma = \frac{2}{v^{T}v}$,
+            ale zakładamy, że poprawna wartość $\gamma$ jest nam dana.)
+
+         \item
+            $Q^{-1} x$, gdzie $Q = H_{1} \cdots H_{N-1}$ jest iloczynem macierzy Householdera
+            $H_{k} = I - \gamma_{k} v_{k} v_{k}^{T}$,
+            zadanych przez wektory $v_{k} \in \R^{N}$ i skalary $\gamma_{k} \in \R$.
+         (Jak poprzednio, zakładamy, że poprawne wartosści $\gamma_{k}$ są nam dane.)
+      \end{enumerate}
+
+
+   \section*{\large Rozwiązanie}
+
+      \begin{enumerate}[label=(\alph*)]
+         \item
+            $H^{m} x$:
+            \[
+               H = I - \gamma vv^{T} \quad
+               oraz \quad
+               H^{2} = I
+            \]
+            czyli:
+
+            \begin{itemize}
+               \item
+                  $m \mid 2$, wtedy zwróć $x$, $\mathcal{O}(1)$
+                  \[
+                     H^{m} x =
+                     H^{2k} x =
+                     (H^{2})^{k} x =
+                     I^{k} x =
+                     I x = x
+                  \]
+
+               \item
+                  $m \nmid  2$, wtedy zwróć $H x$, $\mathcal{O}(N)$ (jak na slajdach)
+                  \[
+                     H^{m} x =
+                     H^{2k + 1} x =
+                     H H^{2k} x =
+                     H x =
+                     (I - \gamma vv^{T}) x =
+                     x - \gamma (v^{T} x) v
+                  \]
+            \end{itemize}
+
+         \item
+            $Q^{-1} x$:
+            \[
+               Q = H_{1} \cdots H_{N-1} \quad
+               oraz \quad
+               H_{k} = I - \gamma_{k} v_{k} v_{k}^{T} \quad
+               oraz \quad
+               H^{-1} = H
+            \]
+            czyli:
+
+            \[
+               Q^{-1} x =
+               (H_{1} \cdots H_{N-1})^{-1} x =
+               H_{N-1}^{-1} \cdots H_{1}^{-1} x =
+               H_{N-1} \cdots H_{1} x
+            \]
+            mnożymy po kolei od prawej do lewej, każdy krok kosztuje $\mathcal{O}(N)$
+            jak pokazaliśmy w a), wykonujemy N takich operacji, czyli łączny koszt to $\mathcal{O}(N^{2})$.
+            Przykładowy kod wykonujący tą operację w danym czasie jest na Graderze.
+      \end{enumerate}
+
+
+   \section*{Zadanie 3.}
+
+      Niech macierze $A, M$ będą symetryczne i dodatnio określone i niech $L L^{T}$ będzie rozkładem Cholesky'ego dla $M$.
+      Liczba $\tau$ jest zadanym parametrem.
+
+      \begin{enumerate}[label=(\alph*)]
+         \item
+            Wykaż, że jeśli $|| I - \tau L^{-1} A L^{-T} ||_{2} < 1$, to metoda iteracyjna
+            \[
+               y_{k+1} = y_{k} + \tau L^{-1} (b - A L^{-T} y_{k})
+            \]
+            jest zbieżna do $y^{*}$ będącego rozwiązaniem równania $A L^{-T} y = b$ dla dowolnego $y_{0}$.
+
+         \item
+            Wykaż, że powyższa metoda jest równoważna metodzie iteracyjnej (dla równania $A x = b$)
+            \[
+               x_{k + 1} = x_{k} + \tau M^{-1} (b - A x_{k}),
+            \]
+            gdzie $y_{k} = L^{T} x_{k}$. \\
+
+            Przez $L^{-T}$ oznaczamy $(L^{T})^{-1} = (L^{-1})^{T}$.
+      \end{enumerate}
+
+
+   \section*{\large Rozwiązanie}
+
+      \begin{enumerate}[label=(\alph*)]
+         \item
+            Metoda iteracyjna: $y_{k+1} = y_{k} + \tau L^{-1} (b - A L^{-T} y_{k})$ dla układu $A L^{-T} y = b$, \\
+            wiemy, że: $||I - \tau L^{-1} A L^{-T}||_{2} < 1$. \\
+            \\
+            Z założenia wynika, że $\tau \ne 0$, bo dla $\tau = 0$:
+            \begin{gather*}
+               ||I - \tau L^{-1} A L^{-T} ||_{2} < 1 \\
+               ||I - 0 L^{-1} A L^{-T} ||_{2} < 1 \\
+               ||I||_{2} < 1 \\
+               1 < 1 \\
+               1 \not < 1 \\
+            \end{gather*}
+            \\
+            Wtedy ustalmy:
+            \begin{gather*}
+               M = \frac{1}{\tau} L \Longleftrightarrow M^{-1} = \tau L^{-1} \\
+               K = A L^{-T} \\
+            \end{gather*}
+            I dobierzmy takie $Z$, żeby $K = M - Z$ (jak w metodzie iteracyjnej): \\
+            Wtedy $A L^{-T} y = b \quad \Longrightarrow \quad K y = b$:
+            \begin{gather*}
+               K = M - Z \\
+               A L^{-T} = \frac{1}{\tau} L - Z \\
+               Z = \frac{1}{\tau} L - A L^{-T} \\
+               B = M^{-1} Z \\
+            \end{gather*}
+            Zauważmy, że otrzymujemy naszą metodę iteracyjną:
+            \begin{gather*}
+               K y = b \\
+               y^{*} = B y^{*} + c \\
+               y^{*} = M^{-1} Z y^{*} + M^{-1} b \\
+               y^{*} = y^{*} - \tau L^{-1} A L^{-T} y^{*} + \tau L^{-1} b \\
+               y^{*} = y^{*} + \tau L^{-1} (b - AL^{-T} y^{*}) \\
+            \end{gather*}
+            Czyli nasza metoda iteracyjna. \\
+            \\
+            Więc teraz jeśli $||B||_{2} < 1$ to metoda będzie zbieżna (Twierdzenie na stronie 115. slajdów):
+            \begin{gather*}
+               ||B||_{2} < 1 \\
+               ||M^{-1} Z||_{2} < 1 \\
+               ||\tau L^{-1} (\frac{1}{\tau} L - A L^{-T})||_{2} < 1 \\
+               ||\tau L^{-1} \cdot \frac{1}{\tau} L - \tau L^{-1} \cdot  A L^{-T}||_{2} < 1 \\
+               ||L^{-1} L - \tau L^{-1} A L^{-T}||_{2} < 1 \\
+               ||I - \tau L^{-1} A L^{-T}||_{2} < 1 \\
+            \end{gather*}
+            Co jest prawdą zgodnie z założeniem, więc dana metoda jest zbieżna. $\qedsymbol$
+
+         \item
+            Metoda iteracyjna: $x_{k + 1} = x_{k} + \tau M^{-1} (b - A x_{k})$ dla układu $A x = b$, \\
+            gdzie $y_{k} = L^{T} x_{k}$. \\
+            \\
+            Wiemy, że poprzednia metoda jest zbieżna, więc:
+            \begin{gather*}
+               y_{k+1} = y_{k} + \tau L^{-1} (b - A L^{-T} y_{k}) \\
+               L^{T} x_{k+1} = L^{T} x_{k} + \tau L^{-1} (b - A L^{-T} L^{T} x_{k}) \\
+               \\
+               mnozymy \, lewostronnie\,  przez \quad L^{-T} \\
+               \Downarrow \\
+               \\
+               L^{-T} L^{T} x_{k+1} = L^{-T} L^{T} x_{k} + L^{-T} \tau L^{-1} (b - A L^{-T} L^{T} x_{k}) \\
+               I x_{k+1} = I x_{k} + \tau L^{-T} L^{-1} (b - A I x_{k}) \\
+               x_{k+1} = x_{k} + \tau L^{-T} L^{-1} (b - A x_{k}) \\
+               x_{k+1} = x_{k} + \tau (L L^{T})^{-1} (b - A x_{k}) \\
+               x_{k+1} = x_{k} + \tau M^{-1} (b - A x_{k}) \\
+            \end{gather*}
+            Czyli nasza metoda iteracyjna. $\qedsymbol$
+      \end{enumerate}
+
+
+   \section*{Zadanie 4.}
+
+      Niech $A$ będzie rzeczywistą macierzą symetryczną $N \times N$, przy czym jej wartości własne spełniają
+      $\lambda_{1} = \lambda_{2} > \lambda_{3} \ge \dots \ge \lambda_{N} \ge 0$.
+      Zmodyfikuj metodę potęgową tak, by wyznaczała wektory własne $v_{1}$ i $v_{2}$.
+
+
+   \section*{\large Rozwiązanie}
+      \begin{gather*}
+         x_{0} = \sum_{i} \alpha_{i} v_{i} \\
+         x_{k} = A^{k} x_{0} \\
+         \\
+         x_{k} = A^{k} (\sum_{i} \alpha_{i} v_{i}) \\
+         x_{k} = \sum_{i} A^{k} (\alpha_{i} v_{i}) \\
+         x_{k} = \sum_{i} \alpha_{i}  A^{k} v_{i} \\
+         x_{k} = \alpha_{1} \lambda_{1}^{k} v_{1} + \alpha_{2} \lambda_{2}^{k} v_{2}
+            + \alpha_{3} \lambda_{3}^{k} v_{3} + \dots \\
+         x_{k} = \alpha_{1} \lambda_{1}^{k} v_{1} + \alpha_{2} \lambda_{1}^{k} v_{2}
+            + \alpha_{3} \lambda_{3}^{k} v_{3} + \dots \\
+         x_{k} = \lambda_{1}^{k} (\alpha_{1} v_{1} + \alpha_{2} v_{2}
+            + \alpha_{3} (\frac{\lambda_{3}}{\lambda_{1}})^{k} v_{3} + \dots) \\
+         \\
+         (\frac{\lambda_{3}}{\lambda_{1}}) < 1 \Longrightarrow
+         (\frac{\lambda_{3}}{\lambda_{1}})^{k} \longrightarrow 0 \\
+         \Downarrow \\
+         x_{k} \longrightarrow \alpha_{1} v_{1} + \alpha_{2} v_{2} = u_{1}
+      \end{gather*}
+
+      Teraz wykonanujemy podobną operację na innym wektorze $y_{0}$, który "nie zawiera" wektora $x$.
+      Możemy to zrobić np. poprzez Ortogonalizację Grama-Schmidta -
+      dla $\tilde{y_{0}}$ z bazy możemy uzyskać
+      $y_{0} = \tilde{y_{0}} - \frac{<\tilde{y_{0}}, u_{1}>}{<u_{1}, u_{1}>}  u_{1}$.
+
+      Wtedy przeprowadzamy podobne rozumowanie dla $y_{0}$ jak wyżej i otrzymujemy:
+      \[
+         y_{k} \longrightarrow \beta_{1} v_{1} + \beta_{2} v_{2} = u_{2}
+      \]
+
+      Wtedy wektory $u_{1}$ i ${u_{2}}$ są naszymi wektorami z treści zadania ($v_{1}$ i $v_{2}$).
+
+
+
+\end{document}

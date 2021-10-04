@@ -1,0 +1,341 @@
+\documentclass[a4paper]{article}
+
+\usepackage{amssymb,mathrsfs,amsmath,amscd,amsthm}
+\usepackage[mathcal]{euscript}
+\usepackage{stmaryrd}
+\usepackage{graphics}
+\usepackage{blindtext}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{mathtools}
+\usepackage{textcomp}
+\usepackage{siunitx}
+\usepackage{hyperref}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[polish]{babel}
+
+\makeatletter
+\makeatother
+
+\RequirePackage{a4wide}
+
+%%%%%%% makra do notacji
+
+\renewcommand{\le}{\leqslant} % mniejsze bądź równe
+\renewcommand{\ge}{\geqslant} % większe bądź równe
+\renewcommand\qedsymbol{\scalebox{0.75}{$\blacksquare$}} % koniec dowodu
+\renewcommand{\phi}{\varphi} % litera φ
+\newcommand{\eps}{\varepsilon} % litera ε
+
+\newcommand{\N}{\mathbb N} % liczby naturalne
+\newcommand{\R}{\mathbb R} % liczby rzeczywiste
+\newcommand{\I}{\mathbb I} % liczby rzeczywiste
+\newcommand{\set}[1]{\{#1\}} % \set{1,2,3} to zbiór {1,2,3}
+
+\renewcommand{\subset}{\subseteq} %symbol ⊆
+\newcommand{\Longupdownarrow}{\Big\Updownarrow}
+
+\title{\vspace{-1cm}
+Metody Numeryczne \\
+\large Praca domowa 4.
+}
+\author{
+   Marcin Abramowicz ma406058 \\
+   \small współpraca: jo406271
+}
+
+\begin{document}
+
+   \maketitle
+
+   \section*{Zadanie 1.}
+
+   Niech $\Phi_{N+1}(x) = (x - x_{0}) \dots (x - x_{N})$, gdzie $a = x_{0} < x_{1} < \dots, x_{N} \le b$.
+   Wykaż, że:
+   \[
+      \max_{x \in [a, b]} \left| \Phi_{N+1}(x) \right| \ge \frac{1}{2^{N}} \cdot \left( \frac{b - a}{2} \right)^{N+1},
+   \]
+   a równość jest osiągana na odpowiednio (jak?) przeskalowanych / przesuniętych węzłach Czebyszewa.
+   Wywnioskuj stąd, że istnieją węzły $a \le x_{0} < x_{1} < \dots < x_{N} \le b$ takie,
+   że błąd aproksymacji $f \in C^{N+1}[a, b]$ przez oparty na nich WIL $p$ spełnia
+   \[
+      \left\| f - p \right\|_{\infty} \le
+      \frac{\left\| f^{(N+1)} \right\|_{\infty}}{2^{N} \cdot (N + 1)!} \cdot
+      \left( \frac{b - a}{2} \right)^{N+1}.
+   \]
+
+
+   \section*{\large Rozwiązanie}
+
+   Zacznijmy od udowodnienia ze dla węzłów Czebyszewa zachodzi równość.
+
+   Z twierdzenia o minimaksie wiemy ze najmniejszą normę w przedziale $[-1, 1]$
+   ma wielomian $\frac{T_{n}}{2^{n-1}} = \Phi^{*}_{n}$.
+   Dodatkowo wiemy, że:
+   \[
+      \max_{x \in [-1, 1]} \left| T_{n}(x) \right| = 1
+   \]
+   Czyli dla minimalnego wielomianu:
+   \[
+      \max_{x \in [-1, 1]} \left| \frac{T_{n}(x)}{2^{n-1}} \right| = \frac{1}{2^{n-1}}
+   \]
+   Teraz jeśli przedział to $[a, b]$, a nie $[-1, 1]$ możemy ''zmapować'' go na $[-1, 1]$ i użyć wielomianu $\Phi^{*}$ otrzymanego z twierdzenia o minimaksie
+   (''zmapowac'' każdy przedział na odpowiednią długość i przesunąć argumenty):
+   \[
+      \Phi_{N+1}(x) = \left( \frac{b - a}{2} \right)^{N + 1} \cdot \Phi^{*}_{N+1} \left( \frac{2x - a - b}{b - a} \right)
+   \]
+   Z tego wszystkiego otrzymujemy, że jeśli odpowiednio przeskalujemy węzły to otrzymamy równość:
+   \[
+      \max_{x \in [a, b]} \left| \Phi_{N+1}(x) \right| =
+      \left( \frac{b - a}{2} \right)^{N + 1} \cdot \frac{1}{2^{N}}
+   \]
+   Ciągle rozpatrywaliśmy wielomian z najmniejszą normą, co oznacza, że każdy inny nie będący nim będzie miał ją większą.
+   Czyli, wtedy nie będzie już równości a jedynie nierówność z zadania, co kończy tą część dowodu. \\
+   \\
+
+   Aby udowodnić, błąd aproksymacji posłużymy się podobnym rozumowaniem.
+
+   Z twierdzenia ze strony 194. wykładu, dla WIL $p$ i $g \in C^{N+1}[-1, 1]$ opartym na węzłach Czebyszewa:
+   \[
+      \left\| g - p \right\|_{\infty} \le \frac{\left\| g^{(N+1)}\right\|_{\infty}}{2^{N} \cdot (N + 1)!}
+   \]
+   Ponownie możemy zastanowić się jak ''zmapować'' funkcję $f \in C^{N+1}[a, b]$.
+   Znowu możemy użyć funkcji $f^{*} \in C^{N+1}[-1, 1]$ podobnie jak z naszym $\Phi$.
+   Wtedy nasza norma będzie wynosiła:
+   \[
+      \left\| f \right\|_{\infty} = \left( \frac{b - a}{2} \right)^{N+1} \cdot \left\| f^{*} \right\|_{\infty}
+   \]
+   Z czego otrzymujemy naszą nierówność:
+   \[
+      \left\| f - p \right\|_{\infty} \le
+      \frac{\left\| f^{(N+1)} \right\|_{\infty}}{2^{N} \cdot (N + 1)!} \cdot
+      \left( \frac{b - a}{2} \right)^{N+1}
+   \]
+
+   \section*{Zadanie 2.}
+
+   Funkcję $f(x) = e^{x}$ aproksymujemy najlepiej, jak to możliwe, za pomocą wielomianu stopnia co najwyżej 1.
+   Podaj wzór na taki wielomian najlepszej aproksymacji w sensie:
+   \begin{itemize}
+      \item
+      średniokwadratowym na $(-1, 1)$, to znaczy w normie
+      $\left\| f \right\| = \sqrt{\int^{1}_{-1} f^{2}(x) \ dx}$
+
+      \item
+      dyskretnie średniokwadratowym w punktach $\pm 1$, a konkretnie w normie
+      $\left\| f \right\| = \sqrt{f^{2}(-1) + f^{2}(+1)}$.
+   \end{itemize}
+   W każdym przypadku podaj oszacowanie błedu aproksymacji.
+
+
+   \section*{\large Rozwiązanie}
+
+   \begin{itemize}
+      \item
+      Szukamy $f^{*}$ stopnia co najwyżej 1, takiego że najlepiej aproksymuje $f$ w sensie średniokwadratowym, czyli minimalizuje
+      $\left\| f - f^{*} \right\|$,więc możemy minimalizować $\left\| f - f^{*} \right\|^{2}$:
+      \begin{gather*}
+         f^{*} = ax + b \\
+         \\
+         \left\| f - f^{*} \right\|^{2} = \\
+         \int^{1}_{-1} (f - f^{*})^{2} \ dx = \\
+         \int^{1}_{-1} (e^{x} - ax - b)^{2} \ dx = \\
+         \frac{2 a^2}{3} + \frac{2b}{e} - \frac{4a}{e} + 2 b^{2} - 2 e b + \frac{e^2}{2} - \frac{1}{2 e ^{2}}
+      \end{gather*}
+      Będziemy minimalizować to wyrażenie.
+      Zauważmy, że możemy minimalizować niezależnie składniki z $a$ i $b$:
+      \begin{gather*}
+         \min \left\{ \frac{2 a^2}{3} - \frac{4a}{e} \right\} =
+         - \frac{6}{e^2}, \ a = \frac{3}{e} \\
+         \\
+         \min \left\{ \frac{2b}{e} + 2 b^{2} - 2 e b \right\} =
+         1 - \frac{1}{2 e^{2}} - \frac{e^2}{2}, \ b = \frac{e^{2} - 1}{2e}
+      \end{gather*}
+      Czyli nasz poszukiwany wielomian to:
+      \[
+         f^{*} = \frac{3}{e} \cdot x + \frac{e^{2} - 1}{2e}
+      \]
+      Błąd aproksymacji:
+      \begin{gather*}
+         \left\| f - f^{*} \right\| = \\
+         \sqrt{\int^{1}_{-1} \left( f - f^{*} \right)^{2} \ dx} = \\
+         \sqrt{\int^{1}_{-1} \left( e^{x} - \frac{3}{e} \cdot x - \frac{e^{2} - 1}{2e} \right)^{2} \ dx} = \\
+         \sqrt{1 - \frac{7}{e^{2}}}
+      \end{gather*}
+      \item
+      Szukamy $f^{*}$ stopnia co najwyżej 1, takiego że najlepiej aproksymuje $f$ w sensie dyskretnie średniokwadratowym,
+      czyli minimalizuje $\left\| f - f^{*} \right\|$, więc również będziemy minimalizować $\left\| f - f^{*} \right\|^{2}$:
+      \begin{gather*}
+         f^{*}(x) = ax + b \\
+         \\
+         \left\| f - f^{*} \right\|^{2} = \\
+         (f(-1) - f^{*}(-1))^{2} + (f(1) - f^{*}(1))^{2}
+      \end{gather*}
+      Spróbujmy więc znaleść takie $a$ i $b$, że $f(-1) - f^{*}(-1) = 0$ oraz $f(1) - f^{*}(1) = 0$:
+      \begin{gather*}
+         (f(-1) - f^{*}(-1))^{2} = 0 \\
+         (e^{-1} + a - b)^{2} = 0 \\
+         e^{-1} + a - b = 0 \\
+         \\
+         (f(1) - f^{*}(1))^{2} = 0 \\
+         (e - a - b)^{2} = 0 \\
+         e - a - b = 0 \\
+         \Downarrow \\
+         \begin{cases}
+            e^{-1} + a - b = 0 \\
+            e - a - b = 0
+         \end{cases}
+         \\
+         \Downarrow \\
+         \begin{cases}
+            a = \frac{e^{2} + 1}{2 e} \\
+            b = \frac{e^{2} - 1}{2 e}
+         \end{cases}
+      \end{gather*}
+      Czyli nasz wielomian to:
+      \[
+         f^{*}(x) = \frac{e^{2} + 1}{2 e} \cdot x + \frac{e^{2} - 1}{2 e}
+      \]
+      A błąd aproksymacji:
+      \begin{gather*}
+         \left\| f - f^{*} \right\| = \\
+         \sqrt{(f(-1) - f^{*}(-1))^{2} + (f(1) - f^{*}(1))^{2}} = 0
+      \end{gather*}
+   \end{itemize}
+
+
+   \section*{Zadanie 3.}
+
+   Jaka liczba $n$ węzłów (a) Czebyszewa (b) równoodległych w $[-1, 1]$ wystarczy, by błąd aproksymacji
+   $f(x) = e^{x}$ przez wielomian interpolacyjny Lagrange'a dla $f$ oparty na tych węzłach był mniejszy niż $\eps > 0$?
+   Podaj prosty do sprawdzenia warunek na $n$.
+
+
+   \section*{\large Rozwiązanie}
+
+   \begin{enumerate}[label=(\alph*)]
+      \item
+      Z twierdzenia ze strony 194. wykładu wiemy, że:
+      \[
+         \left\| f - p \right\|_{\infty} \le \frac{\left\| f^{(N)}\right\|_{\infty}}{2^{N-1} N!}
+      \]
+      Więc w naszym przypadku:
+      \[
+         \frac{\left\| f^{(N)}\right\|_{\infty}}{2^{N-1} N!} =
+         \frac{\left\| e^{x} \right\|_{\infty}}{2^{N-1} N!} =
+         \frac{e}{2^{N-1} N!} < \eps
+      \]
+
+      \item
+      Natomiast ze strony 190. wiemy:
+      \[
+         \left\| f - p \right\|_{\infty} \le
+         \frac{\left\| f^{(N)} \right\|}{N!} \cdot \left\| \Phi_{N} \right\|_{\infty}
+      \]
+      W naszym przypadku maksymalna odległość punktów to 2 więc szacujemy z góry:
+      \[
+         \left\| \Phi_{N} \right\|_{\infty} \le 2^{N}
+      \]
+      Wtedy:
+      \[
+         \frac{\left\| f^{(N)} \right\|}{N!} \cdot \left\| \Phi_{N} \right\|_{\infty} =
+         \frac{\left\| e^{x} \right\|}{N!} \cdot \left\| \Phi_{N} \right\|_{\infty} =
+         \frac{e}{N!} \cdot \left\| \Phi_{N} \right\|_{\infty} \le
+         \frac{e}{N!} \cdot 2^{N} < \eps
+      \]
+   \end{enumerate}
+
+
+   \section*{Zadanie 4.}
+
+   Jacek i Wacek zaimplementowali w Ocave metodę Newtona, a następnie,
+   niezależnie od siebie przeprowadzili testy numeryczne swoich implementacji
+   na tym samym komputerze z procesorem Intel Core i7 3.4 GHz i pamięcią operacyjną 16 GB RAM.
+   Oto wyniki, jakie uzyskali (z braku miejsca, podajemu je z ograniczoną dokładnością):
+
+   \[
+      \begin{tabular}{ | c || c c || c c | }
+         \hline
+         &
+         \multicolumn{2}{ c || }{Jacek} &
+         \multicolumn{2}{ c | }{Wacek} \\
+         \hline \hline
+         równanie &
+         \multicolumn{2}{ c || }{$\sin^{2}(x) = 0$} &
+         \multicolumn{2}{ c | }{$\cos(x + \frac{\pi}{2})$ = 0} \\
+         \hline
+         dokł. rozw. &
+         \multicolumn{2}{ c || }{$x^{*} = \pi$} &
+         \multicolumn{2}{ c | }{$x^{*} = \pi$} \\
+         \hline \hline
+         iteracja $i$ &
+         przybl. rozw. $x_{i}$ & Błąd $|x_{i} - x^{*}|$ &
+         przybl. rozw. $x_{i}$ & Błąd $|x_{i} - x^{*}|$ \\
+         \hline
+         0 & 2.50e+00 & 6.42e-01 & 2.50e+00 & 6.42e-01 \\
+         1 & 2.87e+00 & 2.68e-01 & 3.25e+00 & 1.05e-01 \\
+         2 & 3.01e+00 & 1.31e-01 & 3.12e+00 & 2.59e-02 \\
+         3 & 3.08e+00 & 6.50e-02 & 3.15e+00 & 6.43e-03 \\
+         4 & 3.11e+00 & 3.25e-02 & 3.14e+00 & 1.60e-03 \\
+         5 & 3.13e+00 & 1.62e-02 & 3.14e+00 & 3.96e-04 \\
+         6 & 3.13e+00 & 8.11e-03 & 3.14e+00 & 9.84e-05 \\
+         7 & 3.14e+00 & 4.05e-03 & 3.14e+00 & 2.44e-05 \\
+         \hline
+      \end{tabular}
+   \]
+   Czy możesz stwierdzić, że któryś z nich ma błąd w implementacji?
+   Wyjaśnij swoje podejrzenia.
+
+   \section*{\large Rozwiązanie}
+
+   \subsubsection*{Sprawdzmy pochodne w obliczanych punktach}
+   Jacek: $\left( \sin^{2} \right)'(\pi) = 0$ \\
+   Wacek: $\cos'(\pi + \frac{\pi}{2}) = 1$ \\
+   \\
+   Jacek ma zerową pochodną czyli metoda może jedynie zbiegać liniowo (216. i 223. strona wykładu).
+   Wacek natomiast ma zerową pochodą, czyli ma zbiegać kwadratowo.
+
+   \subsubsection*{Zbieżność liniowa błędu Jacka}
+
+   \begin{gather*}
+      \frac{2.68e-01}{6.42e-01} \approx 0.417 \\
+      \frac{2.68e-01}{6.42e-01} \approx 0.417 \\
+      \frac{1.31e-01}{2.68e-01} \approx 0.488 \\
+      \frac{6.50e-02}{1.31e-01} \approx 0.496 \\
+      \frac{3.25e-02}{6.50e-02} \approx 0.500 \\
+      \frac{1.62e-02}{3.25e-02} \approx 0.498 \\
+      \frac{8.11e-03}{1.62e-02} \approx 0.500 \\
+      \frac{4.05e-03}{8.11e-03} \approx 0.499 \\
+   \end{gather*}
+   Błąd Jacka zbiega liniowo.
+
+
+   \subsubsection*{Zbieżność kwadratowa błędu Wacka}
+
+   \begin{gather*}
+      \frac{1.05e-01}{(6.42e-01)^{2}} \approx 0.254 \\
+      \frac{2.59e-02}{(1.05e-01)^{2}} \approx 2.349 \\
+      \frac{6.43e-03}{(2.59e-02)^{2}} \approx 9.585 \\
+      \frac{1.60e-03}{(6.43e-03)^{2}} \approx 38.698 \\
+      \frac{3.96e-04}{(1.60e-03)^{2}} \approx 154.687 \\
+      \frac{9.84e-05}{(3.96e-04)^{2}} \approx 627.486 \\
+      \frac{2.44e-05}{(9.84e-05)^{2}} \approx 2519.994 \\
+   \end{gather*}
+   Błąd Wacka jak widać nie zbiega kwadratowo.
+
+
+   \subsubsection*{Wnioski}
+
+   Jacek ma poprawną implementację - pochodna niezerowa,
+   czyli chcemy żeby błąd zbiegał liniowo i tak się dzieje.
+
+   Wacek natomiast ma błąd w swojej implementacji.
+   Pochodna jest zerowa w punkcie, więc oczekujemy kwadratowej zbieżności błędu,
+   ale jednak ona nie występuje.
+
+
+\end{document}
