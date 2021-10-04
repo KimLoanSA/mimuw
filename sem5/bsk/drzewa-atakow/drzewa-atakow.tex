@@ -1,0 +1,290 @@
+\documentclass[10pt,a4paper,twoside]{article}
+\RequirePackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[polish]{babel}
+
+\RequirePackage{comment}
+
+\RequirePackage{a4wide}
+\RequirePackage{longtable}
+
+\usepackage{titlesec}
+\usepackage{changepage}
+
+\setcounter{secnumdepth}{4}
+
+\titleformat{\section}
+{\normalfont\normalfont}{\thesection}{1em}{}
+
+\titleformat{\subsection}
+{\normalfont\normalfont}{\thesubsection}{1em}{}
+
+\titleformat{\subsubsection}
+{\normalfont\normalfont}{\thesubsubsection}{1em}{}
+
+\titleformat{\paragraph}
+{\normalfont\normalfont}{\theparagraph}{1em}{}
+\titlespacing*{\paragraph}
+{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+\newenvironment{subs}
+{\adjustwidth{3em}{0pt}}
+{\endadjustwidth}
+
+
+\title{\vspace{-1cm}
+    Bezpieczeństo Systemów Komputerowych \\
+    \large Drzewa Ataków \\
+    \small iteracja 3.
+}
+\author{
+    Marcin Abramowicz ma406058
+}
+
+\begin{document}
+
+    \maketitle
+
+
+    \textbf{Chronione wartości}: dane użytkowników korzystających z banku, np.
+    dane osobowe, dane wrażliwe, hasła, wyciągi z kont, korespondencja itp. \\
+
+    \textbf{Atakujący}: doświadczona osoba lub grupa, która ma dostęp do
+    specjalistycznego sprzętu, ma doświadczenie i duże zasoby
+    organizacyjne, jest osobą zewnętrzną lub wewnętrzną w stosunku do organizacji. \\ \\
+
+    . (OR) Uzyskanie dostępu do danych użytkowników korzystających z banku, np.
+        danych osobowych, danych wrażliwych, hasła, wyciągów z kont, korespondencję itp.
+        przez osoby nieuprawnione.
+
+    1. (OR) Uzyskanie dostępu przez przypadek -- 50
+    \begin{subs}
+        1.1. (OR) Dane wyciekają do Internetu -- 50
+        \begin{subs}
+            1.1.1. (OR) Pracownik banku przypadkowo robi wyciek -- 50
+            \begin{subs}
+                1.1.1.1. (OR) Bo słabo obsługuje system -- 50 \\
+                1.1.1.2. (OR) Bo jest nowy w pracy -- 50 \\
+                1.1.1.3. (OR) Bo myślał, że to środowisko testowe -- 50
+            \end{subs}
+            1.1.2. (OR) Pracownik banku zostaje zmuszony do zrobienia wycieku -- 10 \\
+            1.1.3. (OR) Pracownik banku celowo robi wyciek -- 10
+            \begin{subs}
+                1.1.3.1. (OR) Dla zabawy -- 2 \\
+                1.1.3.2. (OR) Bo był nietrzeźwy -- 2 \\
+                1.1.3.3. (OR) Bo chciał zrobić szefowi na złość -- 2 \\
+                1.1.3.4. (OR) Bo chciał poczuć dreszcz emocji -- 2 \\
+                1.1.3.5. (OR) Bo przegrał zakład -- 2 \\
+                1.1.3.6. (OR) Bo chciał się popisać -- 2 \\
+                1.1.3.7. (OR) Bo nie zrozumiał żartu kolegów -- 2 \\
+                1.1.3.8. (OR) Bo był ostatni dzień w pracy  -- 2 \\
+                1.1.3.9. (OR) Bo czuł się bezkarny -- 3
+            \end{subs}
+            1.1.4. (OR) Ktoś inny włamuje się do banku -- 10
+        \end{subs}
+        1.2. (OR) Dane dostępu do banku wyciekają do Internetu -- 50
+        \begin{subs}
+            1.2.1. (OR) Pracownik banku przypadkowo robi wyciek -- 50
+            \begin{subs}
+                1.2.1.1. (OR) Bo słabo obsługuje system -- 50 \\
+                1.2.1.2. (OR) Bo jest nowy w pracy -- 50 \\
+                1.2.1.3. (OR) Bo myślał, że to środowisko testowe -- 50 \\
+                1.2.1.4. (OR) Bo wysłał dane niezaufanemu znajomemu -- 3
+            \end{subs}
+            1.2.2. (OR) Pracownik banku zostaje zmuszony do zrobienia wycieku -- 10
+            \begin{subs}
+                1.2.2.1. (OR) Grozi mu się śmiercią -- 5 \\
+                1.2.2.2. (OR) Grozi mu się śmiercią bliskich -- 5 \\
+                1.2.2.3. (OR) Grozi mu się zwolnieniem -- 10 \\
+                1.2.2.4. (OR) Grozi mu się zagładą ludzkości -- 2 \\
+                1.2.2.5. (OR) Grozi mu się zjedzeniem jego śniadania -- 2
+            \end{subs}
+            1.2.3. (OR) Pracownik banku celowo robi wyciek -- 3
+            \begin{subs}
+                1.2.3.1. (OR) Dla zabawy -- 2 \\
+                1.2.3.2. (OR) Będąc nietrzeźwym -- 2 \\
+                1.2.3.3. (OR) Chcąc zrobić szefowi na złość -- 2 \\
+                1.2.3.4. (OR) Chcąc poczuć dreszcz emocji -- 2 \\
+                1.2.3.5. (OR) Bo przegrał zakład -- 2 \\
+                1.2.3.6. (OR) Bo chciał się popisać -- 2 \\
+                1.2.3.7. (OR) Bo nie zrozumiał żartu kolegów -- 2 \\
+                1.2.3.8. (OR) Bo był to ostatni dzień w pracy -- 2 \\
+                1.2.3.9. (OR) Bo był czuł się bezkarny -- 2
+            \end{subs}
+            1.2.4. (OR) Ktoś inny włamuje się do banku i udostępnia dane -- 5
+        \end{subs}
+        1.3. (OR) Dane dostępu do banku zostają znalezione na ulicy -- 5
+        \begin{subs}
+            1.3.1. (OR) Pracownik banku gubi karteczkę z danymi -- 10 \\
+            1.3.2. (OR) Pracownik banku gubi telefon z danymi -- 10 \\
+            1.3.3. (OR) Pracownik banku gubi gazetę z danymi -- 1 \\
+            1.3.4. (OR) Pracownik banku gubi zeszyt z danymi -- 5 \\
+            1.3.5. (OR) Pracownik banku gubi notatnik z danymi -- 5 \\
+            1.3.6. (OR) Pracownik banku krzyczy na ulicy dane -- 1 \\
+            1.3.7. (OR) Pracownik banku mówi wszystkim na ulicy dane -- 1 \\
+            1.3.8. (OR) Pracownik banku zapisuje dane na budynkach -- 1
+        \end{subs}
+        1.4. (OR) Dane dostępu do banku zostają uzyskane od pracownika -- 20
+        \begin{subs}
+            1.4.1. (OR) Pracownik banku przekazuje dane -- 10
+            \begin{subs}
+                1.4.1.1. (OR) Będąc torturowanym -- 1 \\
+                1.4.1.2. (OR) Będąc zastraszanym -- 5 \\
+                1.4.1.3. (OR) Będąc przekupionym -- 5 \\
+                1.4.1.4. (OR) Będąc namówionym -- 1 \\
+                1.4.1.5. (OR) Będąc przekonanym faktami -- 1 \\
+                1.4.1.6. (OR) Będąc przekonanym chwytami retorycznymi -- 1 \\
+                1.4.1.7. (OR) Będąc przekonanym przez partię polityczną -- 1 \\
+                1.4.1.8. (OR) Będąc przekonanym przez prezydenta -- 1 \\
+                1.4.1.9. (OR) Będąc przekonanym przez ważną dla niego osobę -- 1 \\
+                1.4.1.10. (OR) Zostając rozkochanym w atakującym -- 1 \\
+                1.4.1.11. (OR) Jego rodzina jest torturowana -- 1 \\
+                1.4.1.12. (OR) Jego znajomi są torturowani -- 1 \\
+            \end{subs}
+        \end{subs}
+        1.5. (OR) Dane dostępu do banku zostają zdobyte podstępem -- 15
+        \begin{subs}
+            1.5.1. (OR) Atakujący zostali pracownikami banku -- 10 \\
+            1.5.2. (OR) Atakujący zostali pracownikami firmy podwykonującej -- 10 \\
+            1.5.3. (OR) Atakujący zostali pracownikami firmy sprzątającej -- 2 \\
+            1.5.4. (OR) Atakujący zostali pracownikami firmy prowadzącej audyt -- 2 \\
+            1.5.5. (OR) Atakujący podpatrzyli jak pracownik baku wpisuje dane -- 40 \\
+            1.5.6. (OR) Atakujący używają keylogger'a -- 40 \\
+        \end{subs}
+        1.6. (OR) Dostęp do banku zostaje zdobyty dzięki bezpośredniemu atakowi -- 4
+        \begin{subs}
+            1.6.1. (OR) Atakujący potrafią szybko obliczać komputerowo logarytm dyskretny -- 1 \\
+            1.6.2. (OR) Atakujący posiadają sawanta w zespole, który potrafi zgadnąć logarytm dyskretny -- 1 \\
+            1.6.3. (OR) Bank nie posiada zabezpieczeń -- 2 \\
+            1.6.4. (OR) Bank posiada zabezpieczenia, które łatwo obejść -- 10 \\
+            1.6.5. (OR) Bank wyłącza swoje zabezpieczenia -- 1 \\
+            1.6.6. (OR) Atakujący wykorzystują luki w systemie -- 10 \\
+            1.6.7. (OR) Atakujący wykorzystują luki w protokołach -- 10 \\
+            1.6.8. (OR) Atakujący wykorzystują luki w protokołach wykorzystywanych w komunikacji -- 10
+        \end{subs}
+        1.7. (OR) Dostęp do banku zostaje zdobyty dzięki przejęciu banku -- 2
+        \begin{subs}
+            1.7.1. (OR) Atakujący dysponują środkami, żeby kupić bank -- 2 \\
+            1.7.2. (OR) Atakujący dysponują środkami, żeby kupić firmę podykonawczą -- 2 \\
+            1.7.3. (OR) Atakujący dysponują środkami, żeby przekupić zarząd banku -- 2 \\
+            1.7.4. (OR) Atakujący zastraszaną zarząd -- 2 \\
+            1.7.5. (OR) Atakujący otwierają inny bank i później wchłaniają atakowany -- 2 \\
+            1.7.6. (OR) Atakujący mają swojego człowieka jako CEO banku -- 2 \\
+            1.7.7. (OR) Atakujący mają swojego człowieka jako CTO banku -- 2
+        \end{subs}
+        1.8. (OR) Dostęp do banku zostaje zdobyty poprzez fizyczny atak -- 2
+        \begin{subs}
+            1.8.1. (OR) Atakujący napadają na serwerownię banku -- 1 \\
+            1.8.2. (OR) Atakujący wykupują najemców, którzy napadają na serwerownię banku -- 1 \\
+            1.8.3. (OR) Atakujący organizują zamieszki, które ostatecznie prowadzą do ataku na serwerownię banku -- 1 \\
+            1.8.4. (OR) Atakujący budują transfomersy, którymi atakują serwerownię banku -- 1 \\
+            1.8.5. (OR) Atakujący wykonują cichą akcję w stylu James'a Bonda -- 1 \\
+            1.8.6. (OR) Atakujący kupują czołg i atakują nim serwerownię banku -- 1 \\
+            1.8.7. (OR) Atakujący budują czołg i atakują nim serwerownię banku -- 1
+        \end{subs}
+        1.9. (OR) Dostęp do banku zostaje zdobyty poprzez zaburzenie ładu światowego -- 5
+        \begin{subs}
+            1.9.1. (OR) Atakujący grożą bronią jądrową -- 1
+            \begin{subs}
+                1.9.1.1. (OR) Atakujący budują samodzielnie bombę atomową -- 1
+                \begin{subs}
+                    1.9.1.1.1. (OR) Atakujący używają wirówek do wzbogacania materiału radioaktywnego -- 1 \\
+                    1.9.1.1.2. (OR) Atakujący kupują gotowy materiał radioaktywny -- 1 \\
+                    1.9.1.1.3. (OR) Atakujący kradną gotowy materiał radioaktywny -- 1 \\
+                    1.9.1.1.4. (OR) Atakujący przypadkowo znajdują gotowy materiał radioaktywny -- 1
+                \end{subs}
+                1.9.1.2. (OR) Atakujący kupują gotową bombę atomową -- 1 \\
+                1.9.1.3. (OR) Atakujący znajdują gotową bombę atomową -- 1 \\
+                1.9.1.4. (OR) Atakujący kradną gotową bombę atomową -- 1 \\
+                1.9.1.5. (OR) Atakujący dogadują się z terrorystami -- 1 \\
+                1.9.1.6. (OR) Atakujący dogadują się z wrogim krajem -- 1
+            \end{subs}
+            1.9.2. (OR) Atakujący grożą atakiem terrorystycznym -- 1
+            \begin{subs}
+                1.9.2.1. (OR) Atakujący grożą samodzielnym atakiem -- 1
+                \begin{subs}
+                    1.9.2.1.1. (OR) Atakujący planują atak z użyciem samolotu pasażerskiego -- 1 \\
+                    1.9.2.1.2. (OR) Atakujący planują atak z użyciem samolotu wojskowego -- 1 \\
+                    1.9.2.1.3. (OR) Atakujący planują atak z użyciem autobusu szkolnego -- 1 \\
+                    1.9.2.1.4. (OR) Atakujący planują atak z użyciem autobusu ZTM -- 1 \\
+                    1.9.2.1.5. (OR) Atakujący planują atak z użyciem bomby -- 1
+                \end{subs}
+                1.9.2.2. (OR) Atakujący wynajmują grupę terrorystyczną -- 1 \\
+                1.9.2.3. (OR) Atakujący prowokują grupę terrorystyczną -- 1
+            \end{subs}
+        \end{subs}
+        1.10. (OR) Dostęp do banku zostaje uzyskany poprzez atak binarny na aplikację mobilną -- 10
+        \begin{subs}
+            1.10.1. (OR) Atakujący przejmuje hasła w aplikacji mobilnej -- 5
+            \begin{subs}
+                1.10.1.1. (OR) Hasła są przechowywane gołym tekstem -- 5 \\
+                1.10.1.2. (OR) Hasła nie są solone -- 5 \\
+                1.10.1.3. (OR) Hasła są hashowane funkcja hashującą, którą umiemy odwrócić -- 5 \\
+                1.10.1.4. (OR) Hasła przypadkowo odgaduje poprawny hash -- 1
+            \end{subs}
+            1.10.2. (OR) W aplikacji znajduje się ''tylne'' wejście, które zostaje odkryte -- 10\\
+            1.10.3. (OR) API mobilne nie jest odpowiednio zabezpieczone -- 2 \\
+            \begin{subs}
+                1.10.3.1. (OR) API nie używa uwierzytelniania -- 2 \\
+                1.10.3.2. (OR) API przesyła hasła gołym tekstem -- 2 \\
+                1.10.3.3. (OR) API używa słabych sposobów uwierzytelniania -- 2 \\
+                1.10.3.4. (OR) API jest podatne na ataki -- 2
+            \end{subs}
+            1.10.4. (OR) Kod aplikacji wycieka -- 5
+            \begin{subs}
+                1.10.4.1. (OR) Pracownik przez przypadek wrzucił na facebook'a -- 1\\
+                1.10.4.2. (OR) Pracownik zrobił repozytorium publiczne -- 3 \\
+            \end{subs}
+            1.10.5. (OR) Aplikacja ma bugi wpływające na bezpieczeństwo -- 20 \\
+            1.10.6. (OR) Atakujący są genialni i zrobili pełną inżynierię wsteczną aplikacji -- 10 \\
+            1.10.7. (OR) Aplikacja sie crashuje i daje darmowy dostęp -- 2
+        \end{subs}
+        1.11. (OR) Mr Robot to nie był tylko serial -- 2 \\
+        \begin{subs}
+            1.11.1. (AND) Eliot postanawia odwiedzić Polskę -- 1 \\
+            1.11.2. (AND) Eliot uznaje ze Evil Corp to nasz bank -- 50
+        \end{subs}
+        1.12. (OR) Zewnętrzne serwery zostają zdobyte -- 20
+        \begin{subs}
+            1.12.1. (OR) Cała serwerownia zostaje zdobyta -- 20
+            \begin{subs}
+                1.12.1.1. (OR) Serwerownia zostaje zdobyta bezpośrednim atakiem -- 5 \\
+                1.12.1.2. (OR) Serwerownia zostaje zdobyta przez błąd pracującego tam człowieka -- 10
+                \begin{subs}
+                    1.12.1.2.1. (AND) Pracownik zostawił otwarte drzwi do serwerowni -- 30 \\
+                    1.12.1.2.2. (AND) Pracownik zostawił karteczkę z danymi potrzebnymi do zalogowania się na maszynę -- 30 \\
+                    1.12.1.2.3. (AND) Pracownik pozwolił atakującemu wejść do serwerowni -- 5
+                \end{subs}
+            \end{subs}
+            1.12.2. (OR) Serwerownia postanawia, że upubliczni wszystkie dane -- 2 \\
+            1.12.3. (OR) Serwerownia przez przypadek wrzuca backup do internetu -- 2 \\
+            1.12.4. (OR) Serwerownia podupada finansowo -- 5
+            \begin{subs}
+                1.12.4.1. (AND) Przyjmuje zapłatę od atakującego -- 10 \\
+                1.12.4.2. (AND) Sprzedaje dane w internecie -- 5 \\
+            \end{subs}
+            1.12.5. (OR) Nikt nie pilnuje serwerowni -- 10
+            \begin{subs}
+                1.12.5.1. (OR) Z powodu lockdownu nikt nie pilnuje -- 10 \\
+                1.12.5.2. (OR) Wszyscy zostają zwolnieni z powodu lockdownu -- 10 \\
+                1.12.5.3. (OR) Nikomu nie chce się przychodzić do pracy z powodu pandemi -- 5
+            \end{subs}
+        \end{subs}
+        1.13. (OR) Władze uznają, że bank jest przekrętem -- 90
+        \begin{subs}
+            1.13.1. (OR) Bank mówi, że jest księgarnią -- 50
+            \begin{subs}
+                1.13.1.1. (OR) Władze robią audyt i przejmują wszystkie dane banku -- 90 \\
+                1.13.1.2. (OR) Bank dobrowolnie oddaje się organowi sprawiedliwości ze swoimi danymi -- 10 \\
+                1.13.1.3. (OR) Bank rozpoczyna proces sądowy i dane zostają przejęte jako dowody -- 90 \\
+            \end{subs}
+            1.13.2 (OR) Bank okazuje się jedynie księgarnią -- 50
+            \begin{subs}
+                1.13.2.1. (OR) Władze przejmują wszystkie dane, bo księgarnia nie może dawać kredytów -- 90 \\
+                1.13.2.2. (OR) Księgarnia dobrowolnie oddaje dane finansowe i wszystkie książki władzom -- 10 \\
+                1.13.2.3. (OR) Księgarnia nie ma pieniędzy na adwokata, więc sprzedaje dane -- 40
+            \end{subs}
+        \end{subs}
+    \end{subs}
+
+\end{document}

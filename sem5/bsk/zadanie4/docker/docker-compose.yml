@@ -1,0 +1,45 @@
+version: "3"
+
+services:
+  green-forest-bank:
+    tty: true
+    image: bsk-4/server
+    build:
+      context: ./server
+    networks:
+      bsk-4:
+        ipv4_address: 172.18.0.11
+    extra_hosts:
+      - "managerclient:172.18.0.12"
+    privileged: true
+
+  manager-client:
+    tty: true
+    image: bsk-4/manager-client
+    build:
+      context: ./manager-client
+    networks:
+      bsk-4:
+        ipv4_address: 172.18.0.12
+    extra_hosts:
+      - "server:172.18.0.11"
+    privileged: true
+
+  worker-client:
+    tty: true
+    image: bsk-4/worker-client
+    build:
+      context: ./worker-client
+    networks:
+      bsk-4:
+        ipv4_address: 172.18.0.13
+    extra_hosts:
+      - "server:172.18.0.11"
+    privileged: true
+
+networks:
+  bsk-4:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.18.0.0/16

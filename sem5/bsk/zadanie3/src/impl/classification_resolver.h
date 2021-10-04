@@ -1,0 +1,9 @@
+#ifndef MIMUW_S5_BSK_ZADANIE_3_CLASSIFICATION_RESOLVER_H
+#define MIMUW_S5_BSK_ZADANIE_3_CLASSIFICATION_RESOLVER_H
+
+void list_all_classification_symbols();
+void list_all_headers_for_classification();
+void list_all_headers_for_no_classification();
+void change_file_classification();
+
+#endif //MIMUW_S5_BSK_ZADANIE_3_CLASSIFICATION_RESOLVER_H

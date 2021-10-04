@@ -1,0 +1,62 @@
+version: '3'
+
+services:
+  www:
+    tty: true
+    image: bsk-6/www
+    build:
+      context: ./www
+    expose:
+      - 8000
+    networks:
+      bsk-6-internal:
+        ipv4_address: 172.16.12.69
+    cap_add:
+      - NET_ADMIN
+
+  firewall:
+    tty: true
+    image: bsk-6/firewall
+    build:
+      context: ./firewall
+    networks:
+      bsk-6-external:
+        ipv4_address: 10.32.0.69
+      bsk-6-internal:
+        ipv4_address: 172.16.13.254
+    cap_add:
+      - NET_ADMIN
+    privileged: true
+
+  internal:
+    tty: true
+    image: bsk-6/internal
+    build:
+      context: ./internal
+    networks:
+      bsk-6-internal:
+        ipv4_address: 172.16.12.42
+
+  manager:
+    tty: true
+    image: bsk-6/manager
+    build:
+      context: ./manager
+    networks:
+      bsk-6-external:
+        ipv4_address: 10.32.0.42
+    cap_add:
+      - NET_ADMIN
+    privileged: true
+
+networks:
+  bsk-6-internal:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.12.0/23
+  bsk-6-external:
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.32.0.0/16

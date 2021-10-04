@@ -1,0 +1,6 @@
+1 Ada Abacka dyrektor DBD
+2 Bartek Babacki obsługa DBD
+5 Czarek Cabacki obsługa DBD
+7 Darek Dumny dyrektor DBB
+3 Eliza Elokwentna obsługa DBB
+8 Franciszka Fikuśna obsługa DBB

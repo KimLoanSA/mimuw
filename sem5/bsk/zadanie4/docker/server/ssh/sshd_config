@@ -1,0 +1,11 @@
+PubkeyAuthentication yes
+PasswordAuthentication no
+
+AllowUsers root manager1@172.18.0.12 manager2@172.18.0.12 worker1 worker2 worker3
+
+Subsystem sftp /usr/lib/openssh/sftp-server
+
+Match User root
+    MaxSessions 1
+
+GatewayPorts=yes
