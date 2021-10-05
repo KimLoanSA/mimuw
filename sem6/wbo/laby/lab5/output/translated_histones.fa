@@ -1,0 +1,30 @@
+>YDR225W cdna chromosome:R64-1-1:IV:915530:915928:1 gene:YDR225W gene_biotype:protein_coding transcript_biotype:protein_coding gene_symbol:HTA1 description:Histone H2A; core histone protein required for chromatin assembly and chromosome function; one of two nearly identical subtypes (see also HTA2); DNA damage-dependent phosphorylation by Mec1p facilitates DNA repair; acetylated by Nat4p; N-terminally propionylated in vivo [Source:SGD;Acc:S000002633]
+MSGGKGGKAGSAAKASQSRSAKAGLTFPVGRVHRLLRRGNYAQRIGSGAPVYLTAVLEYL
+AAEILELAGNAARDNKKTRIIPRHLQLAIRNDDELNKLLGNVTIAQGGVLPNIHQNLLPK
+KSAKATKASQEL
+>YBL003C cdna chromosome:R64-1-1:II:235394:235792:-1 gene:YBL003C gene_biotype:protein_coding transcript_biotype:protein_coding gene_symbol:HTA2 description:Histone H2A; core histone protein required for chromatin assembly and chromosome function; one of two nearly identical (see also HTA1) subtypes; DNA damage-dependent phosphorylation by Mec1p facilitates DNA repair; acetylated by Nat4p [Source:SGD;Acc:S000000099]
+MSGGKGGKAGSAAKASQSRSAKAGLTFPVGRVHRLLRRGNYAQRIGSGAPVYLTAVLEYL
+AAEILELAGNAARDNKKTRIIPRHLQLAIRNDDELNKLLGNVTIAQGGVLPNIHQNLLPK
+KSAKTAKASQEL
+>YNL031C cdna chromosome:R64-1-1:XIV:575640:576050:-1 gene:YNL031C gene_biotype:protein_coding transcript_biotype:protein_coding gene_symbol:HHT2 description:Histone H3; core histone protein required for chromatin assembly, part of heterochromatin-mediated telomeric and HM silencing; one of two identical histone H3 proteins (see HHT1); regulated by acetylation, methylation, and phosphorylation; H3K14 acetylation plays an important role in the unfolding of strongly positioned nucleosomes during repair of UV damage [Source:SGD;Acc:S000004976]
+MARTKQTARKSTGGKAPRKQLASKAARKSAPSTGGVKKPHRYKPGTVALREIRRFQKSTE
+LLIRKLPFQRLVREIAQDFKTDLRFQSSAIGALQESVEAYLVSLFEDTNLAAIHAKRVTI
+QKKDIKLARRLRGERS
+>YBR010W cdna chromosome:R64-1-1:II:256331:256741:1 gene:YBR010W gene_biotype:protein_coding transcript_biotype:protein_coding gene_symbol:HHT1 description:Histone H3; core histone protein required for chromatin assembly, part of heterochromatin-mediated telomeric and HM silencing; one of two identical histone H3 proteins (see HHT2); regulated by acetylation, methylation, and phosphorylation; H3K14 acetylation plays an important role in the unfolding of strongly positioned nucleosomes during repair of UV damage [Source:SGD;Acc:S000000214]
+MARTKQTARKSTGGKAPRKQLASKAARKSAPSTGGVKKPHRYKPGTVALREIRRFQKSTE
+LLIRKLPFQRLVREIAQDFKTDLRFQSSAIGALQESVEAYLVSLFEDTNLAAIHAKRVTI
+QKKDIKLARRLRGERS
+>YDR224C cdna chromosome:R64-1-1:IV:914317:914712:-1 gene:YDR224C gene_biotype:protein_coding transcript_biotype:protein_coding gene_symbol:HTB1 description:Histone H2B; core histone protein required for chromatin assembly and chromosome function; nearly identical to HTB2; Rad6p-Bre1p-Lge1p mediated ubiquitination regulates reassembly after DNA replication, transcriptional activation, meiotic DSB formation and H3 methylation [Source:SGD;Acc:S000002632]
+MSAKAEKKPASKAPAEKKPAAKKTSTSTDGKKRSKARKETYSSYIYKVLKQTHPDTGISQ
+KSMSILNSFVNDIFERIATEASKLAAYNKKSTISAREIQTAVRLILPGELAKHAVSEGTR
+AVTKYSSSTQA
+>YBR009C cdna chromosome:R64-1-1:II:255373:255684:-1 gene:YBR009C gene_biotype:protein_coding transcript_biotype:protein_coding gene_symbol:HHF1 description:Histone H4; core histone protein required for chromatin assembly and chromosome function; one of two identical histone proteins (see also HHF2); contributes to telomeric silencing; N-terminal domain involved in maintaining genomic integrity [Source:SGD;Acc:S000000213]
+MSGRGKGGKGLGKGGAKRHRKILRDNIQGITKPAIRRLARRGGVKRISGLIYEEVRAVLK
+SFLESVIRDSVTYTEHAKRKTVTSLDVVYALKRQGRTLYGFGG
+>YBL002W cdna chromosome:R64-1-1:II:236492:236887:1 gene:YBL002W gene_biotype:protein_coding transcript_biotype:protein_coding gene_symbol:HTB2 description:Histone H2B; core histone protein required for chromatin assembly and chromosome function; nearly identical to HTB1; Rad6p-Bre1p-Lge1p mediated ubiquitination regulates reassembly after DNA replication, transcriptional activation, meiotic DSB formation and H3 methylation [Source:SGD;Acc:S000000098]
+MSSAAEKKPASKAPAEKKPAAKKTSTSVDGKKRSKVRKETYSSYIYKVLKQTHPDTGISQ
+KSMSILNSFVNDIFERIATEASKLAAYNKKSTISAREIQTAVRLILPGELAKHAVSEGTR
+AVTKYSSSTQA
+>YNL030W cdna chromosome:R64-1-1:XIV:576727:577038:1 gene:YNL030W gene_biotype:protein_coding transcript_biotype:protein_coding gene_symbol:HHF2 description:Histone H4; core histone protein required for chromatin assembly and chromosome function; one of two identical histone proteins (see also HHF1); contributes to telomeric silencing; N-terminal domain involved in maintaining genomic integrity [Source:SGD;Acc:S000004975]
+MSGRGKGGKGLGKGGAKRHRKILRDNIQGITKPAIRRLARRGGVKRISGLIYEEVRAVLK
+SFLESVIRDSVTYTEHAKRKTVTSLDVVYALKRQGRTLYGFGG

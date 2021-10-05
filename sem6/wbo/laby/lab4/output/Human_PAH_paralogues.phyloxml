@@ -1,0 +1,32 @@
+<phyloxml xmlns="http://www.phyloxml.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.phyloxml.org http://www.phyloxml.org/1.10/phyloxml.xsd">
+  <phylogeny rooted="true">
+    <clade>
+      <name>Inner3</name>
+      <branch_length>0</branch_length>
+      <clade>
+        <name>Inner2</name>
+        <branch_length>0.02662834708952813</branch_length>
+        <clade>
+          <name>ENSP00000448059_Hsap</name>
+          <branch_length>0.2132643349988104</branch_length>
+        </clade>
+        <clade>
+          <name>Inner1</name>
+          <branch_length>0.08933454047826248</branch_length>
+          <clade>
+            <name>ENSP00000329093_Hsap</name>
+            <branch_length>0.12392979452054792</branch_length>
+          </clade>
+          <clade>
+            <name>ENSP00000250018_Hsap</name>
+            <branch_length>0.12392979452054792</branch_length>
+          </clade>
+        </clade>
+      </clade>
+      <clade>
+        <name>ENSP00000370571_Hsap</name>
+        <branch_length>0.23989268208833853</branch_length>
+      </clade>
+    </clade>
+  </phylogeny>
+</phyloxml>

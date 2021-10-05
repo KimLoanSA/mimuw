@@ -1,0 +1,139 @@
+\documentclass{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[polish]{babel}
+
+
+\title{MIMUW WBO \\ Raport końcowy zadania zaliczeniowego nr 2.}
+\author{Marcin Abramowicz ma406058}
+
+
+\begin{document}
+
+    \maketitle
+
+    \section{Opis implementacji}
+
+        \subsection{Wyszukiwanie}
+
+            Sekwencje są:
+            \begin{itemize}
+                \item
+                    parsowane przy pomocy `SeqIO.parse()`
+
+                \item
+                    tłumaczone przy pomocy `.translate()`
+
+                \item
+                    zapisywane do pliku przy pomocy `SeqIO.write()`
+
+            \end{itemize}
+
+            Następnie BLAST (są to bashowe komendy wykonywane z pythona):
+            \begin{itemize}
+                \item
+                    jest tworzony przy pomocy `makeblastdb`
+
+                \item
+                    odpytywany przy pomocy `blastp`, użyłem dosyć arbitralnej e-wartości
+
+                \item
+                    zapisywane do pliku przy pomocy `SeqIO.write()`
+            \end{itemize}
+
+            Następnie, wyniki z pliku XML są parsowane przy pomocy `NCBIXML.parse()` i same sekwencje są ponownie zapisywane do pliku jak wyżej.
+
+
+        \subsection{PFAM}
+
+            HMMER (ponownie bash z pythona):
+            \begin{itemize}
+                \item
+                    jest indeksowany przy pomocy `hmmpress`
+
+                \item
+                    skanowany przy pomocy `hmmscan`
+
+            \end{itemize}
+
+            Następnie wyniki są parsowane przy pomocy `SearchIO.parse()` i wypisywane są znalezione domeny.
+
+
+        \subsection{Gene Ontology}
+
+            \begin{itemize}
+                \item
+                    plik `.gaf` jest parsowany przy pomocy `gafiterator` z `Bio.UniProt.GOA`
+
+                \item
+                    GO natomiast jest parsowane przy pomocy `obo\_parser` z `goatools`
+
+                \item
+                    i dla wszystkich GO id, ogólniejsze terminy są znajdowane przy pomocy metody `paths\_to\_top`
+
+            \end{itemize}
+
+
+        \subsection{Test Fisher'a}
+
+            Z wielkim smutkiem, ale brak.
+
+
+    \section{Opis wyników}
+
+        \subsection{Wyszukiwanie}
+
+            Blast znalazł pełne sekwencje białkowe, czyli podane fragmenty dało się uliniowić z całymi sekwencjami E. Coli.
+            \\ \\
+            Przykład z pliku wynikowego:
+    \begin{verbatim}
+    >CCQ26909
+        cdna chromosome:HUSEC2011CHR1:Chromosome:31576:32724:1
+        gene:HUS2011_0030 gene_biotype:protein_coding
+        transcript_biotype:protein_coding gene_symbol:carA
+        description:carbamoyl phosphate synthetase small subunit,
+        glutamine amidotransferase
+    LIKSALLVLEDGTQFHGRAIGATGSAVGEVVFNTSMTGYQEILTDPSYSRQIVTLTYPHI
+    GNVGTNDADEESSQVHAQGLVIRDLPLIASNFRNTEDLSSYLKRHNIVAIADIDTRKLTR
+    LLREKGAQNGCIIAGDNPDAALALEKARAFPGLNGMDLAKEVTTAEAYSWTQGSWTLTGG
+    LPEAKKEDELPFHVVAYDFGAKRNILRMLVDRGCRLTIVPAQTSAEDVLKMNPDGIFLSN
+    GPGDPAPCDYAITAIQKFLETDIPVFGICLGHQLLALASGAKTVKMKFGHHGGNHPVKDV
+    EKNVVMITAQNHGFAVDEATLPANLRVTHKSLFDGTLQGIHRTDKPAFSFQGHPEASPGP
+    HDAAPLFDHFIELIEQYRKTAK*
+
+    ...
+    \end{verbatim}
+
+
+        \subsection{PFAM}
+
+            Sekwencje zawieraja nawet sporo domen, między innymi:
+            \begin{verbatim}
+                CPSase_sm_chain
+                GATase
+                Peptidase_C26
+            \end{verbatim}
+
+
+        \subsection{Gene Ontology}
+
+            To co mnie zdziwiło, to że liczba uogólnień dla niektórych terminów jest naprawde spora, np dla `GO:0009264`
+
+
+        \subsection{Test Fisher'a}
+
+            Z wielkim smutkiem, ale tutaj również brak.
+
+
+    \section{Podsumowanie}
+
+        Projekt bardzo ciekawy, dający możliwość zetknięcia się z narzędziami i zobaczyć jak mogą działać wspólnie.
+
+        Testu Fishera nie zaimplementowałem, z powodu odrobiny braku czasu z powodu innych projektów i licencjatu oraz odrobiny braku opanowania tego w pełni. Chciałbym w pełni zrozumieć co się w tych testach dokładnie dzieje, żeby móc je zaimplementować z pełnym zrozumieniem, ale niestety jak już wspomniałem, brak czasu.
+
+        Dodatkowo, co widać po lakoniczności wypowiedzi w tym raporcie, muszę zdecydowanie popracować nad spisywaniem raportów. Zauważyłem, że zbieranie wyników i przedstawianie ich, nie wychodzi mi najlepiej, co zdecydowanie chciałbym poprawić.
+
+        Na koniec, chciałbym dodać, że, okazja ''pobawienia'' się bliżej z sekwencjami, o których sie tylko czyta w książkach, jest bardzo ciekawe i zachęcające do dalszej przygody.
+
+
+\end{document}
