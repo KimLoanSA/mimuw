@@ -1,0 +1,3 @@
+variables([x, k]).
+arrays([chce]).
+program([assign(x, pid), sekcja, goto(1)]).

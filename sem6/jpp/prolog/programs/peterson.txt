@@ -1,0 +1,9 @@
+variables([k]).
+arrays([chce]).
+program([assign(array(chce, pid), 1),
+	 assign(k, pid),
+         condGoto(array(chce, 1-pid) = 0, 5),
+	 condGoto(k = pid, 3),
+         sekcja,
+	 assign(array(chce, pid), 0),
+	 goto(1)]).
